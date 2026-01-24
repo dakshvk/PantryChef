@@ -7,7 +7,7 @@ class Recipe:
         self.calories = calories #stores the number of calories
 
     def __str__(self):
-        return f'{self.name ({self.cuisine}) - self.meal_type}'
+        return f'{self.name} ({self.cuisine}) - {self.meal_type}'
 
 class PantryChef: #this construcotr initializes an empty list to hold all recipe objects
         #goal is to add recipes to this list using add_recipe method
@@ -26,10 +26,10 @@ class PantryChef: #this construcotr initializes an empty list to hold all recipe
             match_score = len(matching_ingredients) / len(recipe.ingredients)
 
                 # cuisine filter if given cuisine
-            if cuisine_filter.lower() and recipe.cuisine.lower() != cuisine_filter.lower():
+            if cuisine_filter and cuisine_filter.lower() and recipe.cuisine.lower() != cuisine_filter.lower():
                 continue #skips to next recipe if user cuisine doesnt match recipes
 
-            if meal.filter.lower() and recipe.meal_type.lower() != meal_filter.lower():
+            if meal_filter and meal_filter.lower() and recipe.meal_type.lower() != meal_filter.lower():
                 continue
                 #same with meal type filter aka breakfast lunch dinner snack and
             if match_score > 0: # creates match dictionary with recipe and percentage match
