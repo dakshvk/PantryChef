@@ -1,0 +1,504 @@
+Category,Name,Type,Example,Description
+Search Recipes by Ingredients,ingredients,string,"apples,flour,sugar",A comma-separated list of ingredients that the recipes should contain.
+Search Recipes by Ingredients,number,number,10,The maximum number of recipes to return (between 1 and 100). Defaults to 10.
+Search Recipes by Ingredients,ranking,number,1,Whether to maximize used ingredients (1) or minimize missing ingredients (2) first.
+Search Recipes by Ingredients,ignorePantry,boolean,true,"Whether to ignore typical pantry items, such as water, salt, flour, etc."
+Search Recipes by Nutrients,minCarbs,number,10,The minimum amount of carbohydrates in grams the recipe must have per serving.
+Search Recipes by Nutrients,maxCarbs,number,100,The maximum amount of carbohydrates in grams the recipe can have per serving.
+Search Recipes by Nutrients,minProtein,number,10,The minimum amount of protein in grams the recipe must have per serving.
+Search Recipes by Nutrients,maxProtein,number,100,The maximum amount of protein in grams the recipe can have per serving.
+Search Recipes by Nutrients,minCalories,number,50,The minimum amount of calories the recipe must have per serving.
+Search Recipes by Nutrients,maxCalories,number,800,The maximum amount of calories the recipe can have per serving.
+Search Recipes by Nutrients,minFat,number,1,The minimum amount of fat in grams the recipe must have per serving.
+Search Recipes by Nutrients,maxFat,number,100,The maximum amount of fat in grams the recipe can have per serving.
+Search Recipes by Nutrients,minAlcohol,number,0,The minimum amount of alcohol in grams the recipe must have per serving.
+Search Recipes by Nutrients,maxAlcohol,number,100,The maximum amount of alcohol in grams the recipe can have per serving.
+Search Recipes by Nutrients,minCaffeine,number,0,The minimum amount of caffeine in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxCaffeine,number,100,The maximum amount of caffeine in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minCopper,number,0,The minimum amount of copper in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxCopper,number,100,The maximum amount of copper in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minCalcium,number,0,The minimum amount of calcium in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxCalcium,number,100,The maximum amount of calcium in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minCholine,number,0,The minimum amount of choline in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxCholine,number,100,The maximum amount of choline in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minCholesterol,number,0,The minimum amount of cholesterol in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxCholesterol,number,100,The maximum amount of cholesterol in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minFluoride,number,0,The minimum amount of fluoride in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxFluoride,number,100,The maximum amount of fluoride in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minSaturatedFat,number,0,The minimum amount of saturated fat in grams the recipe must have per serving.
+Search Recipes by Nutrients,maxSaturatedFat,number,100,The maximum amount of saturated fat in grams the recipe can have per serving.
+Search Recipes by Nutrients,minVitaminA,number,0,The minimum amount of Vitamin A in IU the recipe must have per serving.
+Search Recipes by Nutrients,maxVitaminA,number,100,The maximum amount of Vitamin A in IU the recipe can have per serving.
+Search Recipes by Nutrients,minVitaminC,number,0,The minimum amount of Vitamin C in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxVitaminC,number,100,The maximum amount of Vitamin C in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minVitaminD,number,0,The minimum amount of Vitamin D in micrograms the recipe must have per serving.
+Search Recipes by Nutrients,maxVitaminD,number,100,The maximum amount of Vitamin D in micrograms the recipe can have per serving.
+Search Recipes by Nutrients,minVitaminE,number,0,The minimum amount of Vitamin E in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxVitaminE,number,100,The maximum amount of Vitamin E in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minVitaminK,number,0,The minimum amount of Vitamin K in micrograms the recipe must have per serving.
+Search Recipes by Nutrients,maxVitaminK,number,100,The maximum amount of Vitamin K in micrograms the recipe can have per serving.
+Search Recipes by Nutrients,minVitaminB1,number,0,The minimum amount of Vitamin B1 in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxVitaminB1,number,100,The maximum amount of Vitamin B1 in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minVitaminB2,number,0,The minimum amount of Vitamin B2 in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxVitaminB2,number,100,The maximum amount of Vitamin B2 in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minVitaminB5,number,0,The minimum amount of Vitamin B5 in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxVitaminB5,number,100,The maximum amount of Vitamin B5 in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minVitaminB3,number,0,The minimum amount of Vitamin B3 in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxVitaminB3,number,100,The maximum amount of Vitamin B3 in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minVitaminB6,number,0,The minimum amount of Vitamin B6 in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxVitaminB6,number,100,The maximum amount of Vitamin B6 in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minVitaminB12,number,0,The minimum amount of Vitamin B12 in micrograms the recipe must have per serving.
+Search Recipes by Nutrients,maxVitaminB12,number,100,The maximum amount of Vitamin B12 in micrograms the recipe can have per serving.
+Search Recipes by Nutrients,minFiber,number,0,The minimum amount of fiber in grams the recipe must have per serving.
+Search Recipes by Nutrients,maxFiber,number,100,The maximum amount of fiber in grams the recipe can have per serving.
+Search Recipes by Nutrients,minFolate,number,0,The minimum amount of folate in micrograms the recipe must have per serving.
+Search Recipes by Nutrients,maxFolate,number,100,The maximum amount of folate in micrograms the recipe can have per serving.
+Search Recipes by Nutrients,minFolicAcid,number,0,The minimum amount of folic acid in micrograms the recipe must have per serving.
+Search Recipes by Nutrients,maxFolicAcid,number,100,The maximum amount of folic acid in micrograms the recipe can have per serving.
+Search Recipes by Nutrients,minIodine,number,0,The minimum amount of iodine in micrograms the recipe must have per serving.
+Search Recipes by Nutrients,maxIodine,number,100,The maximum amount of iodine in micrograms the recipe can have per serving.
+Search Recipes by Nutrients,minIron,number,0,The minimum amount of iron in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxIron,number,100,The maximum amount of iron in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minMagnesium,number,0,The minimum amount of magnesium in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxMagnesium,number,100,The maximum amount of magnesium in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minManganese,number,0,The minimum amount of manganese in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxManganese,number,100,The maximum amount of manganese in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minPhosphorus,number,0,The minimum amount of phosphorus in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxPhosphorus,number,100,The maximum amount of phosphorus in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minPotassium,number,0,The minimum amount of potassium in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxPotassium,number,100,The maximum amount of potassium in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minSelenium,number,0,The minimum amount of selenium in micrograms the recipe must have per serving.
+Search Recipes by Nutrients,maxSelenium,number,100,The maximum amount of selenium in micrograms the recipe can have per serving.
+Search Recipes by Nutrients,minSodium,number,0,The minimum amount of sodium in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxSodium,number,100,The maximum amount of sodium in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,minSugar,number,0,The minimum amount of sugar in grams the recipe must have per serving.
+Search Recipes by Nutrients,maxSugar,number,100,The maximum amount of sugar in grams the recipe can have per serving.
+Search Recipes by Nutrients,minZinc,number,0,The minimum amount of zinc in milligrams the recipe must have per serving.
+Search Recipes by Nutrients,maxZinc,number,100,The maximum amount of zinc in milligrams the recipe can have per serving.
+Search Recipes by Nutrients,offset,number,0,The number of results to skip (between 0 and 900).
+Search Recipes by Nutrients,number,number,10,The number of expected results (between 1 and 100).
+Search Recipes by Nutrients,random,boolean,false,"If true, every request will give you a random set of recipes within the requested limits."
+Search Recipes,query,string,pasta,The (natural language) recipe search query.
+Search Recipes,cuisine,string,italian,"The cuisine(s) of the recipes. One or more, comma separated (will be interpreted as 'OR'). See a full list of supported cuisines."
+Search Recipes,excludeCuisine,string,greek,"The cuisine(s) the recipes must not match. One or more, comma separated (will be interpreted as 'AND'). See a full list of supported cuisines."
+Search Recipes,diet,string,vegetarian,"The diet(s) for which the recipes must be suitable. You can specify multiple with comma meaning AND connection. You can specify multiple diets separated with a pipe | meaning OR connection. For example diet=gluten free,vegetarian means the recipes must be both, gluten free and vegetarian. If you specify diet=vegan|vegetarian, it means you want recipes that are vegan OR vegetarian. See a full list of supported diets."
+Search Recipes,intolerances,string,gluten,A comma-separated list of intolerances. All recipes returned must not contain ingredients that are not suitable for people with the intolerances entered. See a full list of supported intolerances.
+Search Recipes,equipment,string,pan,"The equipment required. Multiple values will be interpreted as 'or'. For example, value could be ""blender, frying pan, bowl"".See a full list of supported equipment."
+Search Recipes,includeIngredients,string,"tomato,cheese",A comma-separated list of ingredients that should/must be used in the recipes.
+Search Recipes,excludeIngredients,string,eggs,A comma-separated list of ingredients or ingredient types that the recipes must not contain.
+Search Recipes,type,string,main course,The type of recipe. See a full list of supported meal types.
+Search Recipes,instructionsRequired,boolean,true,Whether the recipes must have instructions.
+Search Recipes,fillIngredients,boolean,false,Add information about the ingredients and whether they are used or missing in relation to the query.
+Search Recipes,addRecipeInformation,boolean,false,"If set to true, you get more information about the recipes returned."
+Search Recipes,addRecipeInstructions,boolean,false,"If set to true, you get analyzed instructions for each recipe returned. The addRecipeInformation parameter needs to be true for this to take effect."
+Search Recipes,addRecipeNutrition,boolean,false,"If set to true, you get nutritional information about each recipes returned."
+Search Recipes,author,string,coffeebean,The username of the recipe author.
+Search Recipes,tags,string,myCustomTag,User defined tags that have to match. The author param has to be set.
+Search Recipes,recipeBoxId,number,2468,The id of the recipe box to which the search should be limited to.
+Search Recipes,titleMatch,string,Crock Pot,Enter text that must be found in the title of the recipes.
+Search Recipes,maxReadyTime,number,20,The maximum time in minutes it should take to prepare and cook the recipe.
+Search Recipes,minServings,number,1,The minimum amount of servings the recipe is for.
+Search Recipes,maxServings,number,8,The maximum amount of servings the recipe is for.
+Search Recipes,ignorePantry,boolean,true,"Whether to ignore typical pantry items, such as water, salt, flour, etc."
+Search Recipes,sort,string,calories,The strategy to sort recipes by. See a full list of supported sorting options.
+Search Recipes,sortDirection,string,asc,The direction in which to sort. Must be either 'asc' (ascending) or 'desc' (descending).
+Search Recipes,minCarbs,number,10,The minimum amount of carbohydrates in grams the recipe must have per serving.
+Search Recipes,maxCarbs,number,100,The maximum amount of carbohydrates in grams the recipe can have per serving.
+Search Recipes,minProtein,number,10,The minimum amount of protein in grams the recipe must have per serving.
+Search Recipes,maxProtein,number,100,The maximum amount of protein in grams the recipe can have per serving.
+Search Recipes,minCalories,number,50,The minimum amount of calories the recipe must have per serving.
+Search Recipes,maxCalories,number,800,The maximum amount of calories the recipe can have per serving.
+Search Recipes,minFat,number,1,The minimum amount of fat in grams the recipe must have per serving.
+Search Recipes,maxFat,number,100,The maximum amount of fat in grams the recipe can have per serving.
+Search Recipes,minAlcohol,number,0,The minimum amount of alcohol in grams the recipe must have per serving.
+Search Recipes,maxAlcohol,number,100,The maximum amount of alcohol in grams the recipe can have per serving.
+Search Recipes,minCaffeine,number,0,The minimum amount of caffeine in milligrams the recipe must have per serving.
+Search Recipes,maxCaffeine,number,100,The maximum amount of caffeine in milligrams the recipe can have per serving.
+Search Recipes,minCopper,number,0,The minimum amount of copper in milligrams the recipe must have per serving.
+Search Recipes,maxCopper,number,100,The maximum amount of copper in milligrams the recipe can have per serving.
+Search Recipes,minCalcium,number,0,The minimum amount of calcium in milligrams the recipe must have per serving.
+Search Recipes,maxCalcium,number,100,The maximum amount of calcium in milligrams the recipe can have per serving.
+Search Recipes,minCholine,number,0,The minimum amount of choline in milligrams the recipe must have per serving.
+Search Recipes,maxCholine,number,100,The maximum amount of choline in milligrams the recipe can have per serving.
+Search Recipes,minCholesterol,number,0,The minimum amount of cholesterol in milligrams the recipe must have per serving.
+Search Recipes,maxCholesterol,number,100,The maximum amount of cholesterol in milligrams the recipe can have per serving.
+Search Recipes,minFluoride,number,0,The minimum amount of fluoride in milligrams the recipe must have per serving.
+Search Recipes,maxFluoride,number,100,The maximum amount of fluoride in milligrams the recipe can have per serving.
+Search Recipes,minSaturatedFat,number,0,The minimum amount of saturated fat in grams the recipe must have per serving.
+Search Recipes,maxSaturatedFat,number,100,The maximum amount of saturated fat in grams the recipe can have per serving.
+Search Recipes,minVitaminA,number,0,The minimum amount of Vitamin A in IU the recipe must have per serving.
+Search Recipes,maxVitaminA,number,100,The maximum amount of Vitamin A in IU the recipe can have per serving.
+Search Recipes,minVitaminC,number,0,The minimum amount of Vitamin C milligrams the recipe must have per serving.
+Search Recipes,maxVitaminC,number,100,The maximum amount of Vitamin C in milligrams the recipe can have per serving.
+Search Recipes,minVitaminD,number,0,The minimum amount of Vitamin D in micrograms the recipe must have per serving.
+Search Recipes,maxVitaminD,number,100,The maximum amount of Vitamin D in micrograms the recipe can have per serving.
+Search Recipes,minVitaminE,number,0,The minimum amount of Vitamin E in milligrams the recipe must have per serving.
+Search Recipes,maxVitaminE,number,100,The maximum amount of Vitamin E in milligrams the recipe can have per serving.
+Search Recipes,minVitaminK,number,0,The minimum amount of Vitamin K in micrograms the recipe must have per serving.
+Search Recipes,maxVitaminK,number,100,The maximum amount of Vitamin K in micrograms the recipe can have per serving.
+Search Recipes,minVitaminB1,number,0,The minimum amount of Vitamin B1 in milligrams the recipe must have per serving.
+Search Recipes,maxVitaminB1,number,100,The maximum amount of Vitamin B1 in milligrams the recipe can have per serving.
+Search Recipes,minVitaminB2,number,0,The minimum amount of Vitamin B2 in milligrams the recipe must have per serving.
+Search Recipes,maxVitaminB2,number,100,The maximum amount of Vitamin B2 in milligrams the recipe can have per serving.
+Search Recipes,minVitaminB5,number,0,The minimum amount of Vitamin B5 in milligrams the recipe must have per serving.
+Search Recipes,maxVitaminB5,number,100,The maximum amount of Vitamin B5 in milligrams the recipe can have per serving.
+Search Recipes,minVitaminB3,number,0,The minimum amount of Vitamin B3 in milligrams the recipe must have per serving.
+Search Recipes,maxVitaminB3,number,100,The maximum amount of Vitamin B3 in milligrams the recipe can have per serving.
+Search Recipes,minVitaminB6,number,0,The minimum amount of Vitamin B6 in milligrams the recipe must have per serving.
+Search Recipes,maxVitaminB6,number,100,The maximum amount of Vitamin B6 in milligrams the recipe can have per serving.
+Search Recipes,minVitaminB12,number,0,The minimum amount of Vitamin B12 in micrograms the recipe must have per serving.
+Search Recipes,maxVitaminB12,number,100,The maximum amount of Vitamin B12 in micrograms the recipe can have per serving.
+Search Recipes,minFiber,number,0,The minimum amount of fiber in grams the recipe must have per serving.
+Search Recipes,maxFiber,number,100,The maximum amount of fiber in grams the recipe can have per serving.
+Search Recipes,minFolate,number,0,The minimum amount of folate in micrograms the recipe must have per serving.
+Search Recipes,maxFolate,number,100,The maximum amount of folate in micrograms the recipe can have per serving.
+Search Recipes,minFolicAcid,number,0,The minimum amount of folic acid in micrograms the recipe must have per serving.
+Search Recipes,maxFolicAcid,number,100,The maximum amount of folic acid in micrograms the recipe can have per serving.
+Search Recipes,minIodine,number,0,The minimum amount of iodine in micrograms the recipe must have per serving.
+Search Recipes,maxIodine,number,100,The maximum amount of iodine in micrograms the recipe can have per serving.
+Search Recipes,minIron,number,0,The minimum amount of iron in milligrams the recipe must have per serving.
+Search Recipes,maxIron,number,100,The maximum amount of iron in milligrams the recipe can have per serving.
+Search Recipes,minMagnesium,number,0,The minimum amount of magnesium in milligrams the recipe must have per serving.
+Search Recipes,maxMagnesium,number,100,The maximum amount of magnesium in milligrams the recipe can have per serving.
+Search Recipes,minManganese,number,0,The minimum amount of manganese in milligrams the recipe must have per serving.
+Search Recipes,maxManganese,number,100,The maximum amount of manganese in milligrams the recipe can have per serving.
+Search Recipes,minPhosphorus,number,0,The minimum amount of phosphorus in milligrams the recipe must have per serving.
+Search Recipes,maxPhosphorus,number,100,The maximum amount of phosphorus in milligrams the recipe can have per serving.
+Search Recipes,minPotassium,number,0,The minimum amount of potassium in milligrams the recipe must have per serving.
+Search Recipes,maxPotassium,number,100,The maximum amount of potassium in milligrams the recipe can have per serving.
+Search Recipes,minSelenium,number,0,The minimum amount of selenium in micrograms the recipe must have per serving.
+Search Recipes,maxSelenium,number,100,The maximum amount of selenium in micrograms the recipe can have per serving.
+Search Recipes,minSodium,number,0,The minimum amount of sodium in milligrams the recipe must have per serving.
+Search Recipes,maxSodium,number,100,The maximum amount of sodium in milligrams the recipe can have per serving.
+Search Recipes,minSugar,number,0,The minimum amount of sugar in grams the recipe must have per serving.
+Search Recipes,maxSugar,number,100,The maximum amount of sugar in grams the recipe can have per serving.
+Search Recipes,minZinc,number,0,The minimum amount of zinc in milligrams the recipe must have per serving.
+Search Recipes,maxZinc,number,100,The maximum amount of zinc in milligrams the recipe can have per serving.
+Search Recipes,offset,number,0,The number of results to skip (between 0 and 900).
+Search Recipes,number,number,10,The number of expected results (between 1 and 100).
+Get Recipe Information,id,number,716429,The id of the recipe.
+Get Recipe Information,includeNutrition,boolean,false,"Include nutrition data in the recipe information. Nutrition data is per serving. If you want the nutrition data for the entire recipe, just multiply by the number of servings."
+Get Recipe Information,addWinePairing,boolean,false,Add a wine pairing to the recipe.
+Get Recipe Information,addTasteData,boolean,false,Add taste data to the recipe.
+Get Recipe Information Bulk,ids,string,"715538,716429",A comma-separated list of recipe ids.
+Get Recipe Information Bulk,includeNutrition,boolean,false,"Include nutrition data to the recipe information. Nutrition data is per serving. If you want the nutrition data for the entire recipe, just multiply by the number of servings."
+Get Similar Recipes,id,number,715538,The id of the source recipe for which similar recipes should be found.
+Get Similar Recipes,number,number,1,The number of random recipes to be returned (between 1 and 100).
+Get Random Recipes,includeNutrition,boolean,true,Whether to include nutritional information to returned recipes.
+Get Random Recipes,include-tags,string,"vegetarian, dessert","The tags (can be diets, meal types, cuisines, or intolerances) that the recipe must have."
+Get Random Recipes,exclude-tags,string,dairy,"The tags (can be diets, meal types, cuisines, or intolerances) that the recipe must NOT have."
+Get Random Recipes,number,number,1,The number of random recipes to be returned (between 1 and 100).
+Autocomplete Recipe Search,query,string,burger,The query to be autocompleted.
+Autocomplete Recipe Search,number,number,10,The number of results to return (between 1 and 25).
+Taste by ID,id,number,69095,The recipe id.
+Taste by ID,normalize,boolean,false,Normalize to the strongest taste.
+Equipment by ID,id,number,1003464,The recipe id.
+Price Breakdown by ID,id,number,1003464,The recipe id.
+Ingredients by ID,id,number,1003464,The recipe id.
+Recipe Nutrition Label Widget,id,number,641166,The recipe id.
+Recipe Nutrition Label Widget,defaultCss,boolean,true,Whether the default CSS should be added to the response.
+Recipe Nutrition Label Widget,showOptionalNutrients,boolean,false,Whether to show optional nutrients.
+Recipe Nutrition Label Widget,showZeroValues,boolean,false,Whether to show zero values.
+Recipe Nutrition Label Widget,showIngredients,boolean,false,Whether to show a list of ingredients.
+Product Nutrition Label Widget,id,number,22347,The product id.
+Product Nutrition Label Widget,defaultCss,boolean,true,Whether the default CSS should be added to the response.
+Product Nutrition Label Widget,showOptionalNutrients,boolean,false,Whether to show optional nutrients.
+Product Nutrition Label Widget,showZeroValues,boolean,false,Whether to show zero values.
+Product Nutrition Label Widget,showIngredients,boolean,false,Whether to show a list of ingredients.
+Product Nutrition Label Image,id,number,22347,The product id.
+Product Nutrition Label Image,showOptionalNutrients,boolean,false,Whether to show optional nutrients.
+Product Nutrition Label Image,showZeroValues,boolean,false,Whether to show zero values.
+Product Nutrition Label Image,showIngredients,boolean,false,Whether to show a list of ingredients.
+Recipe Nutrition Label Image,id,number,641166,The recipe id.
+Recipe Nutrition Label Image,showOptionalNutrients,boolean,false,Whether to show optional nutrients.
+Recipe Nutrition Label Image,showZeroValues,boolean,false,Whether to show zero values.
+Recipe Nutrition Label Image,showIngredients,boolean,false,Whether to show a list of ingredients.
+Nutrition by ID,id,number,1003464,The recipe id.
+Get Analyzed Recipe Instructions,id,number,324694,The recipe id.
+Get Analyzed Recipe Instructions,stepBreakdown,boolean,true,Whether to break down the recipe steps even more.
+Extract Recipe from Website,url,string,https://foodista.com/recipe/ZHK4KPB6/chocolate-crinkle-cookies,The URL of the recipe page.
+Extract Recipe from Website,forceExtraction,boolean,true,"If true, the extraction will be triggered whether we already know the recipe or not. Use this only if information is missing as this operation is slower."
+Extract Recipe from Website,analyze,boolean,false,"If true, the recipe will be analyzed and classified resolving in more data such as cuisines, dish types, and more."
+Extract Recipe from Website,includeNutrition,boolean,false,Whether nutrition data should be added to correctly parsed ingredients.
+Extract Recipe from Website,includeTaste,boolean,false,Whether taste data should be added to correctly parsed ingredients.
+Ingredients by ID Widget,id,number,1082038,The recipe id.
+Ingredients by ID Widget,defaultCss,boolean,true,Whether the default CSS should be added to the response.
+Ingredients by ID Widget,measure,string,us,Whether the the measures should be 'us' or 'metric'.
+Ingredients by ID Image,id,number,1082038,The recipe id.
+Ingredients by ID Image,measure,string,metric,Whether the the measures should be 'us' or 'metric'.
+Recipe Taste by ID Widget,id,number,69095,The recipe id.
+Recipe Taste by ID Widget,normalize,boolean,false,Normalize to the strongest taste.
+Recipe Taste by ID Widget,rgb,string,"75,192,192","Red, green, blue values for the chart color."
+Recipe Taste by ID Image,id,number,69095,The recipe id.
+Recipe Taste by ID Image,normalize,boolean,false,Normalize to the strongest taste.
+Recipe Taste by ID Image,rgb,string,"75,192,192","Red, green, blue values for the chart color."
+Equipment by ID Widget,id,number,44860,The recipe id.
+Equipment by ID Widget,defaultCss,boolean,true,Whether the default CSS should be added to the response.
+Equipment by ID Image,id,number,44860,The recipe id.
+Price Breakdown by ID Widget,id,number,1082038,The recipe id.
+Price Breakdown by ID Widget,defaultCss,boolean,true,Whether the default CSS should be added to the response.
+Price Breakdown by ID Widget,mode,number,1,"The mode in which the widget should be delivered. 1 = separate views (compact), 2 = all in one view (full)."
+Price Breakdown by ID Image,id,number,1082038,The recipe id.
+Price Breakdown by ID Image,mode,number,1,"The mode in which the widget should be delivered. 1 = separate views (compact), 2 = all in one view (full)."
+Recipe Taste Widget,ingredientList,string,1 lemon,"The ingredient list of the recipe, one ingredient per line."
+Recipe Taste Widget,normalize,boolean,false,Normalize to the strongest taste.
+Recipe Taste Widget,rgb,string,"75,192,192","Red, green, blue values for the chart color."
+Recipe Taste Widget,language,string,en,"The input language, either ""en"" or ""de""."
+Recipe Nutrition Widget,ingredientList,string,3 oz flour,"The ingredient list of the recipe, one ingredient per line."
+Recipe Nutrition Widget,servings,number,2,The number of servings.
+Recipe Nutrition Widget,defaultCss,boolean,true,Whether the default CSS should be added to the response.
+Recipe Nutrition Widget,showBacklink,boolean,true,"Whether to show a backlink to spoonacular. If set false, this call counts against your quota."
+Recipe Nutrition Widget,language,string,en,"The input language, either ""en"" or ""de""."
+Price Breakdown Widget,ingredientList,string,3 oz flour,"The ingredient list of the recipe, one ingredient per line."
+Price Breakdown Widget,servings,number,2,The number of servings.
+Price Breakdown Widget,mode,number,1,"The mode in which the widget should be delivered. 1 = separate views (compact), 2 = all in one view (full)."
+Price Breakdown Widget,defaultCss,boolean,true,Whether the default CSS should be added to the response.
+Price Breakdown Widget,showBacklink,boolean,true,"Whether to show a backlink to spoonacular. If set false, this call counts against your quota."
+Price Breakdown Widget,language,string,en,"The input language, either ""en"" or ""de""."
+Equipment Widget,instructions,string,Preheat oven. Cut cucumber with a knife and put in a blender.,The recipe's instructions.
+Equipment Widget,view,string,grid,"How to visualize the equipment, either ""grid"" or ""list""."
+Equipment Widget,defaultCss,boolean,true,Whether the default CSS should be added to the response.
+Equipment Widget,showBacklink,boolean,true,"Whether to show a backlink to spoonacular. If set false, this call counts against your quota."
+Analyze Recipe,language,string,en,"The input language, either ""en"" or ""de""."
+Analyze Recipe,includeNutrition,boolean,false,Whether nutrition data should be added to correctly parsed ingredients.
+Analyze Recipe,includeTaste,boolean,false,Whether taste data should be added to correctly parsed ingredients.
+Summarize Recipe,id,number,4632,The recipe id.
+Create Recipe Card,title,string,My recipe,The title of the recipe.
+Create Recipe Card,ingredients,string,2 cups of green beans,"The ingredient list of the recipe, one ingredient per line (separate lines with \n)."
+Create Recipe Card,instructions,string,cook the beans,The instructions to make the recipe. One step per line (separate lines with \n).
+Create Recipe Card,readyInMinutes,number,60,The number of minutes it takes to get the recipe on the table.
+Create Recipe Card,servings,number,2,The number of servings the recipe makes.
+Create Recipe Card,mask,string,ellipseMask,"The mask to put over the recipe image (""ellipseMask"", ""diamondMask"", ""starMask"", ""heartMask"", ""potMask"", ""fishMask"")."
+Create Recipe Card,backgroundImage,string,background1,"The background image (""none"",""background1"", or ""background2"")."
+Create Recipe Card,image,binary,,The binary image of the recipe as jpg.
+Create Recipe Card,imageUrl,string,https://recipe.com/image.jpg,If you do not sent a binary image you can also pass the image URL.
+Create Recipe Card,author,string,Anna Banana,The author of the recipe.
+Create Recipe Card,backgroundColor,string,#ffffff,The background color for the recipe card as a hex-string.
+Create Recipe Card,fontColor,string,#333333,The font color for the recipe card as a hex-string.
+Create Recipe Card,source,string,spoonacular.com,The source of the recipe.
+Create Recipe Card,id,number,4632,The recipe id.
+Create Recipe Card,mask,string,ellipseMask,"The mask to put over the recipe image (""ellipseMask"", ""diamondMask"", ""starMask"", ""heartMask"", ""potMask"", ""fishMask"")."
+Create Recipe Card,backgroundImage,string,background1,"The background image (""none"",""background1"", or ""background2"")."
+Create Recipe Card,backgroundColor,string,ffffff,The background color for the recipe card as a hex-string.
+Create Recipe Card,fontColor,string,333333,The font color for the recipe card as a hex-string.
+Analyze Recipe Instructions,instructions,string,Put the garlic in a pan and then add the onion. Add some salt and oregano.,The instructions to be analyzed.
+Classify Cuisine,title,string,Pork roast with green beans,The title of the recipe.
+Classify Cuisine,ingredientList,string,3 oz pork shoulder,"The ingredient list of the recipe, one ingredient per line (separate lines with \n)."
+Classify Cuisine,language,string,en,"The input language, either ""en"" or ""de""."
+Analyze a Recipe Search Query,q,string,salmon with fusilli and no nuts,The recipe search query.
+Convert Amounts,ingredientName,string,flour,The ingredient which you want to convert.
+Convert Amounts,sourceAmount,number,2.5,"The amount from which you want to convert, e.g. the 2.5 in ""2.5 cups of flour to grams""."
+Convert Amounts,sourceUnit,string,cups,"The unit from which you want to convert, e.g. the grams in ""2.5 cups of flour to grams"". You can also use ""piece"", e.g. ""3.4 oz tomatoes to piece"""
+Convert Amounts,targetUnit,string,grams,"The unit to which you want to convert, e.g. the grams in ""2.5 cups of flour to grams"". You can also use ""piece"", e.g. ""3.4 oz tomatoes to piece"""
+Parse Ingredients,ingredientList,string,1 cup green tea,"The ingredient list of the recipe, one ingredient per line."
+Parse Ingredients,servings,number,1,The number of servings that you can make from the ingredients.
+Parse Ingredients,includeNutrition,boolean,true,Whether nutrition data should be added to correctly parsed ingredients.
+Parse Ingredients,language,string,en,"The input language, either ""en"" or ""de""."
+Compute Glycemic Load,(post body),string,"{
+                ""ingredients"":[
+                    ""1 kiwi"",
+                    ""2 cups rice"",
+                    ""2 glasses of water""
+                ]
+            }",A json body.
+Compute Glycemic Load,language,string,en,"The input language, either ""en"" or ""de""."
+Autocomplete Ingredient Search,query,string,appl,The partial or full ingredient name.
+Autocomplete Ingredient Search,number,number,10,The number of results to return (between 1 and 100).
+Autocomplete Ingredient Search,language,text,en,"Language code, either ""en"" or ""de""."
+Autocomplete Ingredient Search,metaInformation,boolean,false,Whether to return more meta information about the ingredients.
+Autocomplete Ingredient Search,intolerances,string,egg,A comma-separated list of intolerances. All recipes returned must not contain ingredients that are not suitable for people with the intolerances entered. See a full list of supported intolerances.
+Ingredient Search,query,string,apple,The partial or full ingredient name.
+Ingredient Search,addChildren,boolean,true,Whether to add children of found foods.
+Ingredient Search,minProteinPercent,number,10,The minimum percentage of protein the food must have (between 0 and 100).
+Ingredient Search,maxProteinPercent,number,90,The maximum percentage of protein the food can have (between 0 and 100).
+Ingredient Search,minFatPercent,number,10,The minimum percentage of fat the food must have (between 0 and 100).
+Ingredient Search,maxFatPercent,number,90,The maximum percentage of fat the food can have (between 0 and 100).
+Ingredient Search,minCarbsPercent,number,10,The minimum percentage of carbs the food must have (between 0 and 100).
+Ingredient Search,maxCarbsPercent,number,90,The maximum percentage of carbs the food can have (between 0 and 100).
+Ingredient Search,metaInformation,boolean,false,Whether to return more meta information about the ingredients.
+Ingredient Search,intolerances,string,egg,A comma-separated list of intolerances. All recipes returned must not contain ingredients that are not suitable for people with the intolerances entered. See a full list of supported intolerances.
+Ingredient Search,sort,string,calories,The strategy to sort ingredients by. You can sort by any nutrient listed here.
+Ingredient Search,sortDirection,string,asc,The direction in which to sort. Must be either 'asc' (ascending) or 'desc' (descending).
+Ingredient Search,language,text,en,"Language code, either ""en"" or ""de""."
+Ingredient Search,offset,number,0,The number of results to skip (between 0 and 990).
+Ingredient Search,number,number,10,The number of expected results (between 1 and 100).
+Get Ingredient Substitutes,ingredientName,string,butter,The name of the ingredient you want to replace.
+Get Ingredient Substitutes by ID,id,number,1001,The id of the ingredient you want substitutes for.
+Compute Ingredient Amount,id,number,9266,The id of the ingredient you want the amount for.
+Compute Ingredient Amount,nutrient,string,protein,The target nutrient. See a list of supported nutrients.
+Compute Ingredient Amount,target,number,2,The target number of the given nutrient.
+Compute Ingredient Amount,unit,string,oz,The target unit.
+Ingredients Widget,ingredientList,string,3 oz flour,"The ingredient list of the recipe, one ingredient per line."
+Ingredients Widget,servings,number,2,The number of servings.
+Ingredients Widget,measure,string,metric,"The original system of measurement, either ""metric"" or ""us""."
+Ingredients Widget,view,string,grid,"How to visualize the ingredients, either ""grid"" or ""list""."
+Ingredients Widget,defaultCss,boolean,true,Whether the default CSS should be added to the response.
+Ingredients Widget,showBacklink,boolean,true,"Whether to show a backlink to spoonacular. If set false, this call counts against your quota."
+Ingredients Widget,language,string,en,"The input language, either ""en"" or ""de""."
+Get Product Information,id,number,22347,The id of the packaged food.
+Search Grocery Products,query,string,greek yogurt,The search query.
+Search Grocery Products,minCalories,number,50,The minimum amount of calories the product must have per serving.
+Search Grocery Products,maxCalories,number,800,The maximum amount of calories the product can have per serving.
+Search Grocery Products,minCarbs,number,10,The minimum amount of carbohydrates in grams the product must have per serving.
+Search Grocery Products,maxCarbs,number,100,The maximum amount of carbohydrates in grams the product can have per serving.
+Search Grocery Products,minProtein,number,10,The minimum amount of protein in grams the product must have per serving.
+Search Grocery Products,maxProtein,number,100,The maximum amount of protein in grams the product can have per serving.
+Search Grocery Products,minFat,number,1,The minimum amount of fat in grams the product must have per serving.
+Search Grocery Products,maxFat,number,100,The maximum amount of fat in grams the product can have per serving.
+Search Grocery Products,addProductInformation,boolean,false,"If set to true, you get more information about the products returned."
+Search Grocery Products,offset,number,0,The number of results to skip (between 0 and 990).
+Search Grocery Products,number,number,10,The number of expected results (between 1 and 100).
+Search Grocery Products by UPC,upc,number,041631000564,The product's UPC.
+Search Custom Foods,query,string,brat,The search query.
+Search Custom Foods,username,string,dsky,The username.
+Search Custom Foods,hash,string,4b5v4398573406,The private hash for the username.
+Search Custom Foods,offset,number,0,The number of results to skip (between 0 and 990).
+Search Custom Foods,number,number,10,The number of expected results (between 1 and 100).
+Add Custom Foods,(post body),string,"{
+                            ""title"": ""My little afternoon snack"",
+                            ""servings"": 2
+                          }",The json representing the custom food.
+Add Custom Foods,username,string,dsky,The username.
+Add Custom Foods,hash,string,4b5v4398573406,The private hash for the username.
+Get Comparable Products,upc,number,033698816271,The UPC of the product for which you want to find comparable products.
+Autocomplete Product Search,query,string,chicke,The (partial) search query.
+Autocomplete Product Search,number,number,10,The number of results to return (between 1 and 25).
+Product Nutrition by ID Widget,id,number,7657,The id of the product.
+Product Nutrition by ID Widget,defaultCss,boolean,true,Whether the default CSS should be added to the response.
+Product Nutrition by ID Image,id,number,7657,The id of the product.
+Recipe Nutrition by ID Widget,id,number,1082038,The recipe id.
+Recipe Nutrition by ID Widget,defaultCss,boolean,true,Whether the default CSS should be added to the response.
+Recipe Nutrition by ID Image,id,number,1082038,The recipe id.
+Classify Grocery Product,(post body),string,"{
+                ""title"": ""Kroger Vitamin A & D Reduced Fat 2% Milk"",
+                ""upc"": """",
+                ""plu_code"": """"
+              }",A json object containing the product title.
+Classify Grocery Product,locale,string,en_US,"The display name of the returned category, supported is en_US (for American English) and en_GB (for British English)."
+Classify Grocery Product Bulk,(post body),string,"[{
+                ""title"": ""Kroger Vitamin A & D Reduced Fat 2% Milk"",
+                ""upc"": """",
+                ""plu_code"": """"
+              }]","A json array containing objects, each with the product title."
+Classify Grocery Product Bulk,locale,string,en_US,"The display name of the returned category, supported is en_US (for American English) and en_GB (for British English)."
+Map Ingredients to Grocery Products,(post body),string,"{
+                ""ingredients"": [""eggs"",""bacon""],
+                ""servings"": 2
+              }",Input for grocery product mapping.
+Estimate Nutrition by Dish Name,title,string,Spaghetti Aglio et Olio,The title of the dish.
+Estimate Nutrients from Image,image,binary,,The binary image of the recipe as jpg.
+Autocomplete Menu Item Search,query,string,chicke,The (partial) search query.
+Autocomplete Menu Item Search,number,number,10,The number of results to return (between 1 and 25).
+Search Menu Items,query,string,snickers,The search query.
+Search Menu Items,minCalories,number,50,The minimum amount of calories the menu item must have per serving.
+Search Menu Items,maxCalories,number,800,The maximum amount of calories the menu item can have per serving.
+Search Menu Items,minCarbs,number,10,The minimum amount of carbohydrates in grams the menu item must have per serving.
+Search Menu Items,maxCarbs,number,100,The maximum amount of carbohydrates in grams the menu item can have per serving.
+Search Menu Items,minProtein,number,10,The minimum amount of protein in grams the menu item must have per serving.
+Search Menu Items,maxProtein,number,100,The maximum amount of protein in grams the menu item can have per serving.
+Search Menu Items,minFat,number,1,The minimum amount of fat in grams the menu item must have per serving.
+Search Menu Items,maxFat,number,100,The maximum amount of fat in grams the menu item can have per serving.
+Search Menu Items,addMenuItemInformation,boolean,false,"If set to true, you get more information about the menu items returned."
+Search Menu Items,offset,number,0,The offset number for paging (between 0 and 990).
+Search Menu Items,number,number,100,The number of expected results (between 1 and 10).
+Menu Item Nutrition Label Widget,id,number,342313,The menu item id.
+Menu Item Nutrition Label Widget,defaultCss,boolean,true,Whether the default CSS should be added to the response.
+Menu Item Nutrition Label Widget,showOptionalNutrients,boolean,false,Whether to show optional nutrients.
+Menu Item Nutrition Label Widget,showZeroValues,boolean,false,Whether to show zero values.
+Menu Item Nutrition Label Widget,showIngredients,boolean,false,Whether to show a list of ingredients.
+Menu Item Nutrition Label Image,id,number,342313,The menu item id.
+Menu Item Nutrition Label Image,showOptionalNutrients,boolean,false,Whether to show optional nutrients.
+Menu Item Nutrition Label Image,showZeroValues,boolean,false,Whether to show zero values.
+Menu Item Nutrition Label Image,showIngredients,boolean,false,Whether to show a list of ingredients.
+Menu Item Nutrition by ID Widget,id,number,424571,The menu item id.
+Menu Item Nutrition by ID Widget,defaultCss,boolean,true,Whether the default CSS should be added to the response.
+Menu Item Nutrition by ID Image,id,number,424571,The menu item id.
+Get Menu Item Information,id,number,424571,The menu item id.
+Generate Meal Plan,timeFrame,string,day,"Either for one ""day"" or an entire ""week""."
+Generate Meal Plan,targetCalories,number,2000,What is the caloric target for one day? The meal plan generator will try to get as close as possible to that goal.
+Generate Meal Plan,diet,string,vegetarian,Enter a diet that the meal plan has to adhere to. See a full list of supported diets.
+Generate Meal Plan,exclude,string,"shellfish, olives",A comma-separated list of allergens or ingredients that must be excluded.
+Get Meal Plan Week,username,string,dsky,The username.
+Get Meal Plan Week,start-date,string,2020-06-01,The start date of the meal planned week in the format yyyy-mm-dd.
+Get Meal Plan Week,hash,string,4b5v4398573406,The private hash for the username.
+Get Meal Plan Day,username,string,dsky,The username.
+Get Meal Plan Day,date,string,2020-06-01,The date of the meal planned day in the format yyyy-mm-dd.
+Get Meal Plan Day,hash,string,4b5v4398573406,The private hash for the username.
+Add to Meal Plan,username,string,dsky,The username.
+Add to Meal Plan,hash,string,4b5v4398573406,The private hash for the username.
+Clear Meal Plan Day,username,string,dsky,The username.
+Clear Meal Plan Day,date,string,2020-06-01,The date in the format yyyy-mm-dd.
+Clear Meal Plan Day,hash,string,4b5v4398573406,The private hash for the username.
+Delete from Meal Plan,username,string,dsky,The username.
+Delete from Meal Plan,id,number,15678,The shopping list item id.
+Delete from Meal Plan,hash,string,4b5v4398573406,The private hash for the username.
+Get Meal Plan Templates,username,string,dsky,The username.
+Get Meal Plan Templates,hash,string,4b5v4398573406,The private hash for the username.
+Get Meal Plan Template,username,string,dsky,The username.
+Get Meal Plan Template,id,number,15678,The shopping list item id.
+Get Meal Plan Template,hash,string,4b5v4398573406,The private hash for the username.
+Add Meal Plan Template,username,string,dsky,The username.
+Add Meal Plan Template,hash,string,4b5v4398573406,The private hash for the username.
+Delete Meal Plan Template,username,string,dsky,The username.
+Delete Meal Plan Template,id,number,15678,The shopping list item id.
+Delete Meal Plan Template,hash,string,4b5v4398573406,The private hash for the username.
+Get Shopping List,username,string,dsky,The username.
+Get Shopping List,hash,string,4b5v4398573406,The private hash for the username.
+Generate Shopping List,username,string,dsky,The username.
+Generate Shopping List,start-date,string,2020-06-01,The start date in the format yyyy-mm-dd.
+Generate Shopping List,end-date,string,2020-06-07,The end date in the format yyyy-mm-dd.
+Generate Shopping List,hash,string,4b5v4398573406,The private hash for the username.
+Connect User,(post body),string,"{
+                ""username"": ""cool user"",
+              }",A json body.
+Add to Shopping List,username,string,dsky,The username.
+Add to Shopping List,hash,string,4b5v4398573406,The private hash for the username.
+Delete from Shopping List,username,string,dsky,The username.
+Delete from Shopping List,id,number,15678,The shopping list item id.
+Delete from Shopping List,hash,string,4b5v4398573406,The private hash for the username.
+Dish Pairing for Wine,wine,string,malbec,"The type of wine that should be paired, e.g. ""merlot"", ""riesling"", or ""malbec""."
+Wine Pairing,food,string,steak,"The food to get a pairing for. This can be a dish (""steak""), an ingredient (""salmon""), or a cuisine (""italian"")."
+Wine Pairing,maxPrice,number,50,The maximum price for the specific wine recommendation in USD.
+Wine Description,wine,string,merlot,"The name of the wine that should be paired, e.g. ""merlot"", ""riesling"", or ""malbec""."
+Wine Recommendation,wine,string,merlot,The type of wine to get a specific product recommendation for.
+Wine Recommendation,maxPrice,number,50,The maximum price for the specific wine recommendation in USD.
+Wine Recommendation,minRating,number,0.7,"The minimum rating of the recommended wine between 0 and 1. For example, 0.8 equals 4 out of 5 stars."
+Wine Recommendation,number,number,3,The number of wine recommendations expected (between 1 and 100).
+Image Classification by File,file,binary,-,The binary file of the image.
+Image Classification by URL,imageUrl,string,https://img.spoonacular.com/recipes/635350-240x150.jpg,The URL of the image to be classified.
+Image Analysis by File,file,binary,-,The binary file of the image.
+Image Analysis by URL,imageUrl,string,https://img.spoonacular.com/recipes/635350-240x150.jpg,The URL of the image to be analyzed.
+Quick Answer,q,string,How much vitamin c is in 2 apples?,The nutrition related question.
+Detect Food in Text,text,string,"I like to eat delicious tacos. The only thing better is a cheeseburger with cheddar. But then again, pizza with pepperoni, mushrooms, and tomatoes is so good too!","The text in which food items, such as dish names and ingredients, should be detected in."
+Search Site Content,query,string,past,"The query to search for. You can also use partial queries such as ""spagh"" to already find spaghetti recipes, articles, grocery products, and other content."
+Search All Food,query,string,apple,The search query.
+Search All Food,offset,number,0,The number of results to skip (between 0 and 990).
+Search All Food,number,number,10,The number of expected results (between 1 and 100).
+Search Food Videos,query,string,chicken soup,The search query.
+Search Food Videos,type,string,main course,The type of the recipes. See a full list of supported meal types.
+Search Food Videos,cuisine,string,italian,"The cuisine(s) of the recipes. One or more, comma separated. See a full list of supported cuisines."
+Search Food Videos,diet,string,vegetarian,The diet for which the recipes must be suitable. See a full list of supported diets.
+Search Food Videos,includeIngredients,string,"tomato,cheese",A comma-separated list of ingredients that the recipes should contain.
+Search Food Videos,excludeIngredients,string,eggs,A comma-separated list of ingredients or ingredient types that the recipes must not contain.
+Search Food Videos,minLength,number,0,Minimum video length in seconds.
+Search Food Videos,maxLength,number,999,Maximum video length in seconds.
+Search Food Videos,offset,number,0,The number of results to skip (between 0 and 900).
+Search Food Videos,number,number,10,The number of results to return (between 1 and 100).
+Get Ingredient Information,id,number,9266,The ingredient id.
+Get Ingredient Information,amount,number,150,The amount of this ingredient.
+Get Ingredient Information,unit,string,grams,The unit for the given amount.
+Get Ingredient Information,locale,string,en_US,"The display name of the returned category, supported is en_US (for American English) and en_GB (for British English)."
+Talk to Chatbot,text,string,donut recipes,The request / question / answer from the user to the chatbot.
+Talk to Chatbot,contextId,string,342938,An arbitrary globally unique id for your conversation. The conversation can contain states so you should pass your context id if you want the bot to be able to remember the conversation.
+Conversation Suggests,query,string,tell,A (partial) query from the user. The endpoint will return if it matches topics it can talk about.
+Conversation Suggests,number,number,5,The number of suggestions to return (between 1 and 25).
+Search Restaurants,query,string,beach cafe,The search query.
+Search Restaurants,lat,number,37.7786357,The latitude of the user's location.
+Search Restaurants,lng,number,-122.3918135,"The longitude of the user's location.""."
+Search Restaurants,distance,number,2,The distance around the location in miles.
+Search Restaurants,budget,number,20,The user's budget for a meal in USD.
+Search Restaurants,cuisine,string,italian,The cuisine of the restaurant.
+Search Restaurants,min-rating,number,4.4,The minimum rating of the restaurant between 0 and 5.
+Search Restaurants,is-open,boolean,true,Whether the restaurant must be open at the time of search.
+Search Restaurants,sort,string,distance,"How to sort the results, one of the following 'cheapest', 'fastest', 'rating', 'distance' or the default 'relevance'."
+Search Restaurants,page,number,0,The page number of results.
