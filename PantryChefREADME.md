@@ -161,15 +161,12 @@ This project became a way to blend what I'm passionate about, technology and sus
 
 **Caption**: Main dashboard showing ingredient input sidebar, mood selection, and dietary filters with real-time recipe grid
 
-### Recipe Search Results
+### Recipe Search Results & Details Model
+
+*![GIPHY4-ezgif com-optimize](https://github.com/user-attachments/assets/ca1e4621-f1cd-4acb-b7d5-7cbc5a8629da)*
 
 
-**Caption**: Live recipe search with AI-generated pitch, confidence scores, and nutritional tags
-
-### Recipe Details Modal
-**
-
-**Caption**: Expanded recipe view with full ingredients, step-by-step instructions, and "Ask Chef" substitution feature
+**Caption**: Live recipe search with AI-generated pitch, confidence scores, and nutritional tags with expanded recipe view with full ingredients, step-by-step instructions, and "Ask Chef" substitution feature
 
 ### AI Substitution Recommendations
 *![GIPHY#3](https://github.com/user-attachments/assets/7be253fc-dc3c-460d-a637-3f8315d69ab8)*
