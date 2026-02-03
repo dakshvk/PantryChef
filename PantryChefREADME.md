@@ -157,22 +157,22 @@ This project became a way to blend what I'm passionate about, technology and sus
 ## Demo GIFs
 
 ### Dashboard
-*Demo GIF will be added here*
+*![GIPHY#1](https://github.com/user-attachments/assets/f5636b93-54ba-4c7b-85ef-2ddfc60951e5)*
 
 **Caption**: Main dashboard showing ingredient input sidebar, mood selection, and dietary filters with real-time recipe grid
 
 ### Recipe Search Results
-*Demo GIF will be added here*
+
 
 **Caption**: Live recipe search with AI-generated pitch, confidence scores, and nutritional tags
 
 ### Recipe Details Modal
-*Demo GIF will be added here*
+**
 
 **Caption**: Expanded recipe view with full ingredients, step-by-step instructions, and "Ask Chef" substitution feature
 
 ### AI Substitution Recommendations
-*Demo GIF will be added here*
+*![GIPHY#3](https://github.com/user-attachments/assets/7be253fc-dc3c-460d-a637-3f8315d69ab8)*
 
 **Caption**: Gemini-powered substitution suggestions based on available pantry ingredients
 
