@@ -20,18 +20,44 @@ class GeminiSubstitution:
 
     def __init__(self):
         self.api_key = os.getenv('GEMINI_API_KEY')
-        self.system_prompt = """You are a professional food critic. Write exactly ONE mouth-watering sentence per recipe (always 3 sentences MAX for top 3 recipes). Format: "1. [Recipe Name]: [flavor description]". ZERO advice: Never mention missing ingredients, cooking times, or health stats. NO chatting: Do not explain reasoning. Just give the hook and stop talking.
+        self.system_prompt = """You are a Silent Culinary Auditor and a professional Executive Chef. Your role is to deliver exactly 3 safe recipe recommendations in a clean, professional format.
 
-ULTIMATE DIETARY AUDITOR: You are a culinary auditor. You understand context and can distinguish between actual animal meat and plant-based alternatives.
+SILENT CULINARY AUDITOR RULES:
+- You must audit every recipe for dietary compliance
+- If a recipe violates the user's diet (e.g., contains meat for a vegetarian, dairy for a vegan), SILENTLY SKIP IT
+- Do NOT write "REJECTED", "WARNING", or any error text
+- Do NOT explain why you skipped a recipe
+- Simply do not include it in your response
+- Only include recipes that are 100% safe for the user's dietary requirements
 
-DIET RULES:
-- If the user's diet is Vegetarian: Search the ingredients for animal flesh. If you see 'Chicken', 'Beef', or 'Fish' as actual ingredients (not in dish names), respond only with REJECTED. However, if you see 'Mushroom Shawarma' or 'Seitan Kebab', these are SAFE. Only reject if actual animal meat is an ingredient.
-- If the user's diet is Vegan: Same as Vegetarian, but also reject if you see dairy or eggs in ingredients (unless they are plant-based alternatives like 'almond milk' or 'vegan egg').
-- If the user's diet is Pescatarian: Reject if you see land meat (chicken, beef, pork, lamb, etc.) in ingredients, but ALLOW fish and seafood.
+DIETARY AUDIT RULES:
+- Vegetarian: Search ingredients for animal flesh. If you see 'Chicken', 'Beef', 'Fish' as actual ingredients, skip it silently. 'Mushroom Shawarma' and 'Seitan Kebab' are SAFE.
+- Vegan: Same as Vegetarian, plus check for dairy/eggs. If you see actual dairy/eggs, skip it silently. 'Vegan butter' and 'plant-based egg' are SAFE.
+- Pescatarian: If you see land meat (chicken, beef, pork, lamb) in ingredients, skip it silently. Fish and seafood are SAFE.
+- Custom diets (paleo, keto, raw, etc.): Check if recipes comply with the diet's specific rules. For example, paleo excludes grains and legumes; keto is very low-carb. If a recipe violates the custom diet's rules, skip it silently.
+- Custom intolerances (shrimp, peanuts, shellfish, etc.): Check EVERY ingredient in the recipe. If the custom intolerance keyword appears in ANY ingredient name (e.g., "shrimp" in "shrimp paste", "peanuts" in "peanut oil"), skip the recipe silently. Be thorough - check all ingredients, not just the title.
 
-CRITICAL: Only reject based on actual animal ingredients, not dish names. 'Mushroom Shawarma' is safe, 'Chicken Shawarma' is not. 'Chickpea' is safe, 'Chicken' is not. If it is 100% safe for the user's diet, provide your one-sentence food critic hook.
+CONTEXT UNDERSTANDING: You understand context. 'Chickpea' is safe, 'Chicken' is not. 'Vegan butter' is safe, 'butter' without 'vegan' is not. 'Mushroom Shawarma' is safe, 'Chicken Shawarma' is not.
 
-SAFETY RULE: If a recipe is flagged for AI validation, check if it truly uses a safe alternative (e.g., 'vegan milk', 'plant-based egg'). If it is safe, write the hook. If you find a REAL intolerance ingredient (like real egg or dairy without safe words), your response for that recipe MUST be exactly the word REJECTED."""
+OUTPUT FORMAT (CRITICAL):
+You must deliver exactly 3 recommendations in this exact format:
+1. **[Recipe Name]**: [One mouth-watering flavor description sentence]
+2. **[Recipe Name]**: [One mouth-watering flavor description sentence]
+3. **[Recipe Name]**: [One mouth-watering flavor description sentence]
+
+Example:
+1. **Lemon Garlic Chicken**: A zesty, herb-kissed dish that transforms simple chicken into a bright Mediterranean feast.
+2. **Roast Chicken with Herbs**: Crispy-skinned perfection with aromatic herbs that fill your kitchen with warmth.
+3. **Chicken Piccata**: Tangy lemon and briny capers create a vibrant, restaurant-quality meal in minutes.
+
+REQUIREMENTS:
+- Exactly 3 recipes (if fewer are safe, provide only the safe ones)
+- Use the exact format: 1. **[Recipe Name]**: [Description]
+- Each recommendation must be on its own new line. Do not bunch them into a single paragraph.
+- One sentence per recipe (focus on flavor and vibe only)
+- If NONE OF THE recipes are safe, return: "I couldn't find a perfect match for your diet today, but try these ingredients in a simple sauté!"
+- ZERO advice: Never mention missing ingredients, cooking times, or health stats
+- NO chatting: Do not explain reasoning, just deliver the recommendations"""
 
         if not self.api_key:
             print('WARNING: GEMINI_API_KEY not found in .env. Falling back to Spoonacular data.')
@@ -116,7 +142,9 @@ TIP: [one sentence chef advice under 15 words, mention if it's a creative hack]"
     def generate_recommendation_pitch(
         self,
         recommendations: List[Dict[str, Any]],
-        user_mood: str = 'casual'
+        user_mood: str = 'casual',
+        user_diet: Optional[str] = None,
+        user_intolerances: Optional[List[str]] = None
     ) -> Dict[str, Any]:
         """
         Generate a human-friendly "Chef's Pitch" from Logic.py recommendations.
@@ -124,6 +152,9 @@ TIP: [one sentence chef advice under 15 words, mention if it's a creative hack]"
         
         Args:
             recommendations: List of clean recommendations from PantryChefEngine.process_results()
+            user_mood: User's mood ('tired', 'casual', 'energetic')
+            user_diet: User's dietary restriction (e.g., 'vegetarian', 'vegan', 'paleo', 'keto', or custom)
+            user_intolerances: List of user's intolerances (e.g., ['dairy', 'gluten', 'shrimp', 'peanuts'])
             user_mood: User's mood ('tired', 'casual', 'energetic')
             
         Returns:
@@ -281,13 +312,54 @@ TIP: [one sentence chef advice under 15 words, mention if it's a creative hack]"
                 'cuisines': cuisines  # Plural key
             })
         
+        # Build user dietary context for Gemini
+        user_diet_context = ""
+        if user_diet and user_diet.lower() not in ['none', 'null', '', 'any']:
+            user_diet_context = f"\n\nUSER'S DIET: {user_diet.lower()}"
+            if user_diet.lower() not in ['vegetarian', 'vegan', 'pescatarian']:
+                user_diet_context += " (CUSTOM DIET - Check if recipes comply with this dietary restriction)"
+        
+        user_intolerance_context = ""
+        if user_intolerances and len(user_intolerances) > 0:
+            # Filter out common intolerances to identify custom ones
+            common_intolerances = ['dairy', 'gluten', 'eggs', 'nuts']
+            custom_intolerances = [i for i in user_intolerances if i.lower() not in common_intolerances]
+            common_only = [i for i in user_intolerances if i.lower() in common_intolerances]
+            
+            user_intolerance_context = f"\n\nUSER'S INTOLERANCES: {', '.join(user_intolerances)}"
+            if custom_intolerances:
+                user_intolerance_context += f"\nCUSTOM INTOLERANCES (require special checking): {', '.join(custom_intolerances)}"
+        
         # Check if any recipe requires safety validation
         has_safety_validation = any(r.get('requires_ai_validation', False) for r in recipe_contexts)
         
         # Build safety validation instructions if needed
+        # Include safety_reason from Logic.py so Gemini knows why recipes were flagged
         safety_instructions = ""
-        if has_safety_validation:
-            safety_instructions = "\n\nSAFETY VALIDATION RULE: If a recipe is flagged with requires_ai_validation, inspect the full_ingredient_list and instructions. If it is a fake/vegan version (e.g., 'vegan butter', 'plant-based egg'), approve it with a one-sentence hype description. If you find a REAL intolerance ingredient (e.g., 'butter' without 'vegan', 'egg' without 'vegan'), respond ONLY with 'REJECTED: Safety Violation' for that recipe and skip it in your list."
+        if has_safety_validation or user_diet_context or user_intolerance_context:
+            # Collect safety reasons for flagged recipes
+            safety_contexts = []
+            for r in recipe_contexts:
+                if r.get('requires_ai_validation'):
+                    
+                    safety_reason = r.get('violation_note', '')
+                    found_intolerances = r.get('found_intolerances', [])
+                    suspicious_ingredients = r.get('suspicious_ingredients', [])
+                    
+                    context_parts = []
+                    if safety_reason:
+                        context_parts.append(f"Backend flagged: {safety_reason}")
+                    if found_intolerances:
+                        context_parts.append(f"Intolerances detected: {', '.join(found_intolerances)}")
+                    if suspicious_ingredients:
+                        context_parts.append(f"Suspicious ingredients: {', '.join(suspicious_ingredients)}")
+                    
+                    if context_parts:
+                        safety_contexts.append(f"Recipe '{r['title']}': {'; '.join(context_parts)}")
+            
+            safety_context_text = "\n".join(safety_contexts) if safety_contexts else ""
+            
+            safety_instructions = f"\n\nSAFETY VALIDATION: The backend Logic.py has flagged some recipes for review. Use your culinary knowledge to confirm if these are true violations.{user_diet_context}{user_intolerance_context}\n\n{safety_context_text if safety_context_text else ''}\n\nFor each flagged recipe:\n- If the backend flagged it for a clear violation (e.g., actual meat in vegetarian diet, real dairy in dairy-free diet, shrimp in shellfish-free diet), do NOT include it in your response. Skip it silently.\n- If the backend flagged it for an ambiguous case (e.g., 'vegan butter', 'plant-based egg', flavorings), check the ingredients carefully. If it's a safe alternative, include it with a one-sentence description. If it's a real violation, skip it.\n- For CUSTOM INTOLERANCES (like shrimp, peanuts, shellfish): Check every ingredient in the recipe. If the custom intolerance keyword appears in any ingredient name, skip the recipe silently.\n- For CUSTOM DIETS (like paleo, keto): Verify that the recipe complies with the diet's rules. If it violates the diet, skip it silently.\n- Only include recipes that are 100% safe for the user's dietary requirements and intolerances."
         
         # Build prompt based on mood
         if user_mood == 'tired':
@@ -304,11 +376,13 @@ TIP: [one sentence chef advice under 15 words, mention if it's a creative hack]"
 
 Top Recipe: {top['title']}{ingredient_context}
 
-Write exactly ONE sentence in this format:
-"1. {top['title']}: [flavor description]"
+Provide this recipe in the exact format:
+1. **[{top['title']}]**: [One mouth-watering flavor description sentence]
+
+If this recipe violates the user's diet or contains any of the user's intolerances, do NOT include it. Instead, return: "I couldn't find a perfect match for your diet today, but try these ingredients in a simple sauté!"
 
 ZERO advice: Never mention missing ingredients, cooking times, or health stats.
-Just the hook and stop talking."""
+Just the description and stop talking."""
         else:
             # Top 3 comparison - List format
             # Build simple recipe list with just titles
@@ -330,36 +404,108 @@ Top 3 Recipes:
 {recipes_text}
 {ingredient_check_text if ingredient_check_text else ""}
 
-Write exactly 3 sentences in this format:
-"1. [Recipe Name]: [flavor description]"
-"2. [Recipe Name]: [flavor description]"
-"3. [Recipe Name]: [flavor description]"
+CRITICAL: You MUST provide exactly 3 lines in this EXACT format (no exceptions):
+1. [Recipe Name], [One mouth-watering flavor description sentence]
+2. [Recipe Name], [One mouth-watering flavor description sentence]
+3. [Recipe Name], [One mouth-watering flavor description sentence]
 
-ZERO advice: Never mention missing ingredients, cooking times, or health stats.
-NO chatting: Do not explain reasoning. Just give the hook and stop talking.
-ONLY include the top 3 recipes. Keep it minimalistic and organized."""
+DIETARY FILTERING:
+- If a recipe violates the user's diet or contains intolerances, SKIP it and use another safe recipe from the list
+- If fewer than 3 safe recipes exist, pad the remaining slots with generic recommendations:
+  1. **Quick Sauté**: Try these ingredients with olive oil and seasonings!
+  2. **Simple Stir-Fry**: Toss everything together for a fast, flavorful meal!
+  3. **Easy Roast**: Pop ingredients in the oven for hands-off cooking!
+
+FORMAT RULES:
+- ALWAYS exactly 3 bullet points as numbers like 1. then below it 2. then below that 3. 
+- NEVER return fewer than 3 lines unless if only 2 recipes are recommended or 1 then return respectivally 1 recipe or 2 based on how many recipes are recommended.
+- NEVER return a response like "Here's X for you!" or "I couldn't find..."
+- Each line MUST follow it's respective number so 1. or 2. or 3. then it follow with the [Name of dish], [Flavor description]
+
+ZERO advice about ingredients, time, or nutrition. Just 3 delicious recommendations."""
         
         try:
             response = self.client.models.generate_content(
                 model='gemini-2.0-flash',
                 contents=prompt
             )
-            
+
             pitch_text = response.text.strip()
-            
+
+            # POST-PROCESSING: Guarantee exactly 3 numbered lines
+            lines = pitch_text.split('\n')
+            bullet_lines = [line for line in lines if line.strip().startswith(('1.', '2.', '3.'))]
+
+            # If Gemini didn't return 3 numbered lines, pad with generic recommendations
+            if len(bullet_lines) < 3:
+                generic_recs = [
+                    "1. **Quick Sauté**: Try these ingredients with olive oil and your favorite seasonings!",
+                    "2. **Simple Stir-Fry**: Toss everything in a hot pan for a fast, flavorful meal!",
+                    "3. **Easy Roast**: Pop ingredients in the oven for hands-off deliciousness!"
+                ]
+                # Add generic recommendations to reach 3 total
+                while len(bullet_lines) < 3:
+                    if generic_recs:
+                        bullet_lines.append(generic_recs.pop(0))
+                    else:
+                        break
+                print(
+                    f"Gemini returned only {len([l for l in pitch_text.split('\\n') if l.strip().startswith(('1.', '2.', '3.'))])} recipes, padded to 3")
+
+            # If Gemini returned too many, trim to 3
+            elif len(bullet_lines) > 3:
+                bullet_lines = bullet_lines[:3]
+                print(
+                    f"Gemini returned {len([l for l in pitch_text.split('\\n') if l.strip().startswith(('1.', '2.', '3.'))])} recipes, trimmed to 3")
+
+            # Rebuild pitch with exactly 3 lines
+            pitch_text = '\n'.join(bullet_lines)
+
             return {
                 'pitch_text': pitch_text,
                 'top_recipe': top_3[0] if top_3 else None,
                 'comparison': top_3 if user_mood != 'tired' else []
             }
         except Exception as e:
-            print(f'Error generating recommendation pitch: {e}')
-            # Fallback
-            top = recommendations[0]
+            # Check for 429 rate limit error specifically
+            error_str = str(e).lower()
+            is_rate_limit = (
+                '429' in error_str or 
+                'rate limit' in error_str or 
+                'quota' in error_str or
+                'too many requests' in error_str
+            )
+            
+            if is_rate_limit:
+                print(f'⚠️  Rate limit (429) error in generate_recommendation_pitch: {e}')
+                # 429-specific fallback: Return numbered list using recipe titles
+                fallback_lines = []
+                for i, rec in enumerate(recommendations[:3], 1):
+                    title = rec.get('title', 'Unknown Recipe')
+                    if i == 1:
+                        fallback_lines.append(f"{i}. **{title}**: A delicious, chef-approved choice for your meal!")
+                    elif i == 2:
+                        fallback_lines.append(f"{i}. **{title}**: A wonderful option that uses your ingredients perfectly.")
+                    elif i == 3:
+                        fallback_lines.append(f"{i}. **{title}**: A great dish to try with what you have in your pantry.")
+                    else:
+                        fallback_lines.append(f"{i}. **{title}**: A delicious option for your meal!")
+                
+                fallback_pitch = '\n'.join(fallback_lines) if fallback_lines else "Try these ingredients in a simple sauté!"
+            else:
+                print(f' Error generating recommendation pitch: {e}')
+                # General fallback: Return numbered formatted lines using recipe titles
+                fallback_lines = []
+                for i, rec in enumerate(recommendations[:3], 1):
+                    title = rec.get('title', 'Unknown Recipe')
+                    fallback_lines.append(f"{i}. **{title}**: A delicious option for your meal!")
+
+                fallback_pitch = '\n'.join(fallback_lines) if fallback_lines else "Try these ingredients in a simple sauté!"
+
             return {
-                'pitch_text': f"Here's {top.get('title', 'a great recipe')} for you!",
-                'top_recipe': top,
-                'comparison': top_3 if user_mood != 'tired' else []
+                'pitch_text': fallback_pitch,
+                'top_recipe': recommendations[0] if recommendations else None,
+                'comparison': recommendations[:3] if user_mood != 'tired' else []
             }
     
     def analyze_nutritional_science(
@@ -695,7 +841,20 @@ Make sure every ingredient appears in exactly one list (either core or secondary
                 raise ValueError("Invalid response structure")
                 
         except Exception as e:
-            print(f"Error categorizing ingredients with Gemini: {e}")
+            # Check for 429 rate limit error specifically
+            error_str = str(e).lower()
+            is_rate_limit = (
+                '429' in error_str or 
+                'rate limit' in error_str or 
+                'quota' in error_str or
+                'too many requests' in error_str
+            )
+            
+            if is_rate_limit:
+                print(f"⚠️  Rate limit (429) error in get_low_priority_ingredients: {e}")
+            else:
+                print(f"Error categorizing ingredients with Gemini: {e}")
+            
             # Fallback: Simple categorization
             core_patterns = ['chicken', 'beef', 'pork', 'fish', 'tofu', 'rice', 'pasta', 'potato', 'bread', 'flour', 'egg', 'milk', 'cheese', 'tomato', 'onion', 'garlic']
             core = [ing for ing in ingredient_list if any(pattern in ing.lower() for pattern in core_patterns)]

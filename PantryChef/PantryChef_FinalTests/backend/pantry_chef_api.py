@@ -279,67 +279,88 @@ class SpoonacularClient:
         # This ensures we always get recipes that match the user's pantry, even if filters are selected
         # Filters will be applied AFTER enrichment using informationBulk data (cuisines, dishTypes, diets)
         
-        # API-LEVEL FILTERING: If diet or intolerances are provided, use complexSearch for API-level filtering
-        # This ensures Spoonacular does the heavy lifting of removing meat before data reaches our code
-        if diet or intolerances:
-            # Use complexSearch with diet/intolerances filters for API-level filtering
-            ingredients_str = ','.join(user_ingredients)
-            complex_params = {
-                'includeIngredients': ingredients_str,
-                'number': min(number * 3, 100),
-                'ranking': 1,  # Prioritize recipes using most ingredients
-                'ignorePantry': True,
-                'addRecipeInformation': 'false',
-                'fillIngredients': 'false',
-                'addRecipeNutrition': 'false',
-                'addRecipeInstructions': 'false'
-            }
+        # 2-STAGE APPROACH: Always use findByIngredients FIRST, then filter with complexSearch
+        # Stage 1: Use findByIngredients to get recipes matching ingredients (liberal matching)
+        # This ensures "pantry slaps" work - recipes that use the most of user's ingredients
+        print("DEBUG: Stage 1 - Using findByIngredients to get recipes matching ingredients...")
+        initial_recipes = self._search_by_ingredients_findbyingredients(
+            user_ingredients, 
+            number=min(number * 3, 100)  # Fetch more to account for filtering that happens later
+        )
+        print(f"DEBUG: Stage 1 complete - Found {len(initial_recipes)} recipes from findByIngredients")
+        
+        # Stage 2: Filter recipes if filters are provided
+        # IMPORTANT: Filter out empty/None string values from frontend dropdowns
+        diet_is_valid = diet and diet.lower() not in ['none', 'null', '', 'any']
+        intolerances_is_valid = intolerances and len(intolerances) > 0
+        cuisine_is_valid = cuisine and cuisine.lower() not in ['any', 'none', 'null', '']
+        meal_type_is_valid = meal_type and meal_type.lower() not in ['any', 'none', 'null', '']
+        
+        has_filters = diet_is_valid or intolerances_is_valid or cuisine_is_valid or meal_type_is_valid
+        
+        if has_filters and initial_recipes:
+            print(f"DEBUG: Stage 2 - Filtering {len(initial_recipes)} recipes with filters...")
+            print(f"  - diet: {diet if diet_is_valid else 'None'}")
+            print(f"  - intolerances: {intolerances if intolerances_is_valid else 'None'}")
+            print(f"  - cuisine: {cuisine if cuisine_is_valid else 'None'}")
+            print(f"  - meal_type: {meal_type if meal_type_is_valid else 'None'}")
             
-            # Add diet and intolerances to API request for server-side filtering
-            if diet:
-                complex_params['diet'] = diet
-            if intolerances:
-                if isinstance(intolerances, list) and len(intolerances) > 0:
-                    complex_params['intolerances'] = ','.join(intolerances)
-                elif not isinstance(intolerances, list) and intolerances:
-                    complex_params['intolerances'] = str(intolerances)
-            
-            # Add other filters if provided
-            if cuisine:
-                complex_params['cuisine'] = cuisine
-            if meal_type:
-                complex_params['type'] = meal_type
-            
-            try:
-                result = self._make_request('recipes/complexSearch', complex_params)
-                if isinstance(result, dict):
-                    initial_recipes = result.get('results', [])
-                    # Normalize to match findByIngredients format
-                    normalized_recipes = []
+            # Extract recipe IDs from Stage 1 results
+            recipe_ids = [r.get('id') for r in initial_recipes if r.get('id')]
+
+            if recipe_ids:
+                # NEW: Use semantic fallback instead of simple filter
+                filter_results = self._search_with_semantic_fallback(
+                    recipe_ids=recipe_ids,
+                    user_ingredients=user_ingredients,
+                    cuisine=cuisine if cuisine_is_valid else None,
+                    diet=diet if diet_is_valid else None,
+                    intolerances=intolerances if intolerances_is_valid else None,
+                    meal_type=meal_type if meal_type_is_valid else None
+                )
+
+                golden_ids = filter_results['golden']
+                rescue_ids = filter_results['rescue']
+
+                print(
+                    f"DEBUG: Stage 2 complete - {len(golden_ids)} golden + {len(rescue_ids)} rescue = {len(golden_ids) + len(rescue_ids)} total")
+
+                # Filter initial_recipes to only include recipes that passed the filter
+                all_filtered_ids = golden_ids + rescue_ids
+
+                if all_filtered_ids:
+                    # Map IDs to recipes and add confidence flags
+                    filtered_ids_set = set(all_filtered_ids)
+                    golden_ids_set = set(golden_ids)
+
+                    # Filter initial_recipes to only include filtered IDs
+                    filtered_recipes = []
                     for r in initial_recipes:
-                        if isinstance(r, dict):
-                            normalized_recipe = {
-                                'id': r.get('id'),
-                                'title': r.get('title', 'Unknown Recipe'),
-                                'image': r.get('image', ''),
-                                'readyInMinutes': r.get('readyInMinutes', 0),
-                                'usedIngredientCount': 0,  # Will be calculated during enrichment
-                                'missedIngredientCount': 0,  # Will be calculated during enrichment
-                            }
-                            normalized_recipes.append(normalized_recipe)
-                    initial_recipes = normalized_recipes
+                        if r.get('id') in filtered_ids_set:
+                            # Add confidence marker
+                            if r.get('id') in golden_ids_set:
+                                r['match_confidence'] = 1.0  # Golden match
+                                r['needs_semantic_validation'] = False
+                            else:
+                                r['match_confidence'] = 0.6  # Rescue candidate
+                                r['needs_semantic_validation'] = True
+                                r[
+                                    'semantic_validation_reason'] = f"Missing tags: cuisine={cuisine if cuisine_is_valid else 'N/A'}, meal_type={meal_type if meal_type_is_valid else 'N/A'}"
+
+                            filtered_recipes.append(r)
+
+                    initial_recipes = filtered_recipes
+                    print(f"DEBUG: Final result - {len(initial_recipes)} recipes with confidence flags")
+
                 else:
-                    initial_recipes = []
-            except Exception as e:
-                print(f"⚠️  complexSearch with diet/intolerances failed: {e}")
-                initial_recipes = []
+                    print(f" All recipes were filtered out. Returning unfiltered results from Stage 1.")
+                    # If all recipes were filtered out, return the original results
+                    # This ensures users still get recipes even if filters are too strict
         else:
-            # Step 1: Use findByIngredients when no diet/intolerances filters - ensures "pantry slaps" work
-            # This prioritizes recipes that use the most of the user's ingredients (ranking=1)
-            initial_recipes = self._search_by_ingredients_findbyingredients(
-                user_ingredients, 
-                number=min(number * 3, 100)  # Fetch more to account for filtering that happens later
-            )
+            if not has_filters:
+                print("DEBUG: No filters provided - skipping Stage 2")
+            else:
+                print("DEBUG: No recipes from Stage 1 - skipping Stage 2")
         
         if not initial_recipes:
             return []
@@ -348,6 +369,8 @@ class SpoonacularClient:
         if not enrich_results:
             # Return basic structure compatible with Logic.py
             basic_recipes = []
+
+
             for recipe in initial_recipes[:number]:
                 basic_recipe = {
                     'id': recipe.get('id'),
@@ -362,7 +385,10 @@ class SpoonacularClient:
                     'nutrition': {},  # Not available without enrichment
                     'servings': 0,  # Not available without enrichment
                     'instructions': '',  # Not available without enrichment
-                    'analyzedInstructions': []  # Not available without enrichment
+                    'analyzedInstructions': [],  # Not available without enrichment
+                    'match_confidence': recipe.get('match_confidence', 1.0),
+                    'needs_semantic_validation': recipe.get('needs_semantic_validation', False),
+                    'semantic_validation_reason': recipe.get('semantic_validation_reason', '')
                 }
                 basic_recipes.append(basic_recipe)
             return basic_recipes
@@ -547,7 +573,190 @@ class SpoonacularClient:
         
         # Return top N results
         return merged_recipes[:number]
-    
+
+    def search_recipes_complex(
+        self,
+        query: Optional[str] = None,
+        diet: Optional[str] = None,
+        intolerances: Optional[List[str]] = None,
+        type: Optional[str] = None,
+        cuisine: Optional[str] = None,
+        user_ingredients: Optional[List[str]] = None,
+        number: int = 10,
+        instructionsRequired: bool = True,
+        fillIngredients: bool = True,
+        addRecipeInformation: bool = True
+    ) -> List[Dict[str, Any]]:
+        """
+        Two-Stage Fuzzy Search: Robust recipe discovery using enhanced search strings.
+
+        STAGE 1: Find top recipes by ingredients using findByIngredients
+        - Retrieves top 2-3 recipe titles (e.g., 'Lemon Garlic Chicken', 'Roast Chicken')
+        - These titles represent what recipes actually exist for the user's ingredients
+
+        STAGE 2: Enhanced Search String
+        - Combines user's original query with top recipe titles
+        - Creates "Enhanced Search String" (e.g., "chicken Lemon Garlic Chicken Roast Chicken")
+        - Passes this to complexSearch query parameter for keyword matching
+
+        LAYER 1 (Hard Filter): diet, intolerances, cuisine, type are separate keys
+        - Ensures Spoonacular filters at API level
+        - Recipes violating dietary restrictions are filtered out before reaching Gemini
+
+        Example:
+            User ingredients: ['chicken']
+            User query: 'chicken'
+            Stage 1: findByIngredients returns ['Lemon Garlic Chicken', 'Roast Chicken']
+            Stage 2: Enhanced query = "chicken Lemon Garlic Chicken Roast Chicken"
+            Result: Finds relevant recipes even if exact IDs don't match
+
+        Args:
+            query: User's original search text (e.g., "chicken", "pasta")
+            diet: Dietary restriction (e.g., "vegetarian", "vegan") - separate key
+            intolerances: List of intolerances (e.g., ["dairy"]) - separate key
+            type: Meal type (e.g., "main course") - separate key
+            cuisine: Cuisine type (e.g., "italian") - separate key
+            user_ingredients: List of user ingredients (e.g., ["chicken", "garlic"])
+            number: Number of results to return (default: 10)
+            instructionsRequired: Whether to require instructions (default: True)
+            fillIngredients: Whether to fill ingredient data (default: True)
+            addRecipeInformation: Whether to add full recipe information (default: True)
+
+        Returns:
+            List of recipe dictionaries matching the criteria
+        """
+        # STAGE 1: Find top recipes by ingredients to extract recipe titles
+        enhanced_query_parts = []
+
+        # Add user's original query if provided
+        if query and query.strip():
+            enhanced_query_parts.append(query.strip())
+
+        # If user has ingredients, use findByIngredients to get top recipe titles
+        if user_ingredients and len(user_ingredients) > 0:
+            print(f"DEBUG: Stage 1 - Finding top recipes by ingredients: {user_ingredients}")
+            try:
+                # Get top 3 recipes from findByIngredients (these represent what actually exists)
+                top_recipes = self._search_by_ingredients_findbyingredients(
+                    user_ingredients,
+                    number=3  # Get top 2-3 recipe titles
+                )
+
+                if top_recipes:
+                    # Extract top 2-3 recipe titles
+                    recipe_titles = [r.get('title', '') for r in top_recipes[:3] if r.get('title')]
+                    if recipe_titles:
+                        print(f"DEBUG: Stage 1 - Found top recipe titles: {recipe_titles}")
+                        # Add recipe titles to enhanced query
+                        enhanced_query_parts.extend(recipe_titles)
+                    else:
+                        print(f"DEBUG: Stage 1 - No recipe titles extracted")
+                else:
+                    print(f"DEBUG: Stage 1 - findByIngredients returned 0 results")
+            except Exception as e:
+                print(f"⚠️  Stage 1 (findByIngredients) failed: {e}")
+                # Continue with just user query if Stage 1 fails
+
+        # Build Enhanced Search String
+        enhanced_query = ' '.join(enhanced_query_parts) if enhanced_query_parts else None
+
+        print(f"DEBUG: Stage 2 - Enhanced Search String: '{enhanced_query}'")
+
+        # Build params dictionary with separate keys for each filter
+        # CRITICAL: diet, intolerances, cuisine, and type are separate keys, NOT in query string
+        params = {
+            'number': min(number, 100),  # API limit is 100
+            'instructionsRequired': instructionsRequired,
+            'fillIngredients': 'true' if fillIngredients else 'false',
+            'addRecipeInformation': 'true' if addRecipeInformation else 'false',
+        }
+
+        # STAGE 2: Enhanced Search String goes in query parameter
+        if enhanced_query and enhanced_query.strip():
+            params['query'] = enhanced_query.strip()
+
+        # LAYER 1: Hard filters - passed as separate keys (NOT in query string)
+        # Filter out invalid values (None, "None", "Any", empty strings)
+        if diet and diet.lower() not in ['none', 'null', '', 'any']:
+            params['diet'] = diet.lower()
+
+        if intolerances:
+            if isinstance(intolerances, list) and len(intolerances) > 0:
+                valid_intolerances = [i for i in intolerances if i and i.lower() not in ['none', 'null', '', 'any']]
+                if valid_intolerances:
+                    params['intolerances'] = ','.join(valid_intolerances)
+            elif not isinstance(intolerances, list) and intolerances:
+                if intolerances.lower() not in ['none', 'null', '', 'any']:
+                    params['intolerances'] = str(intolerances)
+
+        if type and type.lower() not in ['any', 'none', 'null', '']:
+            params['type'] = type.lower()
+
+        if cuisine and cuisine.lower() not in ['any', 'none', 'null', '']:
+            params['cuisine'] = cuisine.lower()
+
+        # Include user ingredients if provided (for ingredient matching)
+        if user_ingredients and len(user_ingredients) > 0:
+            ingredients_str = ','.join(user_ingredients)
+            params['includeIngredients'] = ingredients_str
+            params['ranking'] = 1  # Prioritize recipes using most ingredients
+            params['ignorePantry'] = True  # Ignore pantry staples
+
+        print(f"DEBUG: Final complexSearch params:")
+        print(f"  - query (enhanced): '{params.get('query', 'None')}'")
+        print(f"  - diet: '{params.get('diet', 'None')}'")
+        print(f"  - intolerances: '{params.get('intolerances', 'None')}'")
+        print(f"  - type: '{params.get('type', 'None')}'")
+        print(f"  - cuisine: '{params.get('cuisine', 'None')}'")
+
+        try:
+            result = self._make_request('recipes/complexSearch', params)
+
+            if isinstance(result, dict):
+                total_results = result.get('totalResults', -1)
+                recipes_list = result.get('results', [])
+
+                # Check if results are empty - this happens when query conflicts with diet
+                if total_results == 0 or not recipes_list:
+                    print(f"⚠️  complexSearch returned 0 results - No safe recipes found for this search")
+                    print(f"  Enhanced Query: '{enhanced_query}'")
+                    print(f"  Diet: '{diet}'")
+                    print(f"  Intolerances: {intolerances}")
+                    print(f"  REASON: Spoonacular filtered out all recipes - likely query conflicts with dietary restrictions")
+
+                    # Return empty list - prevents frontend from hanging
+                    return []
+
+                if recipes_list:
+                    # Normalize recipes to match expected format
+                    normalized_recipes = []
+                    for r in recipes_list:
+                        if isinstance(r, dict):
+                            normalized_recipe = {
+                                'id': r.get('id'),
+                                'title': r.get('title', 'Unknown Recipe'),
+                                'image': r.get('image', ''),
+                                'readyInMinutes': r.get('readyInMinutes', 0),
+                                'usedIngredientCount': r.get('usedIngredientCount', 0),
+                                'missedIngredientCount': r.get('missedIngredientCount', 0),
+                            }
+                            # Preserve other fields if present
+                            for key in r:
+                                if key not in normalized_recipe:
+                                    normalized_recipe[key] = r[key]
+                            normalized_recipes.append(normalized_recipe)
+
+                    print(f"DEBUG: complexSearch returned {len(normalized_recipes)} recipes")
+                    return normalized_recipes
+
+            # If result is not a dict or is empty, return empty list
+            print(f"DEBUG: complexSearch returned invalid or empty result")
+            return []
+
+        except Exception as e:
+            print(f"⚠️  search_recipes_complex failed: {e}")
+            return []
+
     def _search_complex_search_with_filters(
         self,
         user_ingredients: List[str],
@@ -614,13 +823,67 @@ class SpoonacularClient:
         try:
             result = self._make_request('recipes/complexSearch', params)
             
-            # Handle totalResults: 0 debug log if filters are too restrictive
+            # Handle totalResults: 0 - BROAD SEARCH FALLBACK
+            # If initial search returns 0 results, retry without cuisine and meal_type filters
+            # but keep intolerances and ingredients to ensure Gemini still gets safe recipes
             if isinstance(result, dict):
                 total_results = result.get('totalResults', -1)
-                if total_results == 0:
-                    print(f'DEBUG: complexSearch returned totalResults: 0 - filters may be too restrictive')
-                    print(f'  Applied filters: cuisine={cuisine}, diet=REMOVED (using Smart Check), intolerances={intolerances}, meal_type={meal_type}')
-                    print(f'  Consider relaxing filters or using fewer restrictions')
+                recipes_list = result.get('results', [])
+                
+                if total_results == 0 or not recipes_list:
+                    # Retry without cuisine and meal_type filters, but keep intolerances and ingredients
+                    if cuisine or meal_type:
+                        print(f'⚠️  complexSearch returned 0 results with filters (cuisine={cuisine}, meal_type={meal_type})')
+                        print(f'  Retrying without cuisine/meal_type filters (keeping intolerances and ingredients)...')
+                        
+                        # Build retry params without cuisine and meal_type
+                        retry_params = {
+                            'number': min(number, 100),
+                            'includeIngredients': ingredients_str,
+                            'ranking': 1,
+                            'ignorePantry': True,
+                            'addRecipeInformation': 'false',
+                            'fillIngredients': 'false',
+                            'addRecipeNutrition': 'false',
+                            'addRecipeInstructions': 'false'
+                        }
+                        
+                        # Keep intolerances but remove cuisine and meal_type
+                        if intolerances:
+                            if isinstance(intolerances, list) and len(intolerances) > 0:
+                                retry_params['intolerances'] = ','.join(intolerances)
+                            elif not isinstance(intolerances, list) and intolerances:
+                                retry_params['intolerances'] = str(intolerances)
+                        
+                        try:
+                            retry_result = self._make_request('recipes/complexSearch', retry_params)
+                            if isinstance(retry_result, dict):
+                                retry_recipes = retry_result.get('results', [])
+                                if retry_recipes:
+                                    print(f'  ✅ Found {len(retry_recipes)} recipes without cuisine/meal_type filters')
+                                    # Normalize and return retry results
+                                    normalized_recipes = []
+                                    for r in retry_recipes:
+                                        if isinstance(r, dict):
+                                            normalized_recipe = {
+                                                'id': r.get('id'),
+                                                'title': r.get('title', 'Unknown Recipe'),
+                                                'image': r.get('image', ''),
+                                                'readyInMinutes': r.get('readyInMinutes', 0),
+                                                'usedIngredientCount': 0,
+                                                'missedIngredientCount': 0,
+                                            }
+                                            for key in r:
+                                                if key not in normalized_recipe:
+                                                    normalized_recipe[key] = r[key]
+                                            normalized_recipes.append(normalized_recipe)
+                                    return normalized_recipes
+                        except Exception as retry_e:
+                            print(f'⚠️  Retry search failed: {retry_e}')
+                    
+                    # If retry also fails or no cuisine/meal_type to remove, return empty
+                    print(f'DEBUG: complexSearch returned totalResults: 0 - no recipes found')
+                    print(f'  Applied filters: cuisine={cuisine}, intolerances={intolerances}, meal_type={meal_type}')
                     return []
                 
                 # Extract recipes from results
@@ -689,10 +952,11 @@ class SpoonacularClient:
             return []
         
         # Build complexSearch params with query parameter for semantic search
+        # CRITICAL: query should only contain the dish name, not dietary restrictions
+        # Dietary restrictions (diet, intolerances, type) are passed as separate keys
         ingredients_str = ','.join(user_ingredients)
         params = {
             'number': min(number, 100),
-            'query': query,  # CRITICAL: Semantic search query instead of strict cuisine filter
             'includeIngredients': ingredients_str,  # Still prioritize user's ingredients
             'ranking': 1,  # Prioritize recipes that use the most ingredients
             'ignorePantry': True,  # Ignore pantry staples
@@ -702,16 +966,29 @@ class SpoonacularClient:
             'addRecipeInstructions': 'false'
         }
         
-        # Add filter parameters if provided (but not cuisine - we're using query instead)
-        # NOTE: diet parameter removed - we rely on Smart Diet Check in Logic.py instead
-        # diet parameter removed - Smart Diet Check in Logic.py handles vegetarian/vegan filtering
+        # LAYER 2: Query parameter - only for specific dish names, not dietary restrictions
+        if query and query.strip():
+            params['query'] = query.strip()
+        
+        # LAYER 1: Hard filters - passed as separate keys (not in query string)
+        # Filter out invalid values (None, "None", "Any", empty strings)
+        if diet and diet.lower() not in ['none', 'null', '', 'any']:
+            params['diet'] = diet.lower()
+        
         if intolerances:
             if isinstance(intolerances, list) and len(intolerances) > 0:
-                params['intolerances'] = ','.join(intolerances)
+                valid_intolerances = [i for i in intolerances if i and i.lower() not in ['none', 'null', '', 'any']]
+                if valid_intolerances:
+                    params['intolerances'] = ','.join(valid_intolerances)
             elif not isinstance(intolerances, list) and intolerances:
-                params['intolerances'] = str(intolerances)
-        if meal_type:
-            params['type'] = meal_type
+                if intolerances.lower() not in ['none', 'null', '', 'any']:
+                    params['intolerances'] = str(intolerances)
+        
+        if meal_type and meal_type.lower() not in ['any', 'none', 'null', '']:
+            params['type'] = meal_type.lower()
+        
+        if cuisine and cuisine.lower() not in ['any', 'none', 'null', '']:
+            params['cuisine'] = cuisine.lower()
         
         try:
             result = self._make_request('recipes/complexSearch', params)
@@ -809,17 +1086,17 @@ class SpoonacularClient:
         }
         
         # Add filter parameters if provided
-        # NOTE: diet parameter removed - we rely on Smart Diet Check in Logic.py instead
-        # This prevents hard cutoffs and allows ingredient-based filtering
-        if cuisine:
+        # Filter out invalid values (None, Any, empty strings)
+        if cuisine and cuisine.lower() not in ['any', 'none', 'null', '']:
             params['cuisine'] = cuisine
-        # diet parameter removed - Smart Diet Check in Logic.py handles vegetarian/vegan filtering
+        if diet and diet.lower() not in ['none', 'null', '', 'any']:
+            params['diet'] = diet
         if intolerances:
             if isinstance(intolerances, list) and len(intolerances) > 0:
                 params['intolerances'] = ','.join(intolerances)
             elif not isinstance(intolerances, list) and intolerances:
                 params['intolerances'] = str(intolerances)
-        if meal_type:
+        if meal_type and meal_type.lower() not in ['any', 'none', 'null', '']:
             params['type'] = meal_type
         
         try:
@@ -830,7 +1107,7 @@ class SpoonacularClient:
                 total_results = result.get('totalResults', -1)
                 if total_results == 0:
                     print(f'DEBUG: complexSearch filtering returned totalResults: 0 - filters may be too restrictive')
-                    print(f'  Applied filters: cuisine={cuisine}, diet=REMOVED (using Smart Check), intolerances={intolerances}, meal_type={meal_type}')
+                    print(f'  Applied filters: cuisine={cuisine}, diet={diet}, intolerances={intolerances}, meal_type={meal_type}')
                     print(f'  Consider relaxing filters or using fewer restrictions')
                     return []
                 
@@ -851,6 +1128,81 @@ class SpoonacularClient:
             print(f"⚠️  complexSearch filtering failed: {e}")
             print(f"  Falling back to unfiltered recipe IDs")
             return recipe_ids  # Fallback: return original IDs if filtering fails
+
+    def _search_with_semantic_fallback(
+            self,
+            recipe_ids: List[int],
+            user_ingredients: List[str],
+            cuisine: Optional[str] = None,
+            diet: Optional[str] = None,
+            intolerances: Optional[List[str]] = None,
+            meal_type: Optional[str] = None
+    ) -> Dict[str, List[int]]:
+        """
+        SEMANTIC FALLBACK: Two-pass filtering system.
+
+        Pass 1 (Strict): All filters → Golden Matches
+        Pass 2 (Safety Only): Diet + Intolerances only → Rescue Candidates
+
+        Args:
+            recipe_ids: Recipe IDs from findByIngredients
+            user_ingredients: User's ingredients
+            cuisine, diet, intolerances, meal_type: Filters
+
+        Returns:
+            {
+                'golden': [123, 456],  # Perfect matches (confidence 1.0)
+                'rescue': [789, 101],  # Semantic candidates (confidence 0.6, needs Gemini validation)
+            }
+        """
+        # Check if we actually have soft filters (cuisine or meal_type)
+        has_soft_filters = (cuisine and cuisine.lower() not in ['any', 'none', 'null', '']) or \
+                           (meal_type and meal_type.lower() not in ['any', 'none', 'null', ''])
+
+        # Pass 1: STRICT - All filters
+        print(f"🔍 Semantic Fallback Pass 1: Strict filtering (all filters)")
+        golden_ids = self._search_complex_filter(
+            recipe_ids=recipe_ids,
+            user_ingredients=user_ingredients,
+            cuisine=cuisine,
+            diet=diet,
+            intolerances=intolerances,
+            meal_type=meal_type
+        )
+
+        print(f"   Golden Matches: {len(golden_ids)} recipes passed all filters")
+
+        # If we got enough golden matches OR no soft filters, skip Pass 2
+        if len(golden_ids) >= 5 or not has_soft_filters:
+            return {
+                'golden': golden_ids,
+                'rescue': []
+            }
+
+        # Pass 2: SAFETY ONLY - Drop soft filters (cuisine, meal_type)
+        print(f"🔍 Semantic Fallback Pass 2: Safety-only filtering (diet + intolerances)")
+        print(f"   Dropping: cuisine={cuisine}, meal_type={meal_type}")
+
+        safety_ids = self._search_complex_filter(
+            recipe_ids=recipe_ids,
+            user_ingredients=user_ingredients,
+            cuisine=None,  # Drop cuisine filter
+            diet=diet,  # Keep diet filter (safety!)
+            intolerances=intolerances,  # Keep intolerances (safety!)
+            meal_type=None  # Drop meal_type filter
+        )
+
+        # Rescue candidates = Passed safety but NOT in golden
+        golden_set = set(golden_ids)
+        rescue_ids = [rid for rid in safety_ids if rid not in golden_set]
+
+        print(f"   Rescue Candidates: {len(rescue_ids)} recipes (passed safety, failed tags)")
+        print(f"   These will be sent to Gemini for semantic validation")
+
+        return {
+            'golden': golden_ids,
+            'rescue': rescue_ids
+        }
     
     def _search_by_ingredients_findbyingredients(
         self,

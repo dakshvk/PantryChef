@@ -7,10 +7,12 @@ const Sidebar = ({ onSearch, loading }) => {
   const [intolerances, setIntolerances] = useState([])
   const [otherIntolerance, setOtherIntolerance] = useState('')
   const [showOtherIntolerance, setShowOtherIntolerance] = useState(false)
+  const [customIntolerances, setCustomIntolerances] = useState([]) // Array for custom "Other" intolerances
   const [userProfile, setUserProfile] = useState('balanced')
   const [diet, setDiet] = useState('')
   const [otherDiet, setOtherDiet] = useState('')
   const [showOtherDiet, setShowOtherDiet] = useState(false)
+  const [selectedDiets, setSelectedDiets] = useState([]) // Array for custom "Other" diets
   const [mealType, setMealType] = useState('')
   const [cuisine, setCuisine] = useState('')
 
@@ -39,6 +41,8 @@ const Sidebar = ({ onSearch, loading }) => {
       setShowOtherDiet(false)
       setOtherDiet('')
       setDiet(value)
+      // Clear custom diets when switching to a dropdown option
+      setSelectedDiets([])
     }
   }
 
@@ -88,46 +92,83 @@ const Sidebar = ({ onSearch, loading }) => {
 
   const handleToggleOtherIntolerance = () => {
     setShowOtherIntolerance(!showOtherIntolerance)
-    if (showOtherIntolerance && otherIntolerance) {
-      // Remove custom intolerance if unchecking
-      setIntolerances(intolerances.filter(i => i !== otherIntolerance))
+    if (!showOtherIntolerance) {
+      // When unchecking, clear the input but keep the added custom intolerances
       setOtherIntolerance('')
     }
   }
 
   const handleOtherIntoleranceChange = (value) => {
-    // Remove previous custom intolerance if it exists
-    const commonIntolerances = intoleranceOptions
-    const previousCustom = intolerances.find(i => !commonIntolerances.includes(i))
-    if (previousCustom) {
-      setIntolerances(intolerances.filter(i => i !== previousCustom))
-    }
-    
     setOtherIntolerance(value)
-    if (value.trim()) {
-      setIntolerances([...intolerances.filter(i => commonIntolerances.includes(i)), value.trim().toLowerCase()])
+  }
+
+  const handleAddOtherIntolerance = () => {
+    if (otherIntolerance.trim()) {
+      const value = otherIntolerance.trim().toLowerCase()
+      // Only add if not already in the list
+      if (!customIntolerances.includes(value)) {
+        setCustomIntolerances([...customIntolerances, value])
+      }
+      setOtherIntolerance('')
     }
   }
 
+  const handleRemoveCustomIntolerance = (intolerance) => {
+    setCustomIntolerances(customIntolerances.filter(i => i !== intolerance))
+  }
+
+  const handleAddOtherDiet = () => {
+    if (otherDiet.trim()) {
+      const value = otherDiet.trim().toLowerCase()
+      // Only add if not already in the list
+      if (!selectedDiets.includes(value)) {
+        setSelectedDiets([...selectedDiets, value])
+      }
+      setOtherDiet('')
+    }
+  }
+
+  const handleRemoveCustomDiet = (dietValue) => {
+    setSelectedDiets(selectedDiets.filter(d => d !== dietValue))
+  }
+
   const handleSearch = () => {
-    // Build complete intolerance list (common + custom "other")
-    const finalIntolerances = [...intolerances]
-    if (otherIntolerance.trim() && !finalIntolerances.includes(otherIntolerance.trim().toLowerCase())) {
-      finalIntolerances.push(otherIntolerance.trim().toLowerCase())
+    // Build complete intolerance list (common + custom "other" array)
+    const commonIntolerances = intoleranceOptions
+    const finalIntolerances = [
+      ...intolerances.filter(i => commonIntolerances.includes(i)),
+      ...customIntolerances
+    ]
+
+    // Build diet: use dropdown value OR combine custom diets array
+    // Note: If dropdown has a value, use it. Otherwise, use the first custom diet if available
+    let finalDiet = undefined
+    if (diet && diet !== '' && diet !== 'other') {
+      finalDiet = diet
+    } else if (selectedDiets.length > 0) {
+      // If using custom diets, use the first one (or combine them - backend may need adjustment)
+      // For now, use the first custom diet
+      finalDiet = selectedDiets[0]
     }
 
-    // Use custom diet if "Other" is selected, otherwise use selected diet
-    const finalDiet = showOtherDiet && otherDiet.trim() ? otherDiet.trim().toLowerCase() : (diet || undefined)
-
+    // Build request body - only include filters that have real values (not empty, "None", or "Any")
     const searchData = {
       ingredients,
       mood,
-      intolerances: finalIntolerances,
-      user_profile: userProfile,
-      diet: finalDiet,
-      meal_type: mealType || undefined,
-      cuisine: cuisine || undefined,
+      intolerances: finalIntolerances.length > 0 ? finalIntolerances : [],
+      user_profile: userProfile || 'balanced',
       number: 20,
+    }
+
+    // Only add optional filters if they have real values (not "None", "Any", empty string)
+    if (finalDiet && finalDiet !== "none" && finalDiet !== "" && finalDiet !== "any") {
+      searchData.diet = finalDiet
+    }
+    if (mealType && mealType !== "any" && mealType !== "") {
+      searchData.meal_type = mealType
+    }
+    if (cuisine && cuisine !== "any" && cuisine !== "") {
+      searchData.cuisine = cuisine
     }
 
     // Debug logging: Show exactly what's being sent
@@ -135,6 +176,8 @@ const Sidebar = ({ onSearch, loading }) => {
     console.log('   - Mood value:', mood, '(type:', typeof mood, ')')
     console.log('   - Ingredients count:', ingredients.length)
     console.log('   - Intolerances:', finalIntolerances)
+    console.log('   - Diet:', finalDiet, '(showOtherDiet:', showOtherDiet, ', otherDiet:', otherDiet, ', diet:', diet, ')')
+    console.log('   - Other Intolerance:', otherIntolerance, '(showOtherIntolerance:', showOtherIntolerance, ')')
 
     onSearch(searchData)
   }
@@ -231,13 +274,49 @@ const Sidebar = ({ onSearch, loading }) => {
             <span className="text-sm text-emerald-900">Other (e.g., peanuts, tree nuts, soy, shellfish)</span>
           </label>
           {showOtherIntolerance && (
-            <input
-              type="text"
-              value={otherIntolerance}
-              onChange={(e) => handleOtherIntoleranceChange(e.target.value)}
-              placeholder="Type specific allergies (e.g., peanuts, almonds, soy)..."
-              className="w-full px-3 py-2 border border-emerald-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white text-sm mt-1"
-            />
+            <div className="mt-1">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={otherIntolerance}
+                  onChange={(e) => handleOtherIntoleranceChange(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      handleAddOtherIntolerance()
+                    }
+                  }}
+                  placeholder="Type specific allergies (e.g., peanuts, almonds, soy)..."
+                  className="flex-1 px-3 py-2 border border-emerald-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddOtherIntolerance}
+                  className="px-4 py-2 bg-emerald-600 text-white rounded-2xl hover:bg-emerald-700 transition-colors text-sm font-medium"
+                >
+                  Add
+                </button>
+              </div>
+              {/* Display added custom intolerances as tags */}
+              {customIntolerances.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {customIntolerances.map((intol, index) => (
+                    <span
+                      key={index}
+                      className="inline-flex items-center px-3 py-1 bg-emerald-100 text-emerald-900 rounded-full text-sm"
+                    >
+                      {intol}
+                      <button
+                        onClick={() => handleRemoveCustomIntolerance(intol)}
+                        className="ml-2 text-emerald-700 hover:text-emerald-900"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>
@@ -259,13 +338,49 @@ const Sidebar = ({ onSearch, loading }) => {
           ))}
         </select>
         {showOtherDiet && (
-          <input
-            type="text"
-            value={otherDiet}
-            onChange={(e) => setOtherDiet(e.target.value)}
-            placeholder="Type your diet preference (e.g., paleo, keto, raw)..."
-            className="w-full px-3 py-2 border border-emerald-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white text-sm mt-2"
-          />
+          <div className="mt-2">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={otherDiet}
+                onChange={(e) => setOtherDiet(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    handleAddOtherDiet()
+                  }
+                }}
+                placeholder="Type your diet preference (e.g., paleo, keto, raw)..."
+                className="flex-1 px-3 py-2 border border-emerald-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-white text-sm"
+              />
+              <button
+                type="button"
+                onClick={handleAddOtherDiet}
+                className="px-4 py-2 bg-emerald-600 text-white rounded-2xl hover:bg-emerald-700 transition-colors text-sm font-medium"
+              >
+                Add
+              </button>
+            </div>
+            {/* Display added custom diets as tags */}
+            {selectedDiets.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {selectedDiets.map((dietValue, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center px-3 py-1 bg-emerald-100 text-emerald-900 rounded-full text-sm"
+                  >
+                    {dietValue}
+                    <button
+                      onClick={() => handleRemoveCustomDiet(dietValue)}
+                      className="ml-2 text-emerald-700 hover:text-emerald-900"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         )}
       </div>
 

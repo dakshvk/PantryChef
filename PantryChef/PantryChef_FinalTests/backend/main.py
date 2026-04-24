@@ -10,12 +10,14 @@ from typing import List, Optional
 from app_orchestrator import PantryChefOrchestrator
 
 # 1. Initialize the App
-app = FastAPI(title="PantryChef API", version="1.0.0")
+# redirect_slashes=False ensures /recommend and /recommend/ both work
+app = FastAPI(title="PantryChef API", version="1.0.0", redirect_slashes=False)
 
 # Enable CORS for local React frontend
+# Explicitly list frontend URLs to unblock React-to-FastAPI connection
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for development
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],  # Explicit frontend URLs
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -34,7 +36,7 @@ class RecipeRequest(BaseModel):
     max_time_minutes: Optional[int] = None
     max_missing_ingredients: Optional[int] = None
     dietary_requirements: Optional[List[str]] = None
-    number: Optional[int] = 20
+    number: Optional[int] = 50
     cuisine: Optional[str] = None
     meal_type: Optional[str] = None
     diet: Optional[str] = None
@@ -58,7 +60,7 @@ async def get_recommendations(request: RecipeRequest):
             'intolerances': request.intolerances,
             'max_time_minutes': request.max_time_minutes or 120,
             'max_missing_ingredients': request.max_missing_ingredients or 10,  # Increased default to 10
-            'dietary_requirements': request.dietary_requirements or [],
+            'dietary_requirements': [d for d in (request.dietary_requirements or []) if d and d.lower() not in ['none', 'null', '']],
             'skill_level': 50,  # Default skill level
             'max_time': request.max_time_minutes or 120
         }
@@ -70,7 +72,7 @@ async def get_recommendations(request: RecipeRequest):
         results = orchestrator.run_pantry_chef(
             ingredients=request.ingredients,
             settings=settings,
-            number=request.number or 20,
+            number=request.number or 50,
             cuisine=request.cuisine,
             meal_type=request.meal_type,
             diet=request.diet,
@@ -170,6 +172,16 @@ def health_check():
         "gemini": "available" if (orchestrator.gemini and orchestrator.gemini.is_available()) else "not available"
     }
     return health_status
+
+# 8. Simple Ping Endpoint for Connection Verification
+@app.get("/ping")
+def ping():
+    """
+    Simple ping endpoint to verify the connection.
+    Returns {'status': 'pong'} to confirm the server is responding.
+    """
+    return {'status': 'pong'}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000, log_level="info")

@@ -84,422 +84,403 @@ class PantryChefOrchestrator:
             - pitch: AI-generated recommendation pitch (if enrich_with_ai=True)
             - metadata: Processing metadata
         """
-        if not ingredients:
-            return {
-                'recipes': [],
-                'pitch': None,
-                'metadata': {
-                    'total_fetched': 0,
-                    'total_processed': 0,
-                    'errors': ['No ingredients provided']
-                }
-            }
-        
-        # Step A: API Call - Call 3-step pipeline from pantry_chef_api.py
-        # SMART FILTER LOGIC: Handle cuisine and intolerance fallbacks gracefully
-        raw_recipes = []
-        cuisine_used = cuisine  # Track original cuisine for labeling
-        metadata_notes = []
-        
-        # SMART SACRIFICE: Use Gemini to prioritize ingredients BEFORE API call
-        # If user has >5 ingredients, use only Core ingredients (proteins, grains, main vegetables)
-        # This prevents a single missing spice from hiding 20 great recipes
-        ingredients_to_search = ingredients
-        if len(ingredients) > 5 and self.gemini and self.gemini.is_available():
-            print(f"🔍 Smart Sacrifice: Analyzing {len(ingredients)} ingredients to identify Core vs Optional...")
-            try:
-                ingredient_categorization = self.gemini.get_low_priority_ingredients(ingredients)
-                core_ingredients = ingredient_categorization.get('core', [])
-                optional_ingredients = ingredient_categorization.get('secondary', [])
-                
-                if core_ingredients and len(core_ingredients) < len(ingredients):
-                    print(f"  → Using {len(core_ingredients)} Core ingredients: {core_ingredients}")
-                    print(f"  → Dropping {len(optional_ingredients)} Optional ingredients: {optional_ingredients}")
-                    ingredients_to_search = core_ingredients
-                    metadata_notes.append(f"Smart Sacrifice: Using {len(core_ingredients)} core ingredients (dropped {len(optional_ingredients)} optional)")
-                else:
-                    print(f"  → All ingredients are Core, using all {len(ingredients)} ingredients")
-            except Exception as e:
-                print(f"⚠️  Smart Sacrifice analysis failed: {str(e)} - using all ingredients")
-                # Continue with all ingredients if Gemini fails
-        
+        # WRAP ENTIRE METHOD IN TRY/EXCEPT to prevent silent crashes
+        # If Spoonacular API or Logic Engine fails, return empty list instead of crashing
+        # This prevents the frontend from hanging forever on a 'Pending' request
         try:
-            # Attempt 1: Try with all filters (cuisine, diet, intolerances, meal_type)
-            # Use prioritized ingredients (Core only if Smart Sacrifice was applied)
-            # API-level filtering: diet and intolerances are now passed to Spoonacular for server-side filtering
-            raw_recipes = self.api_client.search_by_ingredients(
-                user_ingredients=ingredients_to_search,
-                number=number,
-                cuisine=cuisine,
-                meal_type=meal_type,
-                diet=diet,
-                intolerances=intolerances,
-                enrich_results=True  # Ensure we get full data from informationBulk
-            )
-            
-            # FALLBACK LOGIC: Check if we have enough recipes (at least 3)
-            # If low results, trigger Gemini Web Search to find more recipes
-            if len(raw_recipes) < 3 and self.gemini and self.gemini.is_available():
-                print(f"⚠️  Low results ({len(raw_recipes)}). Triggering Gemini Web Search...")
-                try:
-                    # Call Gemini to find recipes online
-                    web_recipes = self.gemini.search_web_for_recipes(
-                        ingredients=ingredients_to_search,
-                        diet=diet,
-                        count=(3 - len(raw_recipes)),
-                        cuisine=cuisine,
-                        meal_type=meal_type,
-                        intolerances=intolerances
-                    )
-                    
-                    if web_recipes:
-                        print(f"  → Found {len(web_recipes)} additional recipes from Gemini Web Search")
-                        # Merge web results with API results
-                        raw_recipes.extend(web_recipes)
-                        metadata_notes.append(f"Gemini Web Search: Added {len(web_recipes)} recipes")
-                except Exception as e:
-                    print(f"⚠️  Gemini Web Search failed: {str(e)} - continuing with API results only")
-        except Exception as e:
-            return {
-                'recipes': [],
-                'pitch': None,
-                'metadata': {
-                    'total_fetched': 0,
-                    'total_processed': 0,
-                    'errors': [f'API Error: {str(e)}']
+            if not ingredients:
+                return {
+                    'recipes': [],
+                    'pitch': None,
+                    'metadata': {
+                        'total_fetched': 0,
+                        'total_processed': 0,
+                        'errors': ['No ingredients provided']
+                    }
                 }
-            }
-        
-        # SMART CUISINE FALLBACK: If cuisine selected but 0 results, try progressive fallbacks
-        if not raw_recipes and cuisine:
-            print(f"⚠️  No results with '{cuisine}' cuisine. Trying smart filter fallback...")
             
-            # Attempt 2: CUISINE BROADENING - Use semantic query instead of strict cuisine filter
-            # Example: Instead of cuisine='Indian', try query='Indian chicken rice' for broader matching
-            print(f"  → Trying cuisine broadening with semantic query...")
-            try:
-                # Use top 2-3 ingredients + cuisine name as a semantic search query
-                # This allows the API to find recipes that match the cuisine concept even if strict filter fails
-                top_ingredients_for_query = ingredients[:3]  # Take top 3 ingredients
-                semantic_query = f"{cuisine} {' '.join(top_ingredients_for_query)}"
-                
-                # Use complexSearch with query parameter instead of strict cuisine filter
-                # This method handles enrichment internally
-                raw_recipes = self.api_client._search_complex_search_with_query(
-                    query=semantic_query,
-                    user_ingredients=ingredients,
-                    number=number,
-                    cuisine=None,  # Don't use strict cuisine filter
-                    meal_type=meal_type,
-                    diet=diet,
-                    intolerances=intolerances,
-                    enrich_results=True  # Enrich results with full recipe data
-                )
-                
-                if raw_recipes:
-                    print(f"✅ Found {len(raw_recipes)} recipes with cuisine broadening (query: '{semantic_query}')")
-                    metadata_notes.append(f"Cuisine broadening: '{semantic_query}' (strict {cuisine} filter removed)")
-                    # Still mark as original cuisine for labeling
-                    cuisine_used = cuisine
-            except Exception as e:
-                print(f"  ⚠️  Cuisine broadening failed: {str(e)}")
-                # Continue to next fallback
+            # Step A: API Call - Call 3-step pipeline from pantry_chef_api.py
+            # SMART FILTER LOGIC: Handle cuisine and intolerance fallbacks gracefully
+            raw_recipes = []
+            cuisine_used = cuisine  # Track original cuisine for labeling
+            metadata_notes = []
             
-            # Attempt 3: Remove intolerances first (sometimes "Dairy-Free" kills all Italian results)
-            if not raw_recipes and intolerances and len(intolerances) > 0:
-                print(f"  → Trying without intolerances: {intolerances}")
+            # SMART SACRIFICE: Use Gemini to prioritize ingredients BEFORE API call
+            # If user has >5 ingredients, use only Core ingredients (proteins, grains, main vegetables)
+            # This prevents a single missing spice from hiding 20 great recipes
+            ingredients_to_search = ingredients
+            if len(ingredients) > 5 and self.gemini and self.gemini.is_available():
+                print(f"🔍 Smart Sacrifice: Analyzing {len(ingredients)} ingredients to identify Core vs Optional...")
                 try:
-                    raw_recipes = self.api_client.search_by_ingredients(
-                        user_ingredients=ingredients,
-                        number=number,
-                        cuisine=cuisine,
-                        meal_type=meal_type,
-                        diet=diet,
-                        intolerances=[],  # Remove intolerances
-                        enrich_results=True
-                    )
-                    if raw_recipes:
-                        print(f"✅ Found {len(raw_recipes)} recipes without intolerances")
-                        metadata_notes.append(f"Intolerances removed to find {cuisine} recipes")
+                    ingredient_categorization = self.gemini.get_low_priority_ingredients(ingredients)
+                    core_ingredients = ingredient_categorization.get('core', [])
+                    optional_ingredients = ingredient_categorization.get('secondary', [])
+                    
+                    if core_ingredients and len(core_ingredients) < len(ingredients):
+                        print(f"  → Using {len(core_ingredients)} Core ingredients: {core_ingredients}")
+                        print(f"  → Dropping {len(optional_ingredients)} Optional ingredients: {optional_ingredients}")
+                        ingredients_to_search = core_ingredients
+                        metadata_notes.append(f"Smart Sacrifice: Using {len(core_ingredients)} core ingredients (dropped {len(optional_ingredients)} optional)")
+                    else:
+                        print(f"  → All ingredients are Core, using all {len(ingredients)} ingredients")
                 except Exception as e:
-                    print(f"  ⚠️  Fallback attempt failed: {str(e)}")
+                    print(f"⚠️  Smart Sacrifice analysis failed: {str(e)} - using all ingredients")
+                    # Continue with all ingredients if Gemini fails
             
-            # Attempt 4: Remove cuisine filter entirely (search by ingredients only)
-            if not raw_recipes:
-                print(f"  → Trying without '{cuisine}' cuisine filter...")
-                try:
-                    raw_recipes = self.api_client.search_by_ingredients(
-                        user_ingredients=ingredients,
-                        number=number,
-                        cuisine=None,  # Remove cuisine
-                        meal_type=meal_type,
-                        diet=diet,
-                        intolerances=intolerances,  # Re-add intolerances if we have them
-                        enrich_results=True
-                    )
-                    if raw_recipes:
-                        print(f"✅ Found {len(raw_recipes)} recipes without cuisine filter")
-                        cuisine_used = None  # Mark as no cuisine filter applied
-                        metadata_notes.append("Recommended for your Pantry (cuisine filter removed)")
-                except Exception as e:
-                    print(f"  ⚠️  Final fallback attempt failed: {str(e)}")
-        
-        # RELAXED SEARCH (Pantry Slap): If still zero results and user has >3 ingredients, try with top 3
-        if not raw_recipes and len(ingredients) > 3:
-            print(f"⚠️  No results with {len(ingredients)} ingredients. Trying relaxed search with top 3 ingredients...")
             try:
-                # Use top 3 ingredients (most common/popular)
-                top_ingredients = ingredients[:3]
+                # Attempt 1: Try with all filters (cuisine, diet, intolerances, meal_type)
+                # Use prioritized ingredients (Core only if Smart Sacrifice was applied)
+                # API-level filtering: diet and intolerances are now passed to Spoonacular for server-side filtering
                 raw_recipes = self.api_client.search_by_ingredients(
-                    user_ingredients=top_ingredients,
+                    user_ingredients=ingredients_to_search,
                     number=number,
-                    cuisine=cuisine_used,  # Use original cuisine if available
+                    cuisine=cuisine,
                     meal_type=meal_type,
                     diet=diet,
                     intolerances=intolerances,
                     enrich_results=True  # Ensure we get full data from informationBulk
                 )
-                if raw_recipes:
-                    print(f"✅ Relaxed search successful: Found {len(raw_recipes)} recipes with {len(top_ingredients)} ingredients")
-                    metadata_notes.append(f"Search relaxed to top {len(top_ingredients)} ingredients")
+                
+                # FALLBACK LOGIC: Check if we have enough recipes (at least 3)
+                # If low results, trigger Gemini Web Search to find more recipes
+                if len(raw_recipes) < 3 and self.gemini and self.gemini.is_available():
+                    print(f"⚠️  Low results ({len(raw_recipes)}). Triggering Gemini Web Search...")
+                    try:
+                        # Call Gemini to find recipes online
+                        web_recipes = self.gemini.search_web_for_recipes(
+                            ingredients=ingredients_to_search,
+                            diet=diet,
+                            count=(3 - len(raw_recipes)),
+                            cuisine=cuisine,
+                            meal_type=meal_type,
+                            intolerances=intolerances
+                        )
+                        
+                        if web_recipes:
+                            print(f"  → Found {len(web_recipes)} additional recipes from Gemini Web Search")
+                            # Merge web results with API results
+                            raw_recipes.extend(web_recipes)
+                            metadata_notes.append(f"Gemini Web Search: Added {len(web_recipes)} recipes")
+                    except Exception as e:
+                        print(f"⚠️  Gemini Web Search failed: {str(e)} - continuing with API results only")
             except Exception as e:
-                print(f"⚠️  Relaxed search also failed: {str(e)}")
-        
-        # GEMINI SEMANTIC INGREDIENT PRIORITIZATION: If results < 5, use Core ingredients
-        # This "knocks out" stubborn ingredients that are holding up results
-        if len(raw_recipes) < 5 and self.gemini and self.gemini.is_available():
-            print(f"⚠️  Only {len(raw_recipes)} recipes found. Using Gemini to prioritize ingredients...")
-            try:
-                # Call Gemini to categorize ingredients into Core and Secondary
-                ingredient_categorization = self.gemini.get_low_priority_ingredients(ingredients)
-                core_ingredients = ingredient_categorization.get('core', [])
-                secondary_ingredients = ingredient_categorization.get('secondary', [])
+                return {
+                    'recipes': [],
+                    'pitch': None,
+                    'metadata': {
+                        'total_fetched': 0,
+                        'total_processed': 0,
+                        'errors': [f'API Error: {str(e)}']
+                    }
+                }
+            
+            # SMART CUISINE FALLBACK: If cuisine selected but 0 results, try progressive fallbacks
+            if not raw_recipes and cuisine:
+                print(f"⚠️  No results with '{cuisine}' cuisine. Trying smart filter fallback...")
                 
-                print(f"  → Core ingredients (using these): {core_ingredients}")
-                print(f"  → Secondary ingredients (dropping these): {secondary_ingredients}")
-                
-                # If we have core ingredients and they're different from original, re-run search
-                if core_ingredients and len(core_ingredients) < len(ingredients):
-                    print(f"  → Re-running search with {len(core_ingredients)} core ingredients...")
+                # Attempt 2: CUISINE BROADENING - Use semantic query instead of strict cuisine filter
+                # Example: Instead of cuisine='Indian', try query='Indian chicken rice' for broader matching
+                print(f"  → Trying cuisine broadening with semantic query...")
+                try:
+                    # Use top 2-3 ingredients + cuisine name as a semantic search query
+                    # This allows the API to find recipes that match the cuisine concept even if strict filter fails
+                    top_ingredients_for_query = ingredients[:3]  # Take top 3 ingredients
+                    semantic_query = f"{cuisine} {' '.join(top_ingredients_for_query)}"
                     
-                    # Re-run search with ONLY Core ingredients (if different from initial search)
-                    if core_ingredients != ingredients_to_search:
-                        raw_recipes_core = self.api_client.search_by_ingredients(
-                            user_ingredients=core_ingredients,
+                    # Use complexSearch with query parameter instead of strict cuisine filter
+                    # This method handles enrichment internally
+                    raw_recipes = self.api_client._search_complex_search_with_query(
+                        query=semantic_query,
+                        user_ingredients=ingredients,
+                        number=number,
+                        cuisine=None,  # Don't use strict cuisine filter
+                        meal_type=meal_type,
+                        diet=diet,
+                        intolerances=intolerances,
+                        enrich_results=True  # Enrich results with full recipe data
+                    )
+                    
+                    if raw_recipes:
+                        print(f"✅ Found {len(raw_recipes)} recipes with cuisine broadening (query: '{semantic_query}')")
+                        metadata_notes.append(f"Cuisine broadening: '{semantic_query}' (strict {cuisine} filter removed)")
+                        # Still mark as original cuisine for labeling
+                        cuisine_used = cuisine
+                except Exception as e:
+                    print(f"  ⚠️  Cuisine broadening failed: {str(e)}")
+                    # Continue to next fallback
+                
+                # Attempt 3: Remove intolerances first (sometimes "Dairy-Free" kills all Italian results)
+                if not raw_recipes and intolerances and len(intolerances) > 0:
+                    print(f"  → Trying without intolerances: {intolerances}")
+                    try:
+                        raw_recipes = self.api_client.search_by_ingredients(
+                            user_ingredients=ingredients,
                             number=number,
-                            cuisine=cuisine_used,
+                            cuisine=cuisine,
                             meal_type=meal_type,
                             diet=diet,
-                            intolerances=intolerances,
+                            intolerances=[],  # Remove intolerances
                             enrich_results=True
                         )
-                    else:
-                        # Core ingredients already used in initial search
-                        raw_recipes_core = raw_recipes
+                        if raw_recipes:
+                            print(f"✅ Found {len(raw_recipes)} recipes without intolerances")
+                            metadata_notes.append(f"Intolerances removed to find {cuisine} recipes")
+                    except Exception as e:
+                        print(f"  ⚠️  Fallback attempt failed: {str(e)}")
+                
+                # Attempt 4: Remove cuisine filter entirely (search by ingredients only)
+                if not raw_recipes:
+                    print(f"  → Trying without '{cuisine}' cuisine filter...")
+                    try:
+                        raw_recipes = self.api_client.search_by_ingredients(
+                            user_ingredients=ingredients,
+                            number=number,
+                            cuisine=None,  # Remove cuisine
+                            meal_type=meal_type,
+                            diet=diet,
+                            intolerances=intolerances,  # Re-add intolerances if we have them
+                            enrich_results=True
+                        )
+                        if raw_recipes:
+                            print(f"✅ Found {len(raw_recipes)} recipes without cuisine filter")
+                            cuisine_used = None  # Mark as no cuisine filter applied
+                            metadata_notes.append("Recommended for your Pantry (cuisine filter removed)")
+                    except Exception as e:
+                        print(f"  ⚠️  Final fallback attempt failed: {str(e)}")
+            
+            # RELAXED SEARCH (Pantry Slap): If still zero results and user has >3 ingredients, try with top 3
+            if not raw_recipes and len(ingredients) > 3:
+                print(f"⚠️  No results with {len(ingredients)} ingredients. Trying relaxed search with top 3 ingredients...")
+                try:
+                    # Use top 3 ingredients (most common/popular)
+                    top_ingredients = ingredients[:3]
+                    raw_recipes = self.api_client.search_by_ingredients(
+                        user_ingredients=top_ingredients,
+                        number=number,
+                        cuisine=cuisine_used,  # Use original cuisine if available
+                        meal_type=meal_type,
+                        diet=diet,
+                        intolerances=intolerances,
+                        enrich_results=True  # Ensure we get full data from informationBulk
+                    )
+                    if raw_recipes:
+                        print(f"✅ Relaxed search successful: Found {len(raw_recipes)} recipes with {len(top_ingredients)} ingredients")
+                        metadata_notes.append(f"Search relaxed to top {len(top_ingredients)} ingredients")
+                except Exception as e:
+                    print(f"⚠️  Relaxed search also failed: {str(e)}")
+            
+            # GEMINI SEMANTIC INGREDIENT PRIORITIZATION: If results < 5, use Core ingredients
+            # This "knocks out" stubborn ingredients that are holding up results
+            if len(raw_recipes) < 5 and self.gemini and self.gemini.is_available():
+                print(f"⚠️  Only {len(raw_recipes)} recipes found. Using Gemini to prioritize ingredients...")
+                try:
+                    # Call Gemini to categorize ingredients into Core and Secondary
+                    ingredient_categorization = self.gemini.get_low_priority_ingredients(ingredients)
+                    core_ingredients = ingredient_categorization.get('core', [])
+                    secondary_ingredients = ingredient_categorization.get('secondary', [])
                     
-                    if raw_recipes_core and len(raw_recipes_core) > len(raw_recipes):
-                        print(f"✅ Found {len(raw_recipes_core)} recipes with core ingredients (was {len(raw_recipes)})")
-                        raw_recipes = raw_recipes_core
-                        metadata_notes.append(f"Semantic prioritization: Used {len(core_ingredients)} core ingredients (dropped {len(secondary_ingredients)} secondary)")
-                    else:
-                        print(f"⚠️  Core ingredients search didn't improve results")
-                else:
-                    print(f"⚠️  No core ingredients to prioritize, or core = all ingredients")
+                    print(f"  → Core ingredients (using these): {core_ingredients}")
+                    print(f"  → Secondary ingredients (dropping these): {secondary_ingredients}")
                     
+                    # If we have core ingredients and they're different from original, re-run search
+                    if core_ingredients and len(core_ingredients) < len(ingredients):
+                        print(f"  → Re-running search with {len(core_ingredients)} core ingredients...")
+                        
+                        # Re-run search with ONLY Core ingredients (if different from initial search)
+                        if core_ingredients != ingredients_to_search:
+                            raw_recipes_core = self.api_client.search_by_ingredients(
+                                user_ingredients=core_ingredients,
+                                number=number,
+                                cuisine=cuisine_used,
+                                meal_type=meal_type,
+                                diet=diet,
+                                intolerances=intolerances,
+                                enrich_results=True
+                            )
+                        else:
+                            # Core ingredients already used in initial search
+                            raw_recipes_core = raw_recipes
+                        
+                        if raw_recipes_core and len(raw_recipes_core) > len(raw_recipes):
+                            print(f"✅ Found {len(raw_recipes_core)} recipes with core ingredients (was {len(raw_recipes)})")
+                            raw_recipes = raw_recipes_core
+                            metadata_notes.append(f"Semantic prioritization: Used {len(core_ingredients)} core ingredients (dropped {len(secondary_ingredients)} secondary)")
+                        else:
+                            print(f"⚠️  Core ingredients search didn't improve results")
+                    else:
+                        print(f"⚠️  No core ingredients to prioritize, or core = all ingredients")
+                        
+                except Exception as e:
+                    print(f"⚠️  Gemini ingredient prioritization failed: {str(e)}")
+                    # Continue with original results
+            
+            if not raw_recipes:
+                return {
+                    'recipes': [],
+                    'pitch': None,
+                    'metadata': {
+                        'total_fetched': 0,
+                        'total_processed': 0,
+                        'errors': ['No recipes found from API']
+                    }
+                }
+            
+            # Step B: Logic Processing - Pass raw data directly to PantryChefEngine
+            # Ensure intolerances are passed correctly for Logic.py's manual keyword audit
+            engine_settings = settings.copy()
+            if intolerances and 'intolerances' not in engine_settings:
+                # If intolerances provided as parameter, add to settings for Logic.py
+                engine_settings['intolerances'] = intolerances
+            elif 'intolerances' in engine_settings and isinstance(engine_settings['intolerances'], list):
+                # Settings already has intolerances list - use it
+                pass
+            
+            try:
+                # Initialize engine with user settings
+                self.logic_engine = PantryChefEngine(engine_settings)
+                
+                # Process all recipes through Logic engine
+                # CRITICAL: process_results returns ALL recipes (no filtering based on scores)
+                processed_recipes = self.logic_engine.process_results(raw_recipes)
             except Exception as e:
-                print(f"⚠️  Gemini ingredient prioritization failed: {str(e)}")
-                # Continue with original results
-        
-        if not raw_recipes:
+                return {
+                    'recipes': [],
+                    'pitch': None,
+                    'metadata': {
+                        'total_fetched': len(raw_recipes),
+                        'total_processed': 0,
+                        'errors': [f'Processing Error: {str(e)}']
+                    }
+                }
+            
+            # SAFETY JURY: Send ALL recipes from Logic.py to Gemini for final review
+            # Gemini is the final authority on safety - do not filter recipes here
+            # Every recipe returned by Logic.py is appended to results_to_jury, regardless of score
+            results_to_jury = []
+            for recipe in processed_recipes:
+                # If the recipe exists, send it to Gemini
+                # Do not apply any if passed == True filters here, as Gemini is the final authority
+                results_to_jury.append(recipe)
+                metadata = recipe.get('_metadata', {})
+                safety_check = metadata.get('safety_check', {})
+                if not safety_check.get('passed', True):
+                    print(f" Safety Jury: Recipe '{recipe.get('title', 'Unknown')}' flagged by Logic.py - sending to Gemini for review")
+                    print(f"   Reason: {safety_check.get('reason', safety_check.get('safety_reason', 'Unknown reason'))}")
+            
+            # Update processed_recipes to include all recipes for Gemini review
+            processed_recipes = results_to_jury
+            
+
+            # CRITICAL: Ensure nutrition data is passed to Gemini for nutritional pills generation
+            # The nutrition data (including vitamins, minerals) is already in processed_recipes from Logic.py
+            # Logic.py preserves recipe.nutrition from informationBulk, which contains nutrients array
+            pitch = None
+            # Step C: Gemini Semantic Judge & Pitch
+            if processed_recipes and self.gemini and self.gemini.is_available():
+                print(f"\n🤖 Step 3: Gemini Processing...")
+
+                # Separate recipes that need semantic validation
+                needs_validation = [r for r in processed_recipes if r.get('needs_semantic_validation', False)]
+                already_validated = [r for r in processed_recipes if not r.get('needs_semantic_validation', False)]
+
+                if needs_validation:
+                    print(f"🔍 Gemini Semantic Judge: Validating {len(needs_validation)} rescue candidates...")
+
+                    from Gemini_recipe_validator import GeminiRecipeValidator
+                    validator = GeminiRecipeValidator(self.gemini_key)
+
+                    if validator.is_available():
+                        # Validate rescue candidates
+                        validated_recipes = validator.validate_batch(
+                            recipes=needs_validation,
+                            user_diet=diet,
+                            user_intolerances=intolerances,
+                            user_cuisine=cuisine,
+                            user_meal_type=meal_type,
+                            max_recipes=len(needs_validation)
+                        )
+
+                        # Upgrade confidence if Gemini approves
+                        approved_count = 0
+                        for recipe in validated_recipes:
+                            validation = recipe.get('gemini_validation', {})
+
+                            if validation.get('safe_for_user', False):
+                                # Gemini says it's a semantic match!
+                                recipe['match_confidence'] = 0.9  # Upgrade from 0.6 to 0.9
+                                recipe['semantic_validated'] = True
+                                recipe['needs_semantic_validation'] = False
+                                approved_count += 1
+                            else:
+                                # Gemini rejected - keep low confidence
+                                recipe['semantic_rejected'] = True
+                                recipe['rejection_reason'] = validation.get('rejection_reason', '')
+
+                        print(f"✅ Gemini approved {approved_count}/{len(validated_recipes)} rescue candidates")
+
+                        # Combine validated with already-validated
+                        processed_recipes = already_validated + validated_recipes
+                    else:
+                        print(f"⚠️  Gemini not available - keeping rescue candidates at low confidence")
+                        processed_recipes = already_validated + needs_validation
+
+                # Generate pitch from top recipes
+                pitch = None
+                if enrich_with_ai and processed_recipes:
+                    try:
+                        top_3_for_pitch = processed_recipes[:3]
+
+                        pitch_result = self.gemini.generate_recommendation_pitch(
+                            recommendations=top_3_for_pitch,
+                            user_mood=settings.get('mood', 'casual'),
+                            user_diet=diet,
+                            user_intolerances=intolerances
+                        )
+                        pitch = pitch_result.get('pitch_text')
+                    except Exception as e:
+                        print(f"Warning: Pitch generation failed: {e}")
+                        pitch = None
+            else:
+                pitch = None
+            
+            # Step D: The Return - Return both recipes and pitch
+            # ENFORCER: Only return safe recipes that passed all checks
+            # - Recipes with passed: False from Logic.py have been filtered out
+            # - Recipes with safety_score < 0.5 have been filtered out
+            # - Recipes marked as "REJECTED" by Gemini have been filtered out
+            # The orchestrator is NO LONGER a "neutral conductor" - it actively enforces safety
+            
+            # Add metadata notes about filter fallbacks
+            final_metadata = {
+                'total_fetched': len(raw_recipes),
+                'total_processed': len(processed_recipes),
+                'ai_enriched': pitch is not None,
+                'cuisine_applied': cuisine_used,  # Show which cuisine was actually used (or None if removed)
+                'notes': metadata_notes,  # Notes about filter relaxations
+                'errors': []
+            }
+            
             return {
-                'recipes': [],
+                'recipes': processed_recipes,  # ALL recipes from Logic.py
+                'pitch': pitch,
+                'metadata': final_metadata
+            }
+        
+        except Exception as e:
+            # CRITICAL: Prevent silent crash - return empty list instead of letting error crash FastAPI
+            # This prevents the frontend from hanging forever on a 'Pending' request
+            print(f"CRITICAL ERROR in run_pantry_chef: {str(e)}")
+            import traceback
+            print(f"   Traceback: {traceback.format_exc()}")
+            return {
+                'recipes': [],  # Return empty list instead of crashing
                 'pitch': None,
                 'metadata': {
                     'total_fetched': 0,
                     'total_processed': 0,
-                    'errors': ['No recipes found from API']
+                    'errors': [f'Orchestrator Error: {str(e)}']
                 }
             }
-        
-        # Step B: Logic Processing - Pass raw data directly to PantryChefEngine
-        # Ensure intolerances are passed correctly for Logic.py's manual keyword audit
-        engine_settings = settings.copy()
-        if intolerances and 'intolerances' not in engine_settings:
-            # If intolerances provided as parameter, add to settings for Logic.py
-            engine_settings['intolerances'] = intolerances
-        elif 'intolerances' in engine_settings and isinstance(engine_settings['intolerances'], list):
-            # Settings already has intolerances list - use it
-            pass
-        
-        try:
-            # Initialize engine with user settings
-            self.logic_engine = PantryChefEngine(engine_settings)
-            
-            # Process all recipes through Logic engine
-            # CRITICAL: process_results returns ALL recipes (no filtering based on scores)
-            processed_recipes = self.logic_engine.process_results(raw_recipes)
-        except Exception as e:
-            return {
-                'recipes': [],
-                'pitch': None,
-                'metadata': {
-                    'total_fetched': len(raw_recipes),
-                    'total_processed': 0,
-                    'errors': [f'Processing Error: {str(e)}']
-                }
-            }
-        
-        # ENFORCER: Filter out unsafe recipes BEFORE sending to Gemini
-        # Changed from "neutral conductor" to active filter - removes recipes that Logic.py flagged
-        # This kills "Chicken Shawarma" immediately if Logic.py flags it
-        safe_recipes = []
-        for recipe in processed_recipes:
-            # Check recipe-level passed flag (if Logic.py sets it directly)
-            if not recipe.get('passed', True):
-                print(f"⚠️  Enforcer: Removing recipe '{recipe.get('title', 'Unknown')}' - Logic.py flagged passed: False")
-                continue  # DELETE this recipe - do not send to Gemini
-            
-            # Check metadata safety_check passed flag
-            metadata = recipe.get('_metadata', {})
-            safety_check = metadata.get('safety_check', {})
-            
-            # CRITICAL: Check if recipe passed safety check from Logic.py
-            # Logic.py sets passed: False for meat violations, intolerance violations, etc.
-            if not safety_check.get('passed', True):
-                print(f"⚠️  Enforcer: Removing recipe '{recipe.get('title', 'Unknown')}' - failed safety check (passed: False)")
-                print(f"   Reason: {safety_check.get('reason', 'Unknown reason')}")
-                continue  # DELETE this recipe - do not send to Gemini
-            
-            # CRITICAL: Check if safety_score is too low (< 0.5)
-            # Low safety scores indicate violations that should be filtered out
-            safety_score = safety_check.get('safety_score', 1.0)
-            if safety_score < 0.5:
-                print(f"⚠️  Enforcer: Removing recipe '{recipe.get('title', 'Unknown')}' - low safety score ({safety_score})")
-                print(f"   Reason: {safety_check.get('safety_reason', 'Unknown reason')}")
-                continue  # DELETE this recipe - do not send to Gemini
-            
-            safe_recipes.append(recipe)
-        
-        # Update processed_recipes to only include safe recipes
-        # These are the only recipes that will be sent to Gemini
-        processed_recipes = safe_recipes
-        
-        # Step C: Gemini Enrichment - Take top results and generate pitch
-        # CRITICAL: Ensure nutrition data is passed to Gemini for nutritional pills generation
-        # The nutrition data (including vitamins, minerals) is already in processed_recipes from Logic.py
-        # Logic.py preserves recipe.nutrition from informationBulk, which contains nutrients array
-        pitch = None
-        if enrich_with_ai and processed_recipes and self.gemini and self.gemini.is_available():
-            try:
-                # Take top 3 recipes for pitch generation (but keep ALL recipes in results)
-                top_3_for_pitch = processed_recipes[:3]
-                
-                # CRITICAL: Verify nutrition data is present for Gemini to generate nutritional pills
-                # Each recipe should have recipe.nutrition.nutrients array with vitamins/minerals
-                for recipe in top_3_for_pitch:
-                    if not recipe.get('nutrition') or not recipe.get('nutrition', {}).get('nutrients'):
-                        print(f"⚠️  Warning: Recipe {recipe.get('id')} missing nutrition data - pills may not display correctly")
-                
-                # Generate Chef's Pitch from Gemini
-                # Gemini will use nutrition data from recommendations to generate tags like "High Protein", "Rich in Calcium"
-                pitch_result = self.gemini.generate_recommendation_pitch(
-                    recommendations=top_3_for_pitch,
-                    user_mood=settings.get('mood', 'casual')
-                )
-                pitch = pitch_result.get('pitch_text')
-                
-                # ENFORCER: Filter out recipes that Gemini marked as "REJECTED"
-                # If Gemini's response contains "REJECTED" for a recipe, remove it from final results entirely
-                # This ensures that even if a 'lamb sausage' recipe trickles past the API and Logic.py, Gemini will catch it
-                if pitch:
-                    rejected_recipe_titles = set()
-                    pitch_lower = pitch.lower()
-                    pitch_upper = pitch.upper()
-                    
-                    # Check if pitch contains "REJECTED" - if so, identify which recipe(s) were rejected
-                    if "REJECTED" in pitch_upper:
-                        # Check each recipe in top_3_for_pitch to see if it's marked as REJECTED
-                        for recipe in top_3_for_pitch:
-                            recipe_title = recipe.get('title', '')
-                            if not recipe_title:
-                                continue
-                            
-                            # Look for pattern: "REJECTED" near the recipe title
-                            # Check if REJECTED appears in the same context as the recipe title
-                            title_lower = recipe_title.lower()
-                            
-                            # Find all occurrences of the recipe title in the pitch
-                            title_index = pitch_lower.find(title_lower)
-                            if title_index != -1:
-                                # Check a window around the title for "REJECTED"
-                                window_start = max(0, title_index - 100)
-                                window_end = min(len(pitch_lower), title_index + len(title_lower) + 100)
-                                window_text = pitch_lower[window_start:window_end]
-                                
-                                # If REJECTED appears in the same window as the recipe title, mark it as rejected
-                                if 'rejected' in window_text:
-                                    rejected_recipe_titles.add(recipe_title)
-                        
-                        # Also check for explicit "REJECTED" lines that might reference recipe numbers
-                        # Handle cases where pitch is exactly "REJECTED" or contains "REJECTED" on its own line
-                        pitch_lines = pitch.split('\n')
-                        for i, line in enumerate(pitch_lines):
-                            line_stripped = line.strip().upper()
-                            # If line is exactly "REJECTED", match it to the corresponding recipe by position
-                            if line_stripped == 'REJECTED':
-                                # Match by position in top_3_for_pitch
-                                if i < len(top_3_for_pitch):
-                                    recipe = top_3_for_pitch[i]
-                                    recipe_title = recipe.get('title', '')
-                                    if recipe_title:
-                                        rejected_recipe_titles.add(recipe_title)
-                            elif 'rejected' in line.lower():
-                                # Try to match with recipe by number (1., 2., 3.) or by title
-                                line_lower = line.lower()
-                                for j, recipe in enumerate(top_3_for_pitch):
-                                    recipe_num = j + 1
-                                    recipe_title = recipe.get('title', '')
-                                    # Check if line contains recipe number or title
-                                    if (f"{recipe_num}." in line_lower or 
-                                        (recipe_title and recipe_title.lower() in line_lower)):
-                                        rejected_recipe_titles.add(recipe_title)
-                        
-                        # ENFORCER: Remove rejected recipes from processed_recipes entirely
-                        # After Gemini provides pitches, if any pitch contains "REJECTED", remove that recipe
-                        # This ensures the user never sees unsafe recipes that passed Logic.py but failed Gemini's audit
-                        if rejected_recipe_titles:
-                            print(f"⚠️  Enforcer: Removing {len(rejected_recipe_titles)} rejected recipe(s) from Gemini: {list(rejected_recipe_titles)}")
-                            processed_recipes = [
-                                r for r in processed_recipes 
-                                if r.get('title', '') not in rejected_recipe_titles
-                            ]
-            except Exception as e:
-                # AI enrichment failed, but continue with processed recipes
-                print(f"Warning: AI enrichment failed: {e}")
-                pitch = None
-        
-        # Step D: The Return - Return both recipes and pitch
-        # ENFORCER: Only return safe recipes that passed all checks
-        # - Recipes with passed: False from Logic.py have been filtered out
-        # - Recipes with safety_score < 0.5 have been filtered out
-        # - Recipes marked as "REJECTED" by Gemini have been filtered out
-        # The orchestrator is NO LONGER a "neutral conductor" - it actively enforces safety
-        
-        # Add metadata notes about filter fallbacks
-        final_metadata = {
-            'total_fetched': len(raw_recipes),
-            'total_processed': len(processed_recipes),
-            'ai_enriched': pitch is not None,
-            'cuisine_applied': cuisine_used,  # Show which cuisine was actually used (or None if removed)
-            'notes': metadata_notes,  # Notes about filter relaxations
-            'errors': []
-        }
-        
-        return {
-            'recipes': processed_recipes,  # ALL recipes from Logic.py
-            'pitch': pitch,
-            'metadata': final_metadata
-        }
 
 
 def run_pantry_chef(
@@ -630,20 +611,20 @@ if __name__ == "__main__":
         # Final Test Validation
         test_passed = len(results['recipes']) > 0 and requires_validation
         if test_passed:
-            print(f"\n✅ TEST PASSED: Recipes with dairy are returned despite intolerance setting")
+            print(f"\n TEST PASSED: Recipes with dairy are returned despite intolerance setting")
             print(f"   - Total recipes: {len(results['recipes'])}")
             print(f"   - Safety flag triggered: {requires_validation}")
             print(f"   - Orchestrator acted as neutral conductor (no filtering)")
         else:
-            print(f"\n❌ TEST FAILED: Expected recipes with requires_ai_validation=True")
+            print(f"\n TEST FAILED: Expected recipes with requires_ai_validation=True")
             print(f"   - Total recipes: {len(results['recipes'])}")
             print(f"   - Safety flag triggered: {requires_validation}")
     else:
-        print("❌ No recipes found in fusion test.")
+        print(" No recipes found in fusion test.")
         print("   This indicates recipes are being filtered out - check orchestrator filtering logic")
 
     print("\n" + "="*70)
-    print("✅ FUSION TEST COMPLETE")
+    print(" FUSION TEST COMPLETE")
     print("="*70)
     
     # NEW TEST: Dietary Enforcement Test
@@ -685,9 +666,9 @@ if __name__ == "__main__":
         filtered_list.append(recipe)
     
     if len(filtered_list) == 0:
-        print("✅ SUCCESS: Meat recipe was successfully blocked by Enforcer.")
+        print(" SUCCESS: Meat recipe was successfully blocked by Enforcer.")
     else:
-        print("❌ FAILURE: Meat recipe leaked through the Enforcer!")
+        print(" FAILURE: Meat recipe leaked through the Enforcer!")
     
     print("="*50 + "\n")
 
