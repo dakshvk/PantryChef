@@ -1,191 +1,77 @@
 # PantryChef Frontend
 
-> **React-powered user interface with Tailwind CSS styling, real-time recipe discovery, and interactive AI-powered recommendations**
-
-A modern, responsive web application built with React 18.2 and Tailwind CSS that provides an intuitive interface for discovering recipes, managing dietary preferences, and receiving intelligent substitution recommendations.
+**React 18.2 | Vite 5.0 | Tailwind CSS 3.4 | JavaScript ES6+**
 
 ---
 
-## Table of Contents
+## What This Is
 
-- [Overview](#overview)
-- [Features](#features)
-- [Component Architecture](#component-architecture)
-- [Installation](#installation)
-- [Development](#development)
-- [Components Documentation](#components-documentation)
-- [Styling & Theming](#styling--theming)
-- [State Management](#state-management)
-- [API Integration](#api-integration)
-- [Performance Optimization](#performance-optimization)
-- [Testing](#testing)
-- [Build & Deployment](#build--deployment)
+The frontend is a React single-page application that gives users a way to interact with the PantryChef backend. The interface handles ingredient input, filter selection, and recipe browsing — and it stays out of the way while doing it. The design goal was functional and clean, not flashy. A sidebar for inputs, a grid for results, a modal for detail, and an AI pitch box at the top that translates the backend's scoring math into a sentence a person actually wants to read.
 
 ---
 
-## Overview
-
-The PantryChef frontend is a **React 18.2 single-page application** built with:
-
-- **Vite**: Lightning-fast build tool with hot module replacement (HMR)
-- **Tailwind CSS**: Utility-first CSS framework with custom emerald chef theme
-- **Component-Based Architecture**: Reusable, maintainable React components
-- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
-- **Real-Time Updates**: Live recipe refresh with configurable filters
-
-### Tech Stack
-
-- React 18.2.0
-- JavaScript (ES6+)
-- Tailwind CSS 3.4.1
-- Vite 5.0.8
-- PostCSS 8.4.33
-
----
-
-## Features
-
-### User Interface
-
-- **Responsive Grid Layout**: Adaptive recipe cards that reflow based on screen size
-- **Interactive Modals**: Expandable recipe details with full ingredients and instructions
-- **Real-Time Search**: Instant recipe updates as filters change
-- **AI Pitch Box**: Natural language recommendations from AI Chef
-- **Dietary Safety Indicators**: Visual flags for recipes requiring validation
-
-### Accessibility
-
-- **Keyboard Navigation**: Full keyboard support for all interactive elements
-- **Scalable Fonts**: Font sizes from 80%-150% based on user preference
-- **High Contrast**: WCAG AA compliant color ratios
-- **Screen Reader Support**: Semantic HTML and ARIA labels
-- **Dark/Light Theme**: Toggle between themes (future feature)
-
-### User Experience
-
-- **Ingredient Autocomplete**: Smart suggestions as you type (future feature)
-- **Filter Persistence**: Remembers user preferences across sessions
-- **Loading States**: Skeleton screens and spinners for better UX
-- **Error Handling**: User-friendly error messages with retry options
-- **Smooth Animations**: CSS transitions for polished interactions
-
----
-
-## Component Architecture
+## Component Structure
 
 ```
 src/
-├── App.jsx                    # Root component & main layout
-├── main.jsx                   # React entry point
-├── index.css                  # Global styles + Tailwind imports
-└── components/
-    ├── Sidebar.jsx            # Ingredient input & filters
-    ├── RecipeGrid.jsx         # Recipe card grid layout
-    ├── RecipeCard.jsx         # Individual recipe card with modal
-    ├── AIPitchBox.jsx         # AI recommendation display
-    └── HeroSection.jsx        # Landing page hero (optional)
+    App.jsx                 Root component, state management, API calls
+    main.jsx                React entry point
+    index.css               Global styles and Tailwind imports
+    components/
+        Sidebar.jsx         Ingredient input, mood, dietary filters, profile selector
+        RecipeGrid.jsx      Responsive card grid with loading skeleton
+        RecipeCard.jsx      Individual recipe card with expandable modal
+        AIPitchBox.jsx      AI-generated recommendation display
+        HeroSection.jsx     Landing section shown before first search
 ```
 
-### Component Flow
+### How Data Flows
+
+State lives in App.jsx. The user builds their ingredient list and filter selections in the Sidebar. When they hit search, App.jsx sends a POST request to the backend, receives the ranked recipe list and AI pitch, and passes them down to RecipeGrid and AIPitchBox as props. RecipeCard handles its own modal state locally — opening and closing detail views does not touch App-level state.
 
 ```
-App.jsx (Root)
-│
-├─── Sidebar.jsx (Filters)
-│    └─── Ingredient Input
-│    └─── Mood Selector
-│    └─── Dietary Filters
-│    └─── User Profile Selector
-│
-├─── AIPitchBox.jsx (AI Recommendations)
-│    └─── Displays AI-generated pitch
-│
-└─── RecipeGrid.jsx (Results)
-     └─── RecipeCard.jsx (×20)
-          └─── Image
-          └─── Title
-          └─── Match Score
-          └─── Tags
-          └─── Modal (on click)
-               └─── Full Ingredients
-               └─── Instructions
-               └─── Nutrition
-               └─── Ask Chef Button
+App.jsx
+    Sidebar.jsx         reads filters from props, calls setIngredients and setFilters
+    AIPitchBox.jsx      receives pitch string and top recipe object
+    RecipeGrid.jsx      receives recipes array and loading boolean
+        RecipeCard.jsx  manages isModalOpen locally
 ```
 
 ---
 
-## Installation
+## Setup
 
 ### Prerequisites
 
 - Node.js 16 or higher
-- npm or yarn package manager
 
-### Setup
+### Installation
 
 ```bash
-# 1. Navigate to frontend directory
 cd frontend
-
-# 2. Install dependencies
 npm install
-
-# 3. Start development server
 npm run dev
-
-# 4. Open browser
-# Visit http://localhost:3000
 ```
 
-### Dependencies
-
-```json
-{
-  "react": "^18.2.0",
-  "react-dom": "^18.2.0",
-  "vite": "^5.0.8",
-  "tailwindcss": "^3.4.1",
-  "postcss": "^8.4.33",
-  "autoprefixer": "^10.4.16"
-}
-```
-
----
-
-## Development
-
-### Development Server
-
-```bash
-npm run dev
-# Starts Vite dev server with hot module replacement
-# Available at http://localhost:3000
-```
+The development server runs at http://localhost:3000 with hot module replacement enabled through Vite.
 
 ### Build for Production
 
 ```bash
 npm run build
-# Creates optimized production build in dist/
-```
-
-### Preview Production Build
-
-```bash
 npm run preview
-# Preview production build locally
 ```
 
 ---
 
-## Components Documentation
+## Components
 
-### App.jsx - Root Component
+### App.jsx
 
-**Purpose**: Main application layout and state management
+Manages all application state and the two API integrations.
 
-**State Management**:
+State:
+
 ```javascript
 const [ingredients, setIngredients] = useState([]);
 const [recipes, setRecipes] = useState([]);
@@ -197,122 +83,115 @@ const [filters, setFilters] = useState({
 });
 const [aiPitch, setAiPitch] = useState('');
 const [loading, setLoading] = useState(false);
+const [error, setError] = useState(null);
 ```
 
-**Key Methods**:
+Recipe fetch:
+
 ```javascript
 const fetchRecipes = async () => {
-    setLoading(true);
-    
-    const response = await fetch('http://localhost:8000/recommend', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            ingredients,
-            mood: filters.mood,
-            dietary_requirements: filters.dietaryRequirements,
-            intolerances: filters.intolerances,
-            user_profile: filters.userProfile,
-            number: 20
-        })
-    });
-    
-    const data = await response.json();
-    setRecipes(data.recipes);
-    setAiPitch(data.pitch);
-    setLoading(false);
+    try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch('http://localhost:8000/recommend', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                ingredients,
+                mood: filters.mood,
+                dietary_requirements: filters.dietaryRequirements,
+                intolerances: filters.intolerances,
+                user_profile: filters.userProfile,
+                number: 20
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Request failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        setRecipes(data.recipes);
+        setAiPitch(data.pitch);
+
+    } catch (err) {
+        setError('Could not load recipes. Check that the backend is running.');
+    } finally {
+        setLoading(false);
+    }
 };
 ```
 
-### Sidebar.jsx - Filter Panel
+Substitution fetch:
 
-**Purpose**: Ingredient input and filter controls
+```javascript
+const askChef = async (recipeTitle, query) => {
+    try {
+        const response = await fetch('http://localhost:8000/ask-chef', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                recipe_title: recipeTitle,
+                query,
+                ingredients
+            })
+        });
 
-**Props**: None (uses state from parent via props drilling or context)
+        const data = await response.json();
+        return data.response;
 
-**Features**:
-- Multi-input ingredient field with tag display
-- Mood selector (Tired, Casual, Energetic)
-- Dietary requirement checkboxes (Vegetarian, Vegan)
-- Intolerance checkboxes (Dairy, Gluten, Nuts, Soy)
-- User profile selector (Balanced, Minimal Shopper, Pantry Cleaner)
-- Clear all button
-- Search button with loading state
+    } catch (err) {
+        return 'Could not get a substitution right now. Try again.';
+    }
+};
+```
 
-**Example Code**:
+### Sidebar.jsx
+
+Handles all user input before a search is triggered. Ingredients are entered as text and added as tags on Enter or comma. Each tag has a remove button. The mood selector, dietary requirement checkboxes, intolerance checkboxes, and profile selector all update the filters object in App.jsx.
+
 ```javascript
 <div className="bg-white rounded-lg shadow-lg p-6 sticky top-4">
     <h2 className="text-2xl font-bold text-emerald-700 mb-4">
         Your Pantry
     </h2>
-    
-    {/* Ingredient Input */}
-    <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-            Add Ingredients
-        </label>
-        <input
-            type="text"
-            placeholder="e.g., chicken, rice, garlic"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
-            onKeyPress={handleAddIngredient}
-        />
-        
-        {/* Ingredient Tags */}
-        <div className="flex flex-wrap gap-2 mt-3">
-            {ingredients.map((ing, idx) => (
-                <span key={idx} className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm flex items-center gap-2">
-                    {ing}
-                    <button onClick={() => removeIngredient(idx)}>×</button>
-                </span>
-            ))}
-        </div>
+
+    <input
+        type="text"
+        placeholder="Add an ingredient and press Enter"
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
+        onKeyPress={handleAddIngredient}
+    />
+
+    <div className="flex flex-wrap gap-2 mt-3">
+        {ingredients.map((ing, idx) => (
+            <span key={idx} className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                {ing}
+                <button onClick={() => removeIngredient(idx)}>x</button>
+            </span>
+        ))}
     </div>
-    
-    {/* Mood Selector */}
-    <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-            Cooking Mood
-        </label>
-        <select className="w-full px-4 py-2 border border-gray-300 rounded-lg">
-            <option value="tired">Tired (Quick & Easy)</option>
-            <option value="casual">Casual (Moderate)</option>
-            <option value="energetic">Energetic (Complex OK)</option>
-        </select>
-    </div>
-    
-    {/* Search Button */}
+
+    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg mt-4">
+        <option value="tired">Tired — Quick and easy</option>
+        <option value="casual">Casual — Moderate effort</option>
+        <option value="energetic">Energetic — Complexity is fine</option>
+    </select>
+
     <button
         onClick={fetchRecipes}
-        className="w-full bg-emerald-600 text-white py-3 rounded-lg hover:bg-emerald-700 transition-colors font-semibold"
+        className="w-full bg-emerald-600 text-white py-3 rounded-lg hover:bg-emerald-700 transition-colors font-semibold mt-6"
     >
         {loading ? 'Searching...' : 'Find Recipes'}
     </button>
 </div>
 ```
 
-### RecipeGrid.jsx - Grid Layout
+### RecipeGrid.jsx
 
-**Purpose**: Displays recipe cards in responsive grid
+Renders the recipe cards in a responsive three-column grid. While loading, it renders a skeleton grid of nine placeholder cards using animated pulse styling so the layout does not shift when results arrive.
 
-**Props**:
-```javascript
-{
-    recipes: Array,     // Recipe data from API
-    loading: Boolean    // Loading state
-}
-```
-
-**Layout**:
-```javascript
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {recipes.map(recipe => (
-        <RecipeCard key={recipe.id} recipe={recipe} />
-    ))}
-</div>
-```
-
-**Loading State**:
 ```javascript
 {loading && (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -329,406 +208,155 @@ const fetchRecipes = async () => {
 )}
 ```
 
-### RecipeCard.jsx - Individual Recipe
+### RecipeCard.jsx
 
-**Purpose**: Displays recipe preview with expandable modal
+Displays the recipe image, title, confidence badge, time, difficulty, and a safety flag if the backend marked the recipe as requiring AI validation. Clicking the card opens a modal with the full ingredient list, step-by-step instructions, nutritional data, and the Ask Chef button.
 
-**Props**:
+The confidence badge color reflects the score tier:
+
 ```javascript
-{
-    recipe: {
-        id: Number,
-        title: String,
-        image: String,
-        match_confidence: Number,
-        time: Number,
-        used_ingredients: Number,
-        missing_ingredients: Number,
-        difficulty: String,
-        nutrition_summary: Object,
-        extendedIngredients: Array,
-        instructions: String,
-        requires_ai_validation: Boolean
-    }
-}
+<div className={`inline-block px-3 py-1 rounded-full text-sm font-semibold mb-3 ${
+    recipe.match_confidence >= 0.9 ? 'bg-green-100 text-green-800' :
+    recipe.match_confidence >= 0.7 ? 'bg-yellow-100 text-yellow-800' :
+    'bg-orange-100 text-orange-800'
+}`}>
+    {recipe.match_confidence === 1.0 ? 'Strong Match' :
+     recipe.match_confidence === 0.9 ? 'AI Confirmed' : 'Possible Match'}
+</div>
 ```
 
-**Features**:
-- Recipe image with fallback
-- Match confidence badge (color-coded by score)
-- Time & difficulty indicators
-- Dietary safety flag (if requires_ai_validation)
-- Modal with full details on click
+The safety flag appears when `requires_ai_validation` is true on the recipe object:
 
-**Example Code**:
 ```javascript
-const [isModalOpen, setIsModalOpen] = useState(false);
-
-return (
-    <>
-        {/* Card Preview */}
-        <div
-            onClick={() => setIsModalOpen(true)}
-            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
-        >
-            {/* Image */}
-            <img
-                src={recipe.image}
-                alt={recipe.title}
-                className="w-full h-48 object-cover"
-            />
-            
-            {/* Content */}
-            <div className="p-4">
-                {/* Title */}
-                <h3 className="font-bold text-lg text-gray-800 mb-2">
-                    {recipe.title}
-                </h3>
-                
-                {/* Confidence Badge */}
-                <div className={`inline-block px-3 py-1 rounded-full text-sm font-semibold mb-3 ${
-                    recipe.match_confidence >= 80 ? 'bg-green-100 text-green-800' :
-                    recipe.match_confidence >= 65 ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-orange-100 text-orange-800'
-                }`}>
-                    {recipe.match_confidence}% Match
-                </div>
-                
-                {/* Meta Info */}
-                <div className="flex items-center gap-4 text-sm text-gray-600">
-                    <span>🕐 {recipe.time} min</span>
-                    <span>✨ {recipe.difficulty}</span>
-                </div>
-                
-                {/* Safety Flag */}
-                {recipe.requires_ai_validation && (
-                    <div className="mt-3 text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded">
-                        ⚠️ Contains borderline ingredients - AI validated
-                    </div>
-                )}
-            </div>
-        </div>
-        
-        {/* Modal */}
-        {isModalOpen && (
-            <RecipeModal
-                recipe={recipe}
-                onClose={() => setIsModalOpen(false)}
-            />
-        )}
-    </>
-);
+{recipe.requires_ai_validation && (
+    <div className="mt-3 text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded">
+        Contains borderline ingredients — reviewed by AI
+    </div>
+)}
 ```
 
-### AIPitchBox.jsx - AI Recommendations
+### AIPitchBox.jsx
 
-**Purpose**: Displays AI-generated recipe pitch
+Displays the AI-generated recommendation text alongside a preview of the top-ranked recipe. The pitch comes directly from the backend as a string — the component just renders it.
 
-**Props**:
-```javascript
-{
-    pitch: String,      // AI-generated recommendation
-    topRecipe: Object   // Top-ranked recipe data
-}
-```
-
-**Example Code**:
 ```javascript
 <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg shadow-lg p-6 mb-8">
-    <div className="flex items-start gap-4">
-        {/* AI Chef Icon */}
-        <div className="bg-emerald-600 text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl flex-shrink-0">
-            👨‍🍳
+    <h3 className="font-bold text-lg text-emerald-800 mb-2">
+        AI Chef Recommendation
+    </h3>
+    <p className="text-gray-700 leading-relaxed">
+        {pitch}
+    </p>
+
+    {topRecipe && (
+        <div className="mt-4 flex items-center gap-3">
+            <img
+                src={topRecipe.image}
+                alt={topRecipe.title}
+                className="w-20 h-20 rounded-lg object-cover"
+            />
+            <div>
+                <p className="font-semibold text-gray-800">{topRecipe.title}</p>
+                <p className="text-sm text-gray-600">
+                    {topRecipe.time} min
+                </p>
+            </div>
         </div>
-        
-        {/* Pitch Content */}
-        <div>
-            <h3 className="font-bold text-lg text-emerald-800 mb-2">
-                AI Chef Recommends
-            </h3>
-            <p className="text-gray-700 leading-relaxed">
-                {pitch}
-            </p>
-            
-            {/* Top Recipe Preview */}
-            {topRecipe && (
-                <div className="mt-4 flex items-center gap-3">
-                    <img
-                        src={topRecipe.image}
-                        alt={topRecipe.title}
-                        className="w-20 h-20 rounded-lg object-cover"
-                    />
-                    <div>
-                        <p className="font-semibold text-gray-800">
-                            {topRecipe.title}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                            {topRecipe.time} min • {topRecipe.match_confidence}% match
-                        </p>
-                    </div>
-                </div>
-            )}
-        </div>
-    </div>
+    )}
 </div>
 ```
 
 ---
 
-## Styling & Theming
+## Styling
 
-### Tailwind Configuration
+Tailwind CSS handles all styling. The custom theme extends the default emerald color palette with Inter as the primary font.
 
 ```javascript
 // tailwind.config.js
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,jsx}",
-  ],
-  theme: {
-    extend: {
-      colors: {
-        emerald: {
-          50: '#ecfdf5',
-          100: '#d1fae5',
-          200: '#a7f3d0',
-          300: '#6ee7b7',
-          400: '#34d399',
-          500: '#10b981',
-          600: '#059669',
-          700: '#047857',
-          800: '#065f46',
-          900: '#064e3b',
-        }
-      },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-      }
+    content: [
+        "./index.html",
+        "./src/**/*.{js,jsx}",
+    ],
+    theme: {
+        extend: {
+            colors: {
+                emerald: {
+                    50:  '#ecfdf5',
+                    100: '#d1fae5',
+                    500: '#10b981',
+                    600: '#059669',
+                    700: '#047857',
+                    800: '#065f46',
+                }
+            },
+            fontFamily: {
+                sans: ['Inter', 'system-ui', 'sans-serif'],
+            }
+        },
     },
-  },
-  plugins: [],
+    plugins: [],
 }
 ```
 
-### Global Styles
+Two reusable component classes are defined in index.css:
 
 ```css
-/* index.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  body {
-    @apply bg-gray-50 text-gray-900;
-  }
-}
-
 @layer components {
-  .btn-primary {
-    @apply bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors font-semibold;
-  }
-  
-  .card {
-    @apply bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow;
-  }
+    .btn-primary {
+        @apply bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors font-semibold;
+    }
+
+    .card {
+        @apply bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow;
+    }
 }
 ```
 
 ---
 
-## State Management
+## Connecting to the Backend
 
-### Local State (useState)
+The frontend expects the backend running at http://localhost:8000. If you change the backend port, update the fetch URLs in App.jsx. There is no environment variable abstraction for the API URL currently — it is hardcoded in two places, the fetchRecipes function and the askChef function.
 
-```javascript
-// App.jsx
-const [ingredients, setIngredients] = useState([]);
-const [recipes, setRecipes] = useState([]);
-const [filters, setFilters] = useState({
-    mood: 'casual',
-    dietaryRequirements: [],
-    intolerances: [],
-    userProfile: 'balanced'
-});
-```
+CORS is handled on the backend side. The frontend does not require any proxy configuration in Vite for local development.
 
-### Future: Context API
+---
 
-```javascript
-// contexts/RecipeContext.jsx (future enhancement)
-const RecipeContext = createContext();
+## Dependencies
 
-export const RecipeProvider = ({ children }) => {
-    const [state, setState] = useState(initialState);
-    
-    return (
-        <RecipeContext.Provider value={{state, setState}}>
-            {children}
-        </RecipeContext.Provider>
-    );
-};
+```json
+{
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vite": "^5.0.8",
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.33",
+    "autoprefixer": "^10.4.16"
+}
 ```
 
 ---
 
-## API Integration
+## What Is Not Built Yet
 
-### Fetch Recipes
+Ingredient autocomplete is planned but not implemented. Right now, you type the ingredient name in full and press Enter.
 
-```javascript
-const fetchRecipes = async () => {
-    try {
-        setLoading(true);
-        setError(null);
-        
-        const response = await fetch('http://localhost:8000/recommend', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                ingredients,
-                mood: filters.mood,
-                dietary_requirements: filters.dietaryRequirements,
-                intolerances: filters.intolerances,
-                user_profile: filters.userProfile,
-                number: 20
-            })
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        setRecipes(data.recipes);
-        setAiPitch(data.pitch);
-        
-    } catch (error) {
-        console.error('Error fetching recipes:', error);
-        setError('Failed to load recipes. Please try again.');
-    } finally {
-        setLoading(false);
-    }
-};
-```
+Filter persistence across page reloads is not implemented. State resets on refresh.
 
-### Ask Chef (Substitution)
+The dark mode toggle referenced in the component documentation is a future feature. Only the light theme exists currently.
 
-```javascript
-const askChef = async (recipeTitle, query) => {
-    try {
-        const response = await fetch('http://localhost:8000/ask-chef', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                recipe_title: recipeTitle,
-                query,
-                ingredients
-            })
-        });
-        
-        const data = await response.json();
-        return data.response;
-        
-    } catch (error) {
-        console.error('Error getting substitution:', error);
-        return 'Sorry, I couldn\'t find a good substitution right now.';
-    }
-};
-```
+Component-level testing with React Testing Library is not set up. The test infrastructure would need to be installed separately.
 
 ---
 
-## Performance Optimization
+## Deployment
 
-### Code Splitting
-
-```javascript
-// Lazy load components (future enhancement)
-const RecipeModal = lazy(() => import('./components/RecipeModal'));
-```
-
-### Memoization
-
-```javascript
-// Prevent unnecessary re-renders
-const MemoizedRecipeCard = memo(RecipeCard);
-```
-
-### Debouncing
-
-```javascript
-// Debounce search input (future enhancement)
-const debouncedSearch = useDebounce(searchTerm, 500);
-```
-
----
-
-## Testing
-
-### Component Testing
-
-```bash
-# Install testing libraries (future enhancement)
-npm install --save-dev @testing-library/react @testing-library/jest-dom
-
-# Run tests
-npm test
-```
-
-### Example Test
-
-```javascript
-// RecipeCard.test.jsx
-import { render, screen } from '@testing-library/react';
-import RecipeCard from './RecipeCard';
-
-test('renders recipe title', () => {
-    const recipe = {
-        title: 'Pasta Carbonara',
-        match_confidence: 85,
-        time: 30
-    };
-    
-    render(<RecipeCard recipe={recipe} />);
-    expect(screen.getByText('Pasta Carbonara')).toBeInTheDocument();
-});
-```
-
----
-
-## Build & Deployment
-
-### Production Build
+For a production build:
 
 ```bash
 npm run build
-# Creates optimized build in dist/
 ```
 
-### Deployment Options
-
-#### Vercel (Recommended)
-```bash
-npm install -g vercel
-vercel deploy
-```
-
-#### Netlify
-```bash
-npm install -g netlify-cli
-netlify deploy --prod
-```
-
-#### Static Hosting
-```bash
-# Copy dist/ folder to any static hosting service
-# (GitHub Pages, AWS S3, Firebase Hosting, etc.)
-```
-
----
-
-**Frontend built with React, Tailwind CSS, and modern web technologies**
+This outputs a static dist/ directory that can be served from any static hosting service — Vercel, Netlify, GitHub Pages, AWS S3, Firebase Hosting. The backend needs to be deployed separately and the fetch URLs in App.jsx updated to point to the production backend URL.
