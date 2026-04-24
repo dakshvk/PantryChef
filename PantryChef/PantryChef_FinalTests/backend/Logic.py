@@ -147,6 +147,8 @@ class PantryChefEngine:
                 
                 # If ANY meat keyword is found, immediately discard the recipe
                 if any(meat_kw in recipe_text for meat_kw in MEAT_KEYWORDS):
+                    print(f"🥩 Hard Executioner: Filtering '{recipe.get('title')}' - contains meat")
+                    print(f"   User dietary requirements: {dietary_requirements}")
                     continue  # Hard cutoff - discard immediately
             
             # GATE 1: Safety Check (intolerances)
@@ -167,7 +169,13 @@ class PantryChefEngine:
             
             # Calculate smart score
             scoring_data = self._calculate_smart_score(recipe)
-            
+
+            # NEW: Apply semantic bonus if recipe needs validation
+            if recipe.get('needs_semantic_validation', False):
+                # Lower initial score, will be upgraded by Gemini if semantic match
+                scoring_data['smart_score'] *= 0.8  # 20% penalty until Gemini validates
+                scoring_data['pending_semantic_validation'] = True
+
             # Apply Phase 2 reasoning with mood-based bonuses and penalty adjustments
             reasoning_data = self._apply_reasoning_with_penalties(
                 recipe,
@@ -370,6 +378,34 @@ class PantryChefEngine:
             keywords = ALLERGY_MAP.get(intol_key, [])
             safe_words = SAFE_WORDS.get(intol_key, [])
             
+            # CUSTOM INTOLERANCE HANDLING: If intolerance is not in ALLERGY_MAP (e.g., "shrimp", "shellfish"),
+            # check if the intolerance keyword itself appears in the recipe
+            if not keywords:
+                # Custom intolerance - check if the keyword itself appears in ingredients
+                if intol_key in recipe_text:
+                    # Found custom intolerance keyword in recipe
+                    for ing_name in ingredient_names:
+                        if intol_key in ing_name:
+                            suspicious_ingredients.append(ing_name)
+                    
+                    # For custom intolerances, flag for Gemini validation (more lenient than hard cutoff)
+                    found_intolerances.append(intolerance)
+                    violation_note = f'Contains {intol_key} - custom intolerance requires verification'
+                    return {
+                        'passed': True,
+                        'requires_ai_validation': True,
+                        'safety_score': 0.3,
+                        'safety_reason': violation_note,
+                        'violation_note': violation_note,
+                        'reason': f"Found custom intolerance '{intol_key}' in ingredients - Gemini must verify.",
+                        'found_intolerances': found_intolerances,
+                        'suspicious_ingredients': list(set(suspicious_ingredients)),
+                        'requires_ai_reassurance': False
+                    }
+                # If custom intolerance not found, continue to next intolerance
+                continue
+            
+            # STANDARD INTOLERANCE HANDLING: Check against ALLERGY_MAP keywords
             for kw in keywords:
                 if kw in recipe_text:
                     # Check for "Soft Keyword" (Safe word near the ingredient)
@@ -1126,8 +1162,11 @@ class PantryChefEngine:
             'title': recipe.get('title', 'Unknown Recipe'),
             'image': recipe.get('image', ''),
             'confidence': reasoning_data['confidence'],  # Primary key - updated by penalties
-            'match_confidence': reasoning_data['confidence'],  # Alias for backward compatibility
             # smart_score removed from top level - it's in _metadata only
+            'match_confidence': recipe.get('match_confidence', 1.0),
+            'needs_semantic_validation': recipe.get('needs_semantic_validation', False),
+            'semantic_validation_reason': recipe.get('semantic_validation_reason', ''),
+            'pending_semantic_validation': scoring_data.get('pending_semantic_validation', False),
             'time': time_estimate,
             'reasoning': reasoning_data['text'],
             'semantic_context': semantic_context,  # For Gemini AI analysis
