@@ -197,12 +197,16 @@ honest estimate rather than a fake cross-retailer comparison. Ship price compari
 
 ---
 
-## 6. The retention mechanic nobody has
+## 6. The retention mechanic — no longer unclaimed
 
-This is the most important section in this document.
+> **Correction (Aug 2026):** an earlier version of this section said no competitor had built this
+> loop. That is wrong. **Eatvora** has built essentially all of it — receipt scanning, expiry
+> tracking with color-coded urgency, a "Rescue Mode" that flags what to use first, and household
+> sharing for up to five people. The loop below is still the right architecture, and it is still
+> the reason to build inventory, but it is no longer a first-mover advantage. See §6.5.
 
-SuperCook makes you re-enter your pantry every single visit. Every competitor is a **search box** —
-you show up when you already have the intent. That's why nobody in this category has good retention.
+SuperCook makes you re-enter your pantry every single visit. Most competitors are a **search box** —
+you show up when you already have the intent. That's why most of this category has poor retention.
 
 The loop that turns this into a company:
 
@@ -216,8 +220,57 @@ the single highest-leverage feature on this entire list, it's the reason to buil
 system, and it compounds: the longer someone uses it, the better it knows their kitchen and the
 harder it is to leave.
 
-It also produces the data asset — real consumption patterns per household — that nothing else in
-this space has.
+It also produces the data asset — real consumption patterns per household — that few others in
+this space have.
+
+---
+
+## 6.5 Eatvora — the closest competitor found so far
+
+Eatvora (iOS, Android; developer Zekeria Abdi) is materially closer to PantryChef's roadmap than
+SuperCook is, and closer than any Tier-3 photo app. Assume it is the benchmark.
+
+**What it already has that PantryChef doesn't:**
+
+- Receipt scanning, barcode scanning, and expiry-date OCR for inventory capture
+- Color-coded urgency (red expired → orange 1–2 days → yellow 3–7 days → green safe)
+- "Pantry Health Score" and "Rescue Mode" — use-this-first surfacing
+- Household sharing for up to 5 people on one pantry
+- Shopping Planner drawing from five sources at once (low stock, lists, planned meals, chores, occasions)
+- Meal planning across breakfast/lunch/dinner/snacks, with calorie targets and macro splits
+- Chore and occasion scheduling
+- Shipping on mobile, with a real pricing model
+
+**Pricing:** Free tier caps at 25 pantry items and 3 AI recipes/day. Premium $4.99/mo (unlimited
+items, better receipt reading, meal planning). Plus $9.99/mo (household sharing, chores, occasions).
+
+**Where PantryChef can still be genuinely different:**
+
+| Dimension | Eatvora | PantryChef |
+|---|---|---|
+| **Recipe source** | **AI-generated** (metered — 3/day free) | **Retrieved, real recipes** with tested instructions and true nutrition |
+| **Allergen handling** | Restrictions as preferences fed into generation | Deterministic ontology lookup; LLM can never approve |
+| **Product scope** | Household management — pantry, meals, shopping, **chores, occasions** | Focused on the cooking decision |
+| **Core job** | Inventory-first: track everything, then suggest | Decision-first: what do I cook right now |
+| **Maturity** | Newer, smaller, tight free tier | Earlier, but unconstrained |
+
+**The strategic read:**
+
+1. Their existence **validates the thesis**. Someone else concluded the inventory-expiry loop is the
+   right architecture. That's good news about the market, bad news about the head start.
+2. **Generated recipes + prompt-level dietary restrictions is the least safe combination possible.**
+   If restrictions are a preference string in a generation prompt, there is no safety guarantee at
+   all — the model can invent a dish containing anything. The deterministic-safety wedge cuts
+   *harder* against Eatvora than against SuperCook, not softer.
+3. **Their breadth is an opening.** Bundling chores and occasion planning means they are becoming a
+   household organizer, not a cooking app. Nobody is going deep on the quality of the cooking
+   decision itself. That is the lane.
+4. **Their paywall is tight.** 3 AI recipes/day free, with the best features behind $4.99–9.99.
+   Reviewers already note this. A more generous free core on the thing users actually came for is
+   a viable wedge.
+
+**Action:** download it, use it for two weeks, and log every point of friction. Do this before
+writing any more inventory code — they have already made the mistakes you are about to make.
 
 ---
 

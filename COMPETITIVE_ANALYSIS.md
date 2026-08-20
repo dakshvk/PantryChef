@@ -41,6 +41,24 @@ Its real weaknesses, consistently reported by users:
 | **Paprika** | Recipe manager / clipper, one-time purchase | Beloved, sticky, but you bring the recipes. Different job. |
 | **Plan to Eat, Mealime, Whisk-likes** | Meal planning + grocery lists | Plan-forward, not pantry-forward. |
 
+### Tier 1.5 — the closest competitor: Eatvora
+
+**Eatvora** (iOS + Android, developer Zekeria Abdi) is nearer to PantryChef's intended roadmap than
+anything else in this document. It pairs persistent pantry inventory with expiry-driven cooking
+suggestions — the loop this analysis originally identified as unclaimed.
+
+Has: receipt/barcode/expiry-date scanning, color-coded urgency tiers, a "Pantry Health Score" and
+"Rescue Mode," household sharing for 5, a Shopping Planner pulling from five sources, meal planning
+with calorie and macro targets, plus chore and occasion scheduling.
+
+Pricing: free up to 25 pantry items and 3 AI recipes/day; Premium $4.99/mo; Plus $9.99/mo for
+household sharing.
+
+Its recipes are **AI-generated and metered**, and dietary restrictions appear to be user preferences
+fed into generation rather than an enforced constraint. It is also broadening into general household
+management rather than deepening the cooking decision. Both are openings. Full breakdown in
+`PRODUCT_STRATEGY.md` §6.5.
+
 ### Tier 3 — the 2025–26 AI photo wave
 
 A dozen near-identical apps launched in the last ~18 months: **SnapChef AI**, **Fridgify**, **PicMeal**,
