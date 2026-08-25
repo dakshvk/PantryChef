@@ -36,7 +36,7 @@ class GeminiRecipeValidator:
         try:
             # NEW SDK SYNTAX
             self.client = genai.Client(api_key=self.api_key)
-            self.model_name = 'gemini-2.0-flash' # or 'gemini-1.5-flash'
+            self.model_name = 'gemini-3.7-flash' # model id is centralised here
             print("✅ Gemini Recipe Validator initialized")
         except Exception as e:
             print(f"⚠️  Failed to initialize Gemini: {str(e)}")
@@ -345,7 +345,25 @@ Return ONLY the JSON, no markdown formatting.
             return self._get_default_validation()
 
     def _get_default_validation(self) -> Dict[str, Any]:
-        """Return default validation when Gemini is unavailable or fails."""
+        """
+        What this validator returns when the model is unavailable, times out, or
+        sends back something unparseable.
+
+        This used to answer `safe_for_user: True` with the comment "Don't filter
+        if Gemini unavailable", and it was the return value for a parse failure,
+        a generic exception, a missing client and an API error alike. So when the
+        model could not answer, the system answered "safe" on its behalf.
+
+        It now fails closed. Nothing here can raise a recipe's standing.
+
+        Note what this validator is *for* after the Logic engine rewrite: it
+        judges whether a rescue candidate is a semantic match for the requested
+        cuisine and meal type. Allergen and diet exclusion is decided entirely by
+        Logic._apply_safety_check before this class ever sees a recipe, from a
+        deterministic table, with no model involved. A recipe that engine ruled
+        UNSAFE is already gone. This validator cannot admit one, and the fields
+        below are advisory metadata, never a verdict.
+        """
         return {
             'actual_cuisines': [],
             'actual_diets': [],
@@ -354,13 +372,15 @@ Return ONLY the JSON, no markdown formatting.
             'is_vegan': False,
             'is_gluten_free': False,
             'is_dairy_free': False,
-            'matches_user_diet': True,  # Assume safe if Gemini unavailable
-            'matches_user_cuisine': True,
-            'matches_user_meal_type': True,
-            'intolerance_safe': True,
+            'matches_user_diet': False,
+            'matches_user_cuisine': False,
+            'matches_user_meal_type': False,
+            'intolerance_safe': False,
             'intolerance_violations': [],
-            'safe_for_user': True,  # Don't filter if Gemini unavailable
-            'rejection_reason': '',
+            # Fail closed: no answer from the model is not an endorsement.
+            'safe_for_user': False,
+            'rejection_reason': 'Model unavailable or returned no usable answer',
+            'validator_unavailable': True,
             'confidence': 'low'
         }
 

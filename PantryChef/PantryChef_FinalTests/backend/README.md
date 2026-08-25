@@ -87,11 +87,23 @@ The batch enrichment endpoint (`informationBulk`) pulls full ingredient lists, n
 
 Every recipe that comes out of the discovery stage passes through the Logic Engine. This is deterministic — no AI involved, just code. It runs in this order:
 
-**Hard Executioner**: Scans the recipe's extended ingredient list against a keyword set covering 70+ meat terms, seafood, dairy, and eggs. This check only reads ingredient data, not recipe titles or descriptions. A recipe titled "Mushroom Shawarma" passes. A recipe titled "Chicken Shawarma" fails at the ingredient scan, not the title scan.
+**Screening** (`_apply_safety_check`, backed by `allergen_table.py`): one gate, one vocabulary,
+three verdicts — SAFE, UNSAFE, UNKNOWN. Ingredient text and cooking instructions are tokenised
+and matched on whole words, longest known phrase first, against a versioned canonical table
+covering the UK/EU 14 declarable allergens plus the categories the three diets exclude. Recipe
+titles are not read: they are marketing text and are evidence of nothing. Non-name ingredient
+fields (`aisle`, `image`, `consistency`) are not read either — an image path ending `/ham.jpg`
+is not a ham.
 
-**Intolerance Auditor**: Checks ingredients against allergen categories (dairy, gluten, nuts, soy) with a safe-word layer. Finding "milk" does not immediately reject a recipe if the actual ingredient is "almond milk" or "oat milk." Those ambiguous cases are flagged for Gemini rather than hard-rejected, because a hard reject on "coconut cream" for a dairy-free user would be wrong.
+UNSAFE recipes are withheld and nothing can overturn that. UNKNOWN recipes — no ingredient
+data, an ingredient outside the table, or a declared restriction the table has no vocabulary
+for — are shown, labelled, and never presented like SAFE ones. See the Dietary Screening
+section in the root README for the full contract.
 
-**Smart Scoring**: Recipes that pass safety filtering get scored across four dimensions — ingredient match percentage, time, difficulty, and skill level. The weights depend on the user's selected profile.
+**Smart Scoring**: Recipes that are not withheld get scored across four dimensions — pantry
+coverage, shopping burden, time and skill. The weights depend on the user's selected profile,
+and the two ingredient components measure independent quantities so the profile actually
+changes the number.
 
 | Profile | What It Prioritizes |
 |---|---|
@@ -107,7 +119,10 @@ Rescue candidates and allergen-flagged recipes go to Gemini. The model does thre
 
 First, semantic validation. It evaluates whether a recipe is genuinely appropriate for the requested cuisine based on its actual ingredients, not just its tags. A pasta dish with tomatoes, basil, and mozzarella that is missing the Italian tag in Spoonacular gets evaluated on its ingredients and, if confirmed, has its confidence score upgraded from 0.6 to 0.9.
 
-Second, safety validation on flagged edge cases. The model reads the full ingredient context and makes a binary judgment — safe or not safe. "Heavy cream" in a dairy-free recipe is rejected. "Coconut cream" in the same recipe is approved.
+Second — nothing. Gemini has no role in dietary screening. It cannot mark a recipe safe,
+clear a match, or lift an UNKNOWN to SAFE. Screening finishes deterministically in Stage 2
+before Gemini sees anything, and a withheld recipe is already gone. If Gemini is unavailable
+the verdicts are identical, because there is no path from the model to a verdict.
 
 Third, the recommendation pitch. The top-ranked recipe's match data gets translated into a human-readable explanation that appears in the AI Chef box on the frontend.
 
@@ -125,15 +140,26 @@ Every recipe in the API response includes a `match_confidence` field.
 | 0.9 | Gemini upgrade | Failed strict tag matching but confirmed semantically appropriate |
 | 0.6 | Pass 2 rescue | Did not pass strict filtering, Gemini validation pending or incomplete |
 
+`match_confidence` and `confidence` describe **preference fit** — how well a recipe matches
+what you asked for. Neither is a safety signal, and the two vocabularies never mix. Safety
+lives in its own field, `safety_state`, with its own three values.
+
 ---
 
 ## Dietary Safety in Detail
 
-Safety is the one thing in this system that does not get relaxed under any fallback condition. A recipe that fails the Hard Executioner never reaches the user regardless of how good its ingredient match is. A recipe that fails Gemini safety validation gets dropped even if it passed keyword detection.
+Screening is the one thing in this system that does not get relaxed under any fallback
+condition. A recipe that matches a declared restriction never reaches the user, regardless of
+how good its ingredient match is, and a thin result set is never fixed by loosening it.
 
-The three-layer design handles the cases each layer cannot:
+There is exactly one module that decides exclusion and exactly one file that holds the
+vocabulary. That is a deliberate structural constraint, not a style preference: the previous
+version had four competing keyword lists in three files that disagreed with each other about
+whether titles counted and about which words were meat, and each caught things the others
+missed.
 
-Keywords catch clear violations fast without burning Gemini quota. The safe-word check handles compound ingredients that would be false positives under pure keyword matching. Gemini handles the cases that require reading context — ingredients with the same word meaning different things depending on what surrounds them.
+Nothing here needs Gemini, an API key, or a network connection. Run
+`python3 test_safety_regression.py` to see it.
 
 ---
 

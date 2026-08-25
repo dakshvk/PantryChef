@@ -1353,8 +1353,18 @@ class SpoonacularClient:
         """
         if not recipe_ids:
             return []
-        
-        # Limit to 100 recipes per call (API limit)
+
+        # Spoonacular caps informationBulk at 100 ids per call. This used to slice
+        # to [:100] and return, so a request for 150 recipes silently produced 100
+        # and the caller had no way to know the other 50 had been dropped. Page
+        # instead: the cap is a per-call limit, not a limit on what you can fetch.
+        if len(recipe_ids) > 100:
+            out: List[Dict[str, Any]] = []
+            for start in range(0, len(recipe_ids), 100):
+                out.extend(self.get_recipes_bulk_information(
+                    recipe_ids[start:start + 100], include_nutrition=include_nutrition))
+            return out
+
         recipe_ids_limited = recipe_ids[:100]
         
         # Convert recipe IDs to comma-separated string for informationBulk

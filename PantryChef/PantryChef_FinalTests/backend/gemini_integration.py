@@ -121,9 +121,9 @@ TIP: [one sentence chef advice under 15 words, mention if it's a creative hack]"
         # --- LOGIC GATE: AI EXECUTION ---
         try:
             # FIXED: New library path is client.models.generate_content
-            # Using 'gemini-2.0-flash' for the best speed/accuracy balance
+            # Using 'gemini-3.7-flash' for the best speed/accuracy balance
             response = self.client.models.generate_content(
-                model='gemini-2.0-flash',
+                model='gemini-3.7-flash',
                 contents=prompt
             )
 
@@ -426,7 +426,7 @@ ZERO advice about ingredients, time, or nutrition. Just 3 delicious recommendati
         
         try:
             response = self.client.models.generate_content(
-                model='gemini-2.0-flash',
+                model='gemini-3.7-flash',
                 contents=prompt
             )
 
@@ -624,7 +624,7 @@ Format your response as JSON:
 
         try:
             response = self.client.models.generate_content(
-                model='gemini-2.0-flash',
+                model='gemini-3.7-flash',
                 contents=prompt
             )
             
@@ -716,7 +716,7 @@ Nutrition per serving:
 One sentence summary:"""
                 
                 response = self.client.models.generate_content(
-                    model='gemini-2.0-flash',
+                    model='gemini-3.7-flash',
                     contents=prompt
                 )
                 summary = response.text.strip()
@@ -797,7 +797,7 @@ Make sure every ingredient appears in exactly one list (either core or secondary
 
         try:
             response = self.client.models.generate_content(
-                model='gemini-2.0-flash',
+                model='gemini-3.7-flash',
                 contents=prompt
             )
             
@@ -955,7 +955,7 @@ CRITICAL:
         try:
             # Use Gemini client to generate content (same pattern as other methods)
             response = self.client.models.generate_content(
-                model='gemini-2.0-flash-exp',
+                model='gemini-3.7-flash',
                 contents=prompt
             )
             

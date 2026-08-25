@@ -18,7 +18,7 @@ This is a personal project. I built it to learn, to ship something real, and bec
 
 At its core, PantryChef takes a list of ingredients you have, applies your dietary restrictions and how you are feeling about cooking that day, and returns ranked recipes with an explanation of why each one fits. The ranking is not a black box — it runs through a deterministic scoring pipeline I wrote from scratch, then passes edge cases to Gemini for judgment calls that pure keyword matching cannot handle.
 
-The system never returns zero results. If the Spoonacular recipe database does not have enough matches under strict filtering, the pipeline automatically relaxes non-safety constraints and sends candidates to Gemini for semantic validation. A recipe that is genuinely Italian in its ingredients but missing the Italian tag in the database still gets found and surfaced.
+When the Spoonacular database does not have enough matches under strict filtering, the pipeline relaxes **non-safety** constraints and sends the extra candidates to Gemini for semantic validation. A recipe that is genuinely Italian in its ingredients but missing the Italian tag in the database still gets found and surfaced. Safety constraints are never relaxed to fill a thin result set: if screening out unsafe recipes leaves you with two, you get two.
 
 Substitutions work the same way. If you are missing an ingredient, the app does not just tell you what the standard swap is. It looks at what you actually have and generates a substitution grounded in your pantry.
 
@@ -56,11 +56,13 @@ The Spoonacular client runs a two-pass search. The first pass applies all filter
 
 **Stage 2 — Scoring and Filtering**
 
-The Logic Engine runs every recipe through a multi-layer evaluation. Dietary safety is checked first against an exhaustive list of over 70 meat and allergen keywords, with context awareness to distinguish "vegan butter" from "butter." Recipes that pass safety are scored based on ingredient match, time, difficulty, and skill level according to one of three user profiles. Mood modifiers shift the weights — if you select Tired, time and effort get heavier weighting; if you select Energetic, complexity and technique matter more.
+The Logic Engine runs every recipe through a multi-layer evaluation. Dietary screening happens first, against a versioned canonical ingredient table (`backend/allergen_table.py`) rather than a keyword list — see Dietary Screening below. Recipes that are not excluded are scored on ingredient match, time, effort, difficulty and skill level according to one of three user profiles. Mood modifiers shift the weights: Tired weights shopping and effort more heavily, Energetic weights skill more and the clock less. Those weights are the only place a mood changes the ranking.
 
 **Stage 3 — Gemini Validation**
 
-Rescue candidates and flagged edge cases go to Gemini. The model evaluates whether a recipe is semantically appropriate for the requested cuisine, whether a flagged ingredient is actually safe in context, and generates the recommendation pitch and substitution responses. A constitutional AI layer cross-checks outputs to prevent hallucinations.
+Rescue candidates go to Gemini. The model evaluates whether a recipe is semantically appropriate for the requested cuisine and meal type, and it generates the recommendation pitch and the substitution responses.
+
+Gemini is **not** in the safety path. It cannot mark a recipe safe, cannot clear an allergen match, and cannot lift an unverified recipe to verified. If Gemini is unavailable, times out, or returns something unparseable, every screening verdict is byte-identical to a run with no model configured — because no path runs from the model to a verdict at all. The model affects what you are told about a recipe, never whether you are allowed to see it.
 
 ### Frontend
 
@@ -100,15 +102,130 @@ Every recipe in the response carries a match confidence value that reflects how 
 
 ---
 
-## Dietary Safety Architecture
+## Retrieval: Two Endpoints, One Screen
 
-Safety filtering is not a single check. It runs in three layers and every layer can independently reject a recipe.
+Spoonacular answers two different questions and the app needs both.
+`findByIngredients` is the only endpoint that knows how much of a recipe you
+already own, and it cannot filter by diet or intolerance at all.
+`complexSearch` accepts `diet`, `intolerances`, `includeIngredients` and
+`excludeIngredients`, so it returns a much denser set of plausible candidates,
+but it has no idea what is in your fridge and ranks accordingly.
 
-The Hard Executioner scans extended ingredient lists against a keyword set covering land meat, seafood, dairy, and eggs. It only reads ingredient data, not recipe titles, so "Mushroom Shawarma" passes and "Chicken Shawarma" does not.
+```
+findByIngredients(pantry, ranking=1)     complexSearch(includeIngredients, diet,
+  -> best pantry-coverage ranking           intolerances, excludeIngredients)
+  -> no dietary filtering available        -> pre-filtered, denser, weaker ranking
+                    \                     /
+                     merge + dedupe by recipe id  (provenance recorded)
+                                |
+                     informationBulk(ids)   <- one call per 100 ids
+                                |
+                  DETERMINISTIC SCREEN over EVERY recipe
+                                |
+              UNSAFE dropped | UNKNOWN flagged | SAFE shown
+```
 
-The Intolerance Auditor checks for allergens against a safe-word list. Finding "milk" in a recipe does not immediately reject it if "almond milk" or "oat milk" is the actual ingredient. Those cases get flagged for Gemini review rather than hard-rejected.
+Both arms run, results merge and deduplicate on recipe id, and every recipe
+records which endpoint or endpoints produced it. Details are then fetched with
+`informationBulk` — one call for up to 100 recipes instead of one call each,
+which is the largest quota saving available — paged rather than truncated.
 
-The Gemini Safety Jury handles whatever keyword matching cannot. "Heavy cream" in a dairy-free context gets rejected. "Coconut cream" in the same context gets approved. The model reasons through the ingredient rather than pattern-matching on a substring.
+**Spoonacular's `intolerances` parameter is a quota and density optimisation. It
+is never a verdict.** Every merged recipe is screened locally against the
+canonical table regardless of which endpoint returned it. There is no code path
+where a recipe skips screening because the API said it was already filtered;
+`_screen_all` takes no argument that could weaken it and raises if its screened
+count does not equal its candidate count.
+
+**And the leak rate is measured, not assumed.** When complexSearch is asked to
+exclude dairy and returns a recipe our screen then rejects for dairy, that is
+recorded — recipe, declaration, and the exact ingredient that triggered it — and
+reported in `metadata.screening` and in a log line:
+
+```
+retrieval: pantry_arm=1 filtered_arm=1 merged=2 both=0 bulk_calls=1 screened=2
+           safe=1 unknown=0 unsafe=1 api_prefiltered=1 prefilter_leaks=1
+           leak_rate=100.00% table=2.0.0
+API PREFILTER LEAK: complexSearch was asked to exclude 'dairy' but returned
+  recipe 668492 ('Creamy zucchini and ham pasta'); our screen matched
+  'double cream' -> cream (found in ingredient)
+```
+
+That is the honest replacement for a percentage nobody measured: a number this
+codebase computes on every request, from its own evidence.
+
+If one arm returns nothing and the other returns plenty, the response says so
+explicitly rather than presenting an empty or thin list as "nothing matched".
+
+---
+
+## Dietary Screening
+
+**Read this before relying on the app for an allergy.** PantryChef screens recipes against
+what you declare. It is not a medical device, it does not guarantee anything, and it cannot
+see manufacturing cross-contamination, a substituted ingredient, or an incomplete ingredient
+list from the recipe source. Check the ingredients yourself.
+
+What it does do, precisely:
+
+**One table, one decision.** All screening resolves through a single versioned file,
+`backend/allergen_table.py`. It covers the UK/EU 14 declarable allergens — cereals containing
+gluten, crustaceans, eggs, fish, peanuts, soybeans, milk, tree nuts, celery, mustard, sesame,
+sulphites, lupin and molluscs — with peanuts and tree nuts kept separate, because they are
+separate allergies. Diets (vegetarian, vegan, pescatarian) are sets of excluded categories in
+that same table, not a parallel code path with its own word list. No allergen vocabulary
+exists anywhere else in the codebase.
+
+**Word boundaries, longest phrase first.** Ingredient text is tokenised and matched on whole
+words, longest known phrase first. `peanut butter` resolves to peanut, not to butter.
+`butternut squash` is not butter. `eggplant` is not egg. `donuts` are not nuts. `graham
+crackers` are not ham. Substring containment is not used anywhere in the screening path,
+because that is how a nut-allergic user's protection ends up depending on whether the recipe
+author wrote "walnut" or "walnuts".
+
+**Three verdicts, not two.** Every recipe comes back SAFE, UNSAFE, or UNKNOWN.
+
+- UNSAFE means a declared restriction matched a resolved ingredient. The recipe is withheld,
+  and that is final — no score, no model, and no third-party `glutenFree` flag can overturn it.
+- UNKNOWN means the app could not check: the recipe carries no ingredient list, or an
+  ingredient is not in the table, or you declared something the table has no vocabulary for.
+  UNKNOWN recipes are still shown, marked "Not verified against your restrictions", naming
+  what could not be resolved. They are never rendered like SAFE ones.
+- SAFE means every ingredient resolved and none matched anything you declared.
+
+**Absence of evidence is not evidence of safety.** An empty ingredient list produces UNKNOWN,
+never SAFE. A restriction the table cannot screen produces UNKNOWN and says so, rather than
+reporting that nothing was found.
+
+**Titles are not evidence.** A recipe called "Vegan-Style Mac and Cheese" that lists butter
+and cheddar contains butter and cheddar. A recipe called "Gluten-Free Bread" that lists wheat
+flour contains wheat flour. Ingredients decide, in both directions.
+
+**Instructions are read too.** "Grease the pan with butter" is an allergen that never appears
+in the ingredient list.
+
+**Every restriction, every time.** All declared allergens and all declared diets are evaluated
+against all ingredients, and the verdict names every match rather than the first one.
+Selecting more restrictions can only ever screen more, never less.
+
+**No model in the loop.** `allergen_table.py` imports nothing that can reach a network. Every
+verdict is reproducible from the recipe, your declared restrictions, and the table version,
+which is recorded on the verdict. `backend/test_safety_regression.py` runs the whole suite
+offline with no API key.
+
+### What this replaced
+
+An earlier version of this section described a three-layer design with a "safe-word list" and
+a "Gemini Safety Jury". I removed all of it, because executing the code showed it did not
+behave as described. The safe-word mechanism cleared real butter and real cheddar because the
+word "vegan" appeared in the title, and cleared goat cheese for a dairy-intolerant user
+because "oat" is a substring of "goat". Free-text allergies — which the UI routed peanuts,
+tree nuts, soy and shellfish into — were checked by looking for the typed word in the recipe
+text, so declaring "shellfish" on Shrimp Scampi returned "Safe". And the validator behind the
+Safety Jury returned `safe_for_user: True` whenever it could not reach the API, so the
+fallback for "the model could not answer" was "the model approved".
+
+The regression suite pins each of those cases as a named test.
 
 ---
 
@@ -129,8 +246,12 @@ PantryChef/
             main.py                     FastAPI server entry point
             app_orchestrator.py         Pipeline coordinator
             pantry_chef_api.py          Spoonacular client with semantic fallback
-            Logic.py                    Deterministic scoring engine
-            Gemini_recipe_validator.py  Classifier and safety validator
+            Logic.py                    Deterministic scoring and screening engine
+            allergen_table.py           Canonical ingredient/allergen table (versioned data)
+            dual_retrieval.py           Two-endpoint retrieval, merge, and leak metering
+            test_safety_regression.py   Offline regression suite - no API key needed
+            test_dual_retrieval.py      Offline retrieval tests - no API key needed
+            Gemini_recipe_validator.py  Semantic cuisine/meal-type classifier
             gemini_integration.py       Substitutions and recommendation pitches
             substitution_helper.py      Combined API and AI substitution logic
             requirements.txt
@@ -232,18 +353,27 @@ Response includes the substitution recommendation and a practical usage tip.
 
 ---
 
-## Performance Numbers
+## Testing
 
-These are results from testing the pipeline against known inputs during development.
+There is one test artefact and it runs offline, with no API key and no metered calls:
 
-| What Was Measured | Result |
-|---|---|
-| Dietary safety validation accuracy | 98.7% |
-| Smart scoring match precision | 85.3% |
-| Gemini safety jury precision on edge cases | 96.4% |
-| API quota reduction from batch processing | 70% |
-| Average response time for 20 recipes | under 2 seconds |
-| Recipe availability with semantic fallback active | 95%+ |
+```bash
+cd PantryChef/PantryChef_FinalTests/backend
+python3 test_safety_regression.py    # 46 cases: screening, scoring, table integrity
+python3 test_dual_retrieval.py       # 40 cases: dual retrieval, merge, leak metering
+python3 Logic.py                     # engine self-test
+```
+
+Every case in the regression suite is a defect that was found by executing the shipping code
+and recording what it actually returned, kept so the same failure cannot come back quietly.
+
+This section previously carried a table of percentages — "dietary safety validation accuracy
+98.7%", "Gemini safety jury precision on edge cases 96.4%", "smart scoring match precision
+85.3%". Those numbers were not produced by any measurement in this repository, there was no
+labelled evaluation set behind them, and at the time they were written the only test in the
+codebase did not pass. They are gone rather than restated more carefully, because there is
+nothing to restate. If a benchmark goes back in this README, the corpus and the script that
+produced it go in beside it.
 
 ---
 

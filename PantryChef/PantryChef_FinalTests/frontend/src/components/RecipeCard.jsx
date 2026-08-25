@@ -8,12 +8,28 @@ const RecipeCard = ({ recipe }) => {
   const [isAskingChef, setIsAskingChef] = useState(false)
 
   const safetyCheck = recipe._metadata?.safety_check || {}
-  const requiresValidation = recipe.requires_ai_validation || safetyCheck.requires_ai_validation
-  const safetyScore = safetyCheck.safety_score || 1.0
-  const violationNote = recipe.violation_note || safetyCheck.violation_note || safetyCheck.safety_reason
 
-  // Flag, Don't Fail: Style with amber border if safety_score is 0.2 (soft violation)
-  const isSoftViolation = safetyScore === 0.2 || requiresValidation
+  // Three-state safety verdict from the engine: SAFE, UNKNOWN or UNSAFE.
+  // UNSAFE never reaches the browser -- those recipes are dropped server-side --
+  // so in practice this is SAFE or UNKNOWN.
+  //
+  // The default is UNKNOWN, not SAFE. If a response ever arrives without a
+  // verdict, the honest answer is "we did not check this", and the card must not
+  // render an unchecked recipe with the same treatment as a checked one.
+  const safetyState = recipe.safety_state || safetyCheck.safety_state || 'UNKNOWN'
+  const safetyReason = recipe.safety_reason || safetyCheck.safety_reason || ''
+  const unresolvedIngredients =
+    recipe.safety_unresolved_ingredients || safetyCheck.unresolved_ingredients || []
+  const unscreenableDeclarations =
+    recipe.safety_unscreenable_declarations || safetyCheck.unscreenable_declarations || []
+
+  const isUnverified = safetyState !== 'SAFE'
+  const hasDeclaredRestrictions =
+    (safetyCheck.per_restriction || []).length > 0
+
+  // What the amber state means now: "we could not verify this against what you
+  // declared", not "we found something and asked a model about it".
+  const violationNote = safetyReason
 
   // Calculate match score as "X / Y" (ingredients I have / total ingredients)
   const usedIngredients = recipe.usedIngredientCount || recipe.used_ingredients || 0
@@ -167,7 +183,7 @@ const RecipeCard = ({ recipe }) => {
       {/* Compact Card - Initial View - Only Name, Match %, Nutrition Tags */}
       <div
         className={`bg-emerald-50/50 rounded-[40px] shadow-sm overflow-hidden cursor-pointer transition-transform hover:scale-[1.02] ${
-          isSoftViolation ? 'border-2 border-amber-400' : 'border border-emerald-100'
+          isUnverified ? 'border-2 border-amber-400' : 'border border-emerald-100'
         }`}
         onClick={() => setIsModalOpen(true)}
       >
@@ -194,6 +210,29 @@ const RecipeCard = ({ recipe }) => {
           <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
             <span className="text-sm font-bold text-emerald-900">{matchScore}</span>
           </div>
+
+          {/*
+            UNKNOWN must never look like SAFE. If the engine could not verify
+            this recipe against what the user declared, the card says so in
+            words, on the front of the card, before the user has to open
+            anything. Silence here would read as reassurance.
+          */}
+          {isUnverified && hasDeclaredRestrictions && (
+            <div className="absolute bottom-4 left-4 right-4 bg-amber-50 border border-amber-300 rounded-xl px-3 py-2 shadow-lg">
+              <p className="text-xs font-bold text-amber-900">Not verified against your restrictions</p>
+              {unscreenableDeclarations.length > 0 && (
+                <p className="text-xs text-amber-800 mt-0.5">
+                  Cannot screen for: {unscreenableDeclarations.join(', ')}
+                </p>
+              )}
+              {unscreenableDeclarations.length === 0 && unresolvedIngredients.length > 0 && (
+                <p className="text-xs text-amber-800 mt-0.5">
+                  Unrecognised: {unresolvedIngredients.slice(0, 3).join(', ')}
+                </p>
+              )}
+              <p className="text-xs text-amber-800 mt-0.5">Check the ingredients yourself.</p>
+            </div>
+          )}
         </div>
 
         {/* Card Content - Clean and Minimal */}
