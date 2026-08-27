@@ -1,110 +1,92 @@
-<title>What It Cost, What They Chose</title>
+<title>You Already Built The Hard Part</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500;600;700;800&family=Alegreya:ital,wght@0,400;0,600;1,400&family=Anonymous+Pro:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Ubuntu+Mono:wght@400;700&display=swap">
 
 <style>
 :root{
-  --ink:#1B171A; --ink-2:#464047; --muted:#736C74;
-  --paper:#EFEBEA; --card:#FCFAF9; --band:#E3DDDC;
-  --rule:#C9C1C1; --rule-soft:#DBD4D3;
-  --rose:#A6304E; --rose-ink:#88213C; --rose-wash:#F1DFE3;
-  --slate:#3B5468; --slate-wash:#DEE5EB;
-  --go:#22624A; --go-wash:#DAE8E1;
+  --ink:#17150F; --ink-2:#443F33; --muted:#726B5B;
+  --paper:#EEEBE3; --card:#FBF9F3; --band:#E3DFD3;
+  --rule:#C8C2B2; --rule-soft:#DBD6C8;
+  --gold:#B08400; --gold-ink:#8C6800; --gold-wash:#F2E8C9;
+  --kill:#A33526; --kill-wash:#F1DFDB;
+  --go:#256150; --go-wash:#DBE9E4;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ink:#EDE8E9; --ink-2:#BAB2B5; --muted:#8A8286;
-    --paper:#151113; --card:#1F1A1D; --band:#191416;
-    --rule:#3A3236; --rule-soft:#2B2528;
-    --rose:#E68399; --rose-ink:#F09FB1; --rose-wash:#3A1723;
-    --slate:#8FAEC6; --slate-wash:#17222B;
-    --go:#6FB795; --go-wash:#132D23;
+    --ink:#EDE9DE; --ink-2:#BDB6A5; --muted:#8C8474;
+    --paper:#131109; --card:#1D1A11; --band:#18150E;
+    --rule:#383324; --rule-soft:#29251A;
+    --gold:#E0B93C; --gold-ink:#EDC95A; --gold-wash:#332A0B;
+    --kill:#E1857A; --kill-wash:#341C17;
+    --go:#6CB89D; --go-wash:#123028;
   }
 }
 :root[data-theme="dark"]{
-  --ink:#EDE8E9; --ink-2:#BAB2B5; --muted:#8A8286;
-  --paper:#151113; --card:#1F1A1D; --band:#191416;
-  --rule:#3A3236; --rule-soft:#2B2528;
-  --rose:#E68399; --rose-ink:#F09FB1; --rose-wash:#3A1723;
-  --slate:#8FAEC6; --slate-wash:#17222B;
-  --go:#6FB795; --go-wash:#132D23;
+  --ink:#EDE9DE; --ink-2:#BDB6A5; --muted:#8C8474;
+  --paper:#131109; --card:#1D1A11; --band:#18150E;
+  --rule:#383324; --rule-soft:#29251A;
+  --gold:#E0B93C; --gold-ink:#EDC95A; --gold-wash:#332A0B;
+  --kill:#E1857A; --kill-wash:#341C17;
+  --go:#6CB89D; --go-wash:#123028;
 }
 
 *{box-sizing:border-box}
 body{margin:0; background:var(--paper); color:var(--ink);
-  font-family:Alegreya,Georgia,serif; font-size:17.5px; line-height:1.6;
+  font-family:"IBM Plex Serif",Georgia,serif; font-size:16.5px; line-height:1.63;
   -webkit-font-smoothing:antialiased}
-.wrap{max-width:960px; margin:0 auto; padding:0 22px 90px}
+.wrap{max-width:950px; margin:0 auto; padding:0 22px 90px}
 
-h1,h2,h3,h4,.gb{font-family:Gabarito,"Helvetica Neue",Arial,sans-serif; font-weight:700; text-wrap:balance; letter-spacing:-.028em}
-h1{font-size:clamp(2.5rem,6.8vw,4.4rem); line-height:1.0; margin:0; font-weight:800}
-h2{font-size:clamp(1.75rem,3.8vw,2.4rem); line-height:1.08; margin:0}
-h3{font-size:1.32rem; line-height:1.2; margin:0 0 6px}
-h4{font-size:1.05rem; margin:0 0 4px; font-weight:600}
+h1,h2,h3,h4,.sy{font-family:Syne,"Helvetica Neue",Arial,sans-serif; font-weight:800; text-wrap:balance; letter-spacing:-.025em}
+h1{font-size:clamp(2.4rem,6.4vw,4.2rem); line-height:1.02; margin:0}
+h2{font-size:clamp(1.7rem,3.7vw,2.35rem); line-height:1.1; margin:0}
+h3{font-size:1.28rem; line-height:1.2; margin:0 0 6px; font-weight:700}
+h4{font-size:1.02rem; margin:0 0 4px; font-weight:700}
 p{margin:0 0 14px; max-width:68ch}
-a{color:var(--rose-ink)}
-.mono,.lab,td.n,th.n{font-family:"Anonymous Pro",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
-.lab{font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--rose); font-weight:700}
-.lab.s{color:var(--slate)} .lab.g{color:var(--go)} .lab.q{color:var(--muted)}
+a{color:var(--gold-ink)}
+.mono,.lab,td.n,th.n{font-family:"Ubuntu Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.lab{font-size:12px; letter-spacing:.15em; text-transform:uppercase; color:var(--gold-ink); font-weight:700}
+.lab.k{color:var(--kill)} .lab.g{color:var(--go)} .lab.q{color:var(--muted)}
 
 header.mast{padding:50px 0 0}
 .topline{display:flex; flex-wrap:wrap; gap:8px 20px; align-items:baseline; border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:26px}
-.topline .who{font-family:"Anonymous Pro",monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase}
-.topline .meta{margin-left:auto; font-family:"Anonymous Pro",monospace; font-size:12px; color:var(--muted)}
-.dek{margin:22px 0 0; font-size:1.2rem; line-height:1.48; color:var(--ink-2); max-width:60ch}
+.topline .who{font-family:"Ubuntu Mono",monospace; font-size:13px; letter-spacing:.06em; text-transform:uppercase}
+.topline .meta{margin-left:auto; font-family:"Ubuntu Mono",monospace; font-size:13px; color:var(--muted)}
+.dek{margin:22px 0 0; font-size:1.18rem; line-height:1.5; color:var(--ink-2); max-width:60ch}
 
-.figs{display:grid; grid-template-columns:repeat(auto-fit,minmax(185px,1fr)); gap:1px; background:var(--rule-soft); border:1px solid var(--rule-soft); margin:34px 0 0}
-.figs>div{background:var(--card); padding:20px}
-.figs .big{display:block; font-family:Gabarito,Arial,sans-serif; font-weight:800; font-size:2rem; line-height:1.04; letter-spacing:-.035em; color:var(--rose-ink)}
-.figs .cap{display:block; margin-top:9px; font-size:.9rem; line-height:1.42; color:var(--ink-2)}
-
-section{margin:58px 0 0; scroll-margin-top:14px}
+section{margin:56px 0 0; scroll-margin-top:14px}
 .shead{border-top:2px solid var(--ink); padding-top:12px; margin-bottom:22px}
 .shead .lab{display:block; margin-bottom:6px}
 .shead p{margin:10px 0 0; color:var(--ink-2); max-width:66ch}
 
 .card{background:var(--card); border:1px solid var(--rule-soft); padding:22px 24px; margin:22px 0}
 .card>*:last-child{margin-bottom:0}
-.card.rose{border-color:var(--rose); border-left-width:3px}
-.card.slate{border-color:var(--slate); border-left-width:3px}
+.card.gold{border-color:var(--gold); border-left-width:3px}
+.card.kill{border-color:var(--kill); border-left-width:3px}
 .card.go{border-color:var(--go); border-left-width:3px}
 
-.pull{border-left:3px solid var(--rose); padding:3px 0 3px 20px; margin:26px 0; max-width:62ch}
-.pull p{font-family:Gabarito,Arial,sans-serif; font-weight:700; font-size:1.34rem; line-height:1.26; margin:0; letter-spacing:-.028em}
-.pull .sub{font-family:Alegreya,serif; font-weight:400; font-size:1.02rem; color:var(--muted); line-height:1.5; margin-top:9px; letter-spacing:0}
-.pull.s{border-left-color:var(--slate)}
+.pull{border-left:3px solid var(--gold); padding:3px 0 3px 20px; margin:26px 0; max-width:62ch}
+.pull p{font-family:Syne,Arial,sans-serif; font-weight:800; font-size:1.3rem; line-height:1.3; margin:0; letter-spacing:-.025em}
+.pull .sub{font-family:"IBM Plex Serif",serif; font-weight:400; font-size:.96rem; color:var(--muted); line-height:1.55; margin-top:9px; letter-spacing:0}
+.pull.k{border-left-color:var(--kill)}
 
 ul.list{margin:0 0 16px; padding:0; list-style:none}
 ul.list li{position:relative; padding-left:20px; margin-bottom:9px; max-width:68ch}
-ul.list li::before{content:""; position:absolute; left:2px; top:.7em; width:8px; height:1px; background:var(--rose)}
+ul.list li::before{content:""; position:absolute; left:2px; top:.74em; width:8px; height:1px; background:var(--gold)}
 
 .scroll{overflow-x:auto; margin:22px 0; border:1px solid var(--rule-soft); background:var(--card)}
-table{border-collapse:collapse; width:100%; min-width:520px; font-size:.95rem}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:.93rem}
 th,td{text-align:left; padding:11px 15px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
-thead th{font-family:"Anonymous Pro",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700; border-bottom:1px solid var(--rule); white-space:nowrap}
+thead th{font-family:"Ubuntu Mono",monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; border-bottom:1px solid var(--rule); white-space:nowrap}
 tbody tr:last-child td{border-bottom:none}
-tr.hi td{background:var(--rose-wash)}
-tr.ok td{background:var(--go-wash)}
-td.n,th.n{text-align:right; white-space:nowrap; font-family:"Anonymous Pro",monospace}
+tr.dead td{background:var(--kill-wash)}
+tr.hi td{background:var(--gold-wash)}
+td.n,th.n{text-align:right; white-space:nowrap; font-family:"Ubuntu Mono",monospace}
 caption{caption-side:bottom; text-align:left; padding:10px 15px; font-size:12.5px; color:var(--muted); line-height:1.45}
 
-.rec{background:var(--band); border:1px solid var(--rule-soft); padding:18px 20px; margin:22px 0;
-  font-family:"Anonymous Pro",monospace; font-size:.9rem; line-height:1.9; overflow-x:auto}
-.rec .k{color:var(--muted)}
-.rec .o{color:var(--rose-ink); font-weight:700}
-.rec hr{border:none; border-top:1px solid var(--rule); margin:8px 0}
-
-.step{display:grid; grid-template-columns:32px 1fr; gap:0 16px; padding:16px 0; border-bottom:1px solid var(--rule-soft)}
-.step:last-child{border-bottom:none}
-.step .s{font-family:Gabarito,Arial,sans-serif; font-weight:800; font-size:1.2rem; color:var(--rose); line-height:1.25}
-.step .t>*:last-child{margin-bottom:0}
-.step .t p{font-size:1rem}
-
-footer{margin:66px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.9rem; line-height:1.6}
+footer{margin:64px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.88rem; line-height:1.6}
 footer p{max-width:78ch}
-a:focus-visible{outline:2px solid var(--rose); outline-offset:2px}
-@media (max-width:620px){ .step{grid-template-columns:1fr; gap:4px} }
+a:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
 </style>
 
@@ -112,204 +94,149 @@ a:focus-visible{outline:2px solid var(--rose); outline-offset:2px}
 
 <header class="mast">
   <div class="topline">
-    <span class="who">Idea file · veterinary economics</span>
-    <span class="meta">Aug 2026 · replaces the previous idea in this file</span>
+    <span class="who">Idea file · replaces the vet idea</span>
+    <span class="meta">Aug 2026</span>
   </div>
-  <h1>What It Cost,<br>What They<br>Chose</h1>
-  <p class="dek">Different discipline. Still animals, still science, <strong>nothing to do with kids or speech.</strong> And this time I ran the existence check first — which changed the answer twice before I got to the idea.</p>
-
-  <div class="figs">
-    <div><span class="big">52%</span><span class="cap">of US pet owners have <strong>put off veterinary care because of cost</strong> — Gallup</span></div>
-    <div><span class="big">$2,500</span><span class="cap">is the ceiling <strong>55% won't go past to avoid euthanasia.</strong> Many emergencies cost more than that.</span></div>
-    <div><span class="big">30%</span><span class="cap">know someone whose <strong>pet died because the owner couldn't afford care</strong></span></div>
-    <div><span class="big">$1–2B</span><span class="cap">annual cost of <strong>burnout</strong> to the profession — and the US will train only <strong>76%</strong> of the vets it needs through 2032</span></div>
-  </div>
+  <h1>You Already<br>Built The<br>Hard Part</h1>
+  <p class="dek">You're right about the vet idea — the payer was hypothetical and that's disqualifying. But six markets have now died the same way, and <strong>the reason isn't the ideas.</strong></p>
 </header>
 
-<!-- ===== THE CRISIS ===== -->
-<section id="crisis">
+<!-- ===== THE PATTERN ===== -->
+<section id="pattern">
   <div class="shead">
-    <span class="lab">Why this discipline</span>
-    <h2>Two crises that turn out to be one crisis</h2>
+    <span class="lab k">Say the obvious thing first</span>
+    <h2>Six for six, and it's structural</h2>
   </div>
 
-  <p>Veterinary prices are rising far faster than everything else — <strong>urban veterinary services rose 5.9% from March 2024 to March 2025 against 2.4% for all consumer goods</strong>, and costs at some practices have climbed as much as <strong>40%</strong>. Meanwhile the workforce is short and burning out.</p>
+  <div class="scroll">
+    <table>
+      <caption>Every one of these was researched properly. Every one died within one or two searches.</caption>
+      <thead><tr><th>Idea</th><th>How it died</th></tr></thead>
+      <tbody>
+        <tr class="dead"><td>Restaurant food costing</td><td>Square shipped it with MarketMan at $99/mo, inside the POS</td></tr>
+        <tr class="dead"><td>Spearfishing regulations</td><td>Fish Rules, free, whole US coastline</td></tr>
+        <tr class="dead"><td>Dive visibility forecasting</td><td>Five products, all recent</td></tr>
+        <tr class="dead"><td>Outdoor conditions apps <span style="color:var(--muted)">(20 markets)</span></td><td>Five per activity. Weather API plus a weekend.</td></tr>
+        <tr class="dead"><td>Construction estimating <span style="color:var(--muted)">(checked today)</span></td><td>Real money — <strong>$72–152k/yr per contractor in estimator labour</strong> — and McCormick has owned the trade databases for 45 years, with Beam, CountBricks, Trimble and Buildxact on top</td></tr>
+        <tr class="dead"><td>Veterinary cost data</td><td>No payer who isn't broke</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull k">
+    <p>Every idea generated from public information loses to the hundreds of people with the same public information.</p>
+    <span class="sub">That's not pessimism, it's arithmetic. A weather API, a market report and an afternoon of searching are available to everyone, and everyone has already used them. <strong>Handing you a seventh idea from the same source would waste your time and mine.</strong></span>
+  </div>
+</section>
+
+<!-- ===== THE ASSET ===== -->
+<section id="asset">
+  <div class="shead">
+    <span class="lab">What you've been walking past</span>
+    <h2>You have an asset. You've been hunting for ideas instead of a buyer for it.</h2>
+  </div>
+
+  <div class="card gold">
+    <h3>PantryChef's safety architecture</h3>
+    <p>Three layers — Hard Executioner, Intolerance Auditor, Gemini Safety Jury — built on an invariant you articulated yourself: <strong>the model may narrow the safe set, never widen it. An LLM can never move an ingredient from unsafe to safe.</strong></p>
+    <p style="margin-bottom:0">Across all this research, <strong>no competitor had that.</strong> Eatvora has the inventory loop but no deterministic allergen handling. MarketMan ships AI recipe generation from a photographed ingredient list and nothing about safety. The six AI fish-ID apps, the five gardening apps, Fishbrain — none of them are load-bearing for anyone's life, so none of them needed it. <strong>You solved a problem the consumer market didn't have.</strong></p>
+  </div>
+
+  <p><strong>That's why the consumer framing kept failing.</strong> Recipe app users won't pay for guaranteed allergen safety because the downside of getting it wrong is mild. You built a seatbelt and tried to sell it to people going for a walk.</p>
+</section>
+
+<!-- ===== THE PAYER ===== -->
+<section id="payer">
+  <div class="shead">
+    <span class="lab g">Lead with the money this time</span>
+    <h2>Someone does have that downside, and they're regulated</h2>
+    <p>Institutional food service — schools, care homes, hospitals, contract caterers, food manufacturers. Here the failure mode is a dead child and a lawsuit, and the environment is tightening right now.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>These are the conditions that were <em>missing</em> from restaurant food waste — where the fine was $50–200 with a 60-day cure window and nothing compelled the spend.</caption>
+      <thead><tr><th>Signal</th><th class="n">Detail</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td><strong>Lawsuits surged in 2026</strong></td><td class="n" style="text-align:left">as more states adopt <strong>mandatory allergen disclosure laws</strong></td></tr>
+        <tr><td>Typical payout</td><td class="n" style="text-align:left"><strong>$150,000–$300,000</strong>; over <strong>$5M</strong> for wrongful death</td></tr>
+        <tr class="hi"><td><strong>FDA enforcement</strong></td><td class="n" style="text-align:left">increased in 2025 and 2026, described as a <strong>friendlier environment for plaintiffs</strong></td></tr>
+        <tr><td>FSMA documentation duty</td><td class="n" style="text-align:left">written allergen hazard analysis, preventive controls, monitoring, corrective actions and verification — <strong>records kept two years, available for FDA inspection</strong></td></tr>
+        <tr><td>Schools</td><td class="n" style="text-align:left">expected to hold a <strong>Food Allergy Management and Prevention Plan</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
 
   <div class="pull">
-    <p>"Telling clients you can't help them because they have no money is one of the leading causes of burnout in the veterinary profession."</p>
-    <span class="sub">That single sentence connects the two. <strong>The affordability crisis and the burnout crisis are the same crisis</strong>, experienced from opposite sides of the exam table — and it has a name in the profession: <em>economic euthanasia.</em></span>
+    <p>A mandated document, a two-year retention duty, a tightening enforcement posture, and a $150k–$5M downside. That's a budget line that already exists.</p>
+    <span class="sub">Compare it with everything that died: the restaurant waste mandate carried a $100 fine with a cure period, the vet idea had no payer at all, and the outdoor apps had no downside to getting it wrong. <strong>This is the first market in the whole programme where somebody is legally obliged to do the thing you already built.</strong></span>
   </div>
 
-  <p>And unlike almost everything else in this research programme, <strong>discovery here is trivial.</strong> There is a veterinary clinic within walking distance of you right now, the people in it will talk about this specific thing at length, and it is the emotional centre of their working life.</p>
+  <div class="card">
+    <h3>And it reuses what exists, rather than starting over</h3>
+    <ul class="list">
+      <li>The <strong>ingredient ontology with canonical IDs and alias tables</strong> — the thing that makes allergen decisions a database lookup rather than a guess</li>
+      <li>The <strong>deterministic engine</strong> and its never-widen invariant, which is exactly the audit story a regulator wants</li>
+      <li>The <strong>schema.org recipe parsing</strong> work, repointed at supplier spec sheets and product labels instead of food blogs</li>
+      <li>Every decision is <strong>already logged and explainable</strong> — which is the FSMA documentation requirement, produced as a by-product</li>
+    </ul>
+    <p style="margin-bottom:0"><strong>You would be changing the buyer, not the codebase.</strong></p>
+  </div>
 </section>
 
-<!-- ===== THE CHECK ===== -->
+<!-- ===== CHECK ===== -->
 <section id="check">
   <div class="shead">
-    <span class="lab s">Existence check, run first this time</span>
-    <h2>Two obvious ideas, both already taken</h2>
-    <p>Applying the lesson properly. Both of these are what you'd think of in the first ten minutes, and both are gone.</p>
+    <span class="lab k">Before you get excited</span>
+    <h2>What I did not check — and it's the same check that killed the other six</h2>
   </div>
 
-  <div class="scroll">
-    <table>
-      <thead><tr><th>Obvious idea</th><th class="n">Status</th><th>What exists</th></tr></thead>
-      <tbody>
-        <tr class="hi"><td><strong>Tiered "here are three treatment options at three prices" estimates</strong></td><td class="n">Taken</td><td>"Spectrum of care" is an established movement with its own professional literature. <strong>AAHA and AVMA published a Spectrum of Care Toolkit in JAVMA in 2025.</strong> Tiered estimate templates already ship inside practice management software — Digitail, IDEXX and others.</td></tr>
-        <tr class="hi"><td><strong>Vet price comparison</strong></td><td class="n">Taken ×3</td><td><strong>FareVet</strong> (price comparison across services, US and Canada) · <strong>PawPrice</strong> (compare listed prices for exams, vaccines, dentals, spays) · <strong>Vet Receipt</strong> (real prices from <em>verified invoices</em>)</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="card slate">
-    <span class="lab s">But the check surfaced something better than a kill</span>
-    <p style="margin-top:9px">A 2026 paper in <em>Frontiers in Veterinary Science</em> — <strong>"Lack of online price transparency of small animal veterinary clinics in the United States"</strong> — found that price information on clinic websites is <strong>incomplete or inconsistently presented</strong>, and that <strong>many clinics fail to provide basic pricing for common procedures at all.</strong></p>
-    <p style="margin-bottom:0">US veterinary pricing is <strong>largely self-regulated, with no federal requirement to disclose fees.</strong> Professional guidance asks for transparent communication between vet and client, but never requires a published price list.</p>
-  </div>
-
-  <div class="pull s">
-    <p>So three comparison apps are scraping a surface that mostly doesn't exist. The interface isn't the hard part. The dataset is.</p>
-    <span class="sub">This is precisely the situation onX was in before onX: everyone knew parcel data would be valuable, and nobody had done the unglamorous work of assembling it. <strong>Vet Receipt's approach — verified invoices submitted by owners — is the correct shape, and the fact that someone has started is a signal the shape is right, not that the space is closed.</strong></span>
+  <div class="card kill">
+    <ul class="list">
+      <li><strong>Allergen management software already exists.</strong> I saw Miratag and Alleratech in the results and did not investigate either. <strong>Run the full check before anything else</strong> — and specifically on the <em>institutional and school</em> segment, not restaurants.</li>
+      <li><strong>Is the mandated document actually a pain?</strong> Schools may already have a compliant binder that nobody wants to replace. A legal duty is not the same as a felt problem.</li>
+      <li><strong>Who signs?</strong> School district food service directors, not principals. Procurement is slow and budget cycles are annual.</li>
+      <li><strong>Does the liability argument sell, or scare?</strong> "Your current process could kill a child" is true and is also a terrible sales pitch.</li>
+      <li><strong>The claimed metrics</strong> in your README — 98.7% dietary safety accuracy — <strong>would need real validation</strong> if anyone's liability rests on them. That's a different standard of evidence than a class project.</li>
+    </ul>
+    <p style="margin-bottom:0">⚠️ <strong>I am flagging this as a lead, not a verdict.</strong> Six ideas died on exactly this step and this one has not been through it.</p>
   </div>
 </section>
 
-<!-- ===== THE IDEA ===== -->
-<section id="idea">
+<!-- ===== THE REAL THING ===== -->
+<section id="real">
   <div class="shead">
-    <span class="lab">The idea</span>
-    <h2>Not "what does a spay cost." The 11pm question.</h2>
+    <span class="lab">The part you won't want to hear</span>
+    <h2>You have never run the interviews</h2>
   </div>
 
-  <div class="card rose">
-    <p style="font-family:Gabarito,Arial,sans-serif; font-weight:700; font-size:1.26rem; line-height:1.3; letter-spacing:-.028em; margin-bottom:12px">Your dog is vomiting blood at 11pm. The emergency vet hands you an estimate for $4,000. You have $900. Nobody in the world can tell you what happens on each path.</p>
-    <p style="margin-bottom:0">Price comparison is a <em>planned purchase</em> tool — useful for a dental, useless in an emergency, and emergencies are where the $2,500 ceiling gets crossed and pets get euthanised for money. <strong>The decision that destroys people is not "which clinic," it's "which version of care, and what am I giving up."</strong></p>
-  </div>
+  <p>There is a 38-question instrument sitting in this repository with scoring rules and pre-committed kill criteria. It was written for restaurants but the method transfers to any market in an afternoon. <strong>It has never been used.</strong></p>
 
-  <h3 style="margin-top:34px; font-size:1.45rem">What you'd actually build</h3>
-  <p>A dataset of <strong>what real treatments actually cost, what owners actually chose, and what actually happened</strong> — assembled from owner-submitted invoices and follow-ups, normalised into comparable procedures.</p>
+  <p>Every idea you have rejected, you rejected from a desk — including the good instinct that killed the vet idea. That's efficient, and it has a ceiling: <strong>desk research can only ever tell you what is already public, which is why it keeps returning "someone built this."</strong></p>
 
-  <div class="rec">
-    <span class="k">// what an invoice line actually looks like</span><br>
-    ANES-ISO 15MIN &nbsp; IVC PLCMT 22G &nbsp; RADS 2V ABD &nbsp; CBC/CHEM17 &nbsp; HOSP LVL2 O/N<br><br>
-    <span class="k">// what it has to become</span><br>
-    <span class="o">general anaesthesia · IV catheter · abdominal radiographs, 2 view · bloodwork panel · overnight hospitalisation, level 2</span>
-    <hr>
-    <span class="k">Thousands of practices. Dozens of practice management systems. No standard.</span>
-  </div>
-
-  <p><strong>That normalisation is the whole moat, and it is a genuine language-model job.</strong> Not a wrapper — messy, abbreviated, practice-specific clinical shorthand into a comparable schema, at scale, cheaply. It is the boring, ugly work that nobody wants to do, which is exactly why it's worth doing.</p>
-
-  <div class="card">
-    <div class="step"><span class="s">1</span><div class="t">
-      <h4>Owners submit invoices</h4>
-      <p>They already have them. The incentive to submit is immediate: <strong>"see what other people paid for this."</strong> That is a reason to upload before the dataset is any good — which solves the cold start.</p>
-    </div></div>
-    <div class="step"><span class="s">2</span><div class="t">
-      <h4>The model normalises them</h4>
-      <p>Line items into standard procedures, with prices, geography and clinic type attached.</p>
-    </div></div>
-    <div class="step"><span class="s">3</span><div class="t">
-      <h4>Follow up on outcome</h4>
-      <p>One question, weeks later: <em>what did you choose, and how is your pet?</em> <strong>This is the part nobody has, and it's the part that makes the dataset irreplaceable</strong> — because it converts a price list into a record of consequences.</p>
-    </div></div>
-    <div class="step"><span class="s">4</span><div class="t">
-      <h4>Give it back at the moment of the decision</h4>
-      <p>Not a recommendation. A distribution: <em>for this presentation, 340 owners reported estimates between $2,100 and $5,400. 61% pursued the full workup. Of those who chose the medical-management path instead, here is what they reported.</em></p>
-    </div></div>
-  </div>
-
-  <div class="card rose">
-    <span class="lab">The invariant — same discipline as your allergen engine</span>
-    <p style="margin-top:9px"><strong>It never recommends a course of action. It never mentions euthanasia. It never predicts an outcome for <em>this</em> animal.</strong> It reports what other owners paid, what they chose, and what they said happened — and it says loudly that a veterinarian is the only person who can advise on a specific case.</p>
-    <p style="margin-bottom:0">Cross that line and you are practising veterinary medicine without a licence, in the most emotionally charged decision a pet owner ever makes. <strong>The product is a mirror held up to the population, not an oracle pointed at one animal.</strong></p>
-  </div>
-</section>
-
-<!-- ===== MONEY ===== -->
-<section id="money">
-  <div class="shead">
-    <span class="lab g">Where the money is — and it isn't the pet owner</span>
-    <h2>The honest business model</h2>
-  </div>
-
-  <div class="card">
-    <p><strong>The trap to avoid:</strong> pet owners who can't afford veterinary care also can't afford your subscription. That's the same failure as the spearfishing HUD — the people who need it most are the least able to pay. <strong>Do not build a consumer subscription on this.</strong></p>
-    <p style="margin-bottom:0">Consumer-facing stays free. It's how the dataset gets built.</p>
-  </div>
-
-  <div class="scroll">
-    <table>
-      <caption>⚠️ Willingness-to-pay figures are my reasoning, not researched. Verify before relying on any of them.</caption>
-      <thead><tr><th>Who pays</th><th>For what</th><th class="n">Confidence</th></tr></thead>
-      <tbody>
-        <tr class="ok"><td><strong>Pet insurers</strong></td><td>Claims benchmarking and regional pricing intelligence. They already hold claims data but not <em>declined-care</em> data — <strong>what owners chose when they didn't claim is invisible to them and visible to you.</strong></td><td class="n">⚠️ est.</td></tr>
-        <tr class="ok"><td><strong>Clinics and groups</strong></td><td>Competitive pricing intelligence in their own market — the thing the Frontiers paper says doesn't exist. Corporate consolidators would want this most.</td><td class="n">⚠️ est.</td></tr>
-        <tr><td>Charitable funders</td><td>Organisations funding emergency care grants need to know where the money goes furthest. Small budgets, high mission alignment.</td><td class="n">⚠️ est.</td></tr>
-        <tr><td>Researchers and press</td><td>The affordability crisis is heavily covered and there is <strong>no public dataset.</strong> Not revenue — but it's how you get distribution for free.</td><td class="n">Likely</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- ===== RISKS ===== -->
-<section id="risks">
-  <div class="shead">
-    <span class="lab s">Before anything else</span>
-    <h2>What I did not verify, in order</h2>
-  </div>
-
-  <div class="card">
-    <div class="step"><span class="s">1</span><div class="t">
-      <h4>Look hard at Vet Receipt</h4>
-      <p><strong>They already do verified invoices.</strong> How many? Do they normalise line items or just store totals? Do they collect outcomes? <strong>If they collect outcomes, this idea is theirs and you should stop.</strong> That is one afternoon of work and it comes before everything else.</p>
-    </div></div>
-    <div class="step"><span class="s">2</span><div class="t">
-      <h4>Does the outcome question actually get answered?</h4>
-      <p>Price data is easy to collect; outcomes are not. Owners whose pet died may never reply, which biases the whole dataset toward survivors. <strong>This is the hardest unsolved thing in the plan and I have no evidence either way.</strong></p>
-    </div></div>
-    <div class="step"><span class="s">3</span><div class="t">
-      <h4>Cold start maths</h4>
-      <p>How many invoices before a given presentation in a given metro has enough data to say anything? I don't know. It might be thousands. <strong>Estimate it before building.</strong></p>
-    </div></div>
-    <div class="step"><span class="s">4</span><div class="t">
-      <h4>Talk to five vets and five owners</h4>
-      <p>Vets first — ask what they did the last time a client couldn't pay. Then owners who declined care. <strong>If "I had no idea what my options were" isn't what comes back, the thesis is wrong.</strong></p>
-    </div></div>
-  </div>
-
-  <div class="card slate">
-    <h3>And the thing that could sink it</h3>
-    <p style="margin-bottom:0"><strong>Veterinarians may hate this.</strong> A public record of what practices charge, cross-referenced against outcomes, is not something the profession has asked for — and the profession is exhausted, underpaid relative to its debt load, and already dealing with client aggression over pricing. <strong>If it reads as an attack on vets, it fails, deservedly.</strong> The framing that survives is the one the data actually supports: <em>the same tool that helps an owner understand their options is the tool that stops a vet having to have the worst conversation in their job unarmed.</em></p>
-  </div>
-</section>
-
-<!-- ===== FILTER ===== -->
-<section id="filter">
-  <div class="shead">
-    <span class="lab g">The reusable part</span>
-    <h2>Why this one surfaced and twenty outdoor markets didn't</h2>
+  <div class="pull">
+    <p>Fishbrain's seven million logged catches, onX's county parcel records, Strava's social graph — none of those were ideas anyone had at a desk. They were consequences of being inside something.</p>
+    <span class="sub">The interviews are the cheapest way to get information other people don't have. <strong>Fifteen conversations, about sixty dollars, one week.</strong> Against six months of generating ideas that die in one search.</span>
   </div>
 
   <div class="card go">
-    <p>Run the filter: <strong>does this market have something in it that makes normal people give up?</strong></p>
+    <h3>What I'd actually do, in order</h3>
     <ul class="list">
-      <li><strong>A documented failure rate</strong> — 52% deferring care, pets dying over money</li>
-      <li><strong>Data that is genuinely hard to assemble</strong> — no disclosure requirement, no standard format, thousands of practice management systems</li>
-      <li><strong>An emotionally brutal subject</strong> that most founders would rather not sit with</li>
-      <li><strong>Real liability</strong> if you get the framing wrong</li>
-      <li><strong>But: zero hardware, trivial discovery, and a language model doing exactly what language models are good at</strong></li>
+      <li><strong>Run the existence check on institutional allergen software.</strong> One afternoon. If it's taken, you've lost an afternoon.</li>
+      <li><strong>If it survives, call five school district food service directors.</strong> Ask what they did the last time a parent disclosed a new allergy mid-year. Not whether they'd buy anything.</li>
+      <li><strong>If it dies, that's fine — but stop generating ideas from search results.</strong> The next one will die too, for the same reason as these six.</li>
     </ul>
-    <p style="margin-bottom:0">Compare that with a climbing conditions app: free weather API, a weekend of work, five competitors, no barrier at all. <strong>The friction is the whole opportunity.</strong> Every market this filter rejects is one where the ideas are cheap and so is the competition.</p>
+    <p style="margin-bottom:0">And the honest framing for the New Venture Competition, since October is six weeks out: <strong>"I built a deterministic food-safety engine, then spent six months proving that the consumer market for it doesn't exist, and here is the regulated buyer who does"</strong> is a far stronger story than any of the twenty ideas. <strong>The rejections are the work. LegalTime AI won on eighty conversations, not on an idea.</strong></p>
   </div>
 </section>
 
 <footer>
   <span class="lab q">Source quality &amp; confidence</span>
-  <p style="margin-top:10px"><strong>External fetching was blocked throughout.</strong> Every figure is a search-index summary; no paper, survey or product page was opened directly. <strong>This file replaces the AAC idea previously published at this address, at your request.</strong> (The filename on disk is legacy — the URL is what stays stable.)</p>
-  <p><strong>High confidence:</strong> the Gallup 52% deferred-care figure · the 55%/$2,500 euthanasia threshold · the 30% who know of a pet lost to cost · urban veterinary price inflation at 5.9% against 2.4% general · the 76%-of-needed-veterinarians projection through 2032 · the $1–2B burnout cost · the existence of FareVet, PawPrice and Vet Receipt · the AAHA/AVMA Spectrum of Care Toolkit (JAVMA 2025) · the <em>Frontiers in Veterinary Science</em> finding on absent online price transparency and the lack of any federal disclosure requirement.</p>
-  <p><strong>⚠️ Unverified and load-bearing:</strong> <strong>what Vet Receipt actually collects</strong> — check this first · whether owners will answer an outcome follow-up at all · how many invoices are needed per metro per presentation · every willingness-to-pay figure in the business-model table · whether insurers would buy declined-care data.</p>
-  <p><strong>Not researched:</strong> state-level veterinary practice acts and where "information" becomes "practising without a licence." <strong>That is a lawyer question and it defines the product's boundaries, not its features.</strong></p>
-  <p style="margin-top:16px; color:var(--ink-2)">Idea file · veterinary cost and outcome data · August 2026</p>
+  <p style="margin-top:10px"><strong>External fetching was blocked throughout.</strong> Every figure is a search-index summary; no statute, court record or product page was opened directly. <strong>This file replaces the veterinary idea at the same address, at your request.</strong></p>
+  <p><strong>High confidence:</strong> the food allergy litigation figures and the 2026 surge attributed to mandatory disclosure laws · increased FDA enforcement in 2025–26 · the FSMA allergen documentation and two-year retention requirements · the expectation that schools hold a Food Allergy Management and Prevention Plan · the construction estimating labour figures ($75–95/hour, $900–1,900 per bid, 80 bids a year) and the incumbents in that space.</p>
+  <p><strong>⚠️ Not checked, and load-bearing:</strong> <strong>whether institutional allergen compliance software already exists and is good.</strong> Miratag and Alleratech both appeared in results and were not investigated. This is the exact step that killed the previous six ideas, and this idea has not survived it yet — <strong>treat everything above as a lead.</strong></p>
+  <p><strong>Also unverified:</strong> whether school districts experience the compliance duty as a real pain · who holds the budget · whether liability-led selling works in this segment · whether PantryChef's claimed safety metrics would survive independent validation.</p>
+  <p style="margin-top:16px; color:var(--ink-2)">Idea file · the asset you already have, and the regulated buyer for it · August 2026</p>
 </footer>
 
 </div>
