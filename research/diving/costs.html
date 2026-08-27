@@ -1,0 +1,355 @@
+<title>Why Diving Costs What It Does</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,400;0,600;0,700;1,400&family=Manrope:wght@400;600;700&family=Overpass+Mono:wght@400;600&display=swap">
+
+<style>
+:root{
+  --ink:#1A1A20; --ink-2:#42434F; --muted:#74757F;
+  --paper:#EDEBE6; --card:#FCFBF8; --band:#E2DFD8;
+  --rule:#CAC6BD; --rule-soft:#DCD8D0;
+  --ind:#33357E; --ind-ink:#282A69; --ind-wash:#DFE0EF;
+  --lock:#C0435A; --lock-wash:#F4E0E4;
+  --ok:#2C6A52;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#EBE9E3; --ink-2:#BAB8B2; --muted:#8A8880;
+    --paper:#111116; --card:#1B1B22; --band:#16161C;
+    --rule:#33333D; --rule-soft:#26262E;
+    --ind:#9497E8; --ind-ink:#AAADF2; --ind-wash:#242653;
+    --lock:#EC8397; --lock-wash:#3A1D25;
+    --ok:#6DB694;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#EBE9E3; --ink-2:#BAB8B2; --muted:#8A8880;
+  --paper:#111116; --card:#1B1B22; --band:#16161C;
+  --rule:#33333D; --rule-soft:#26262E;
+  --ind:#9497E8; --ind-ink:#AAADF2; --ind-wash:#242653;
+  --lock:#EC8397; --lock-wash:#3A1D25;
+  --ok:#6DB694;
+}
+
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink);
+  font-family:Manrope,"Helvetica Neue",Arial,sans-serif; font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:960px; margin:0 auto; padding:0 22px 90px}
+
+h1,h2,h3,h4,.slab{font-family:"Zilla Slab",Georgia,serif; font-weight:700; text-wrap:balance; letter-spacing:-.01em}
+h1{font-size:clamp(2.8rem,7.5vw,4.9rem); line-height:.99; margin:0}
+h2{font-size:clamp(1.85rem,4vw,2.6rem); line-height:1.06; margin:0}
+h3{font-size:1.4rem; line-height:1.16; margin:0 0 6px}
+h4{font-size:1.06rem; margin:0 0 5px}
+p{margin:0 0 14px; max-width:68ch}
+a{color:var(--ind-ink)}
+.mono,.lab,td.n,th.n{font-family:"Overpass Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.lab{font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--ind); font-weight:600}
+.lab.k{color:var(--lock)} .lab.q{color:var(--muted)}
+
+header.mast{padding:52px 0 0}
+.topline{display:flex; flex-wrap:wrap; gap:8px 20px; align-items:baseline; border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:28px}
+.topline .who{font-family:"Overpass Mono",monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase}
+.topline .meta{margin-left:auto; font-family:"Overpass Mono",monospace; font-size:11px; color:var(--muted)}
+.dek{margin:24px 0 0; font-size:1.2rem; line-height:1.52; color:var(--ink-2); max-width:60ch}
+
+section{margin:64px 0 0; scroll-margin-top:14px}
+.shead{border-top:2px solid var(--ink); padding-top:12px; margin-bottom:22px}
+.shead .lab{display:block; margin-bottom:6px}
+.shead p{margin:10px 0 0; color:var(--ink-2); max-width:66ch}
+
+.card{background:var(--card); border:1px solid var(--rule-soft); padding:22px 24px; margin:22px 0}
+.card>*:last-child{margin-bottom:0}
+.pull{border-left:3px solid var(--ind); padding:3px 0 3px 20px; margin:26px 0; max-width:62ch}
+.pull p{font-family:"Zilla Slab",Georgia,serif; font-weight:700; font-size:1.42rem; line-height:1.25; margin:0}
+.pull .sub{font-family:Manrope,sans-serif; font-weight:400; font-size:.96rem; color:var(--muted); line-height:1.55; margin-top:9px; letter-spacing:0}
+.pull.k{border-left-color:var(--lock)}
+
+ul.list{margin:0 0 16px; padding:0; list-style:none}
+ul.list li{position:relative; padding-left:20px; margin-bottom:9px; max-width:68ch}
+ul.list li::before{content:""; position:absolute; left:2px; top:.74em; width:8px; height:1px; background:var(--ind)}
+
+/* mechanism blocks — a real sequence: four interlocking locks */
+.mech{display:grid; grid-template-columns:56px 1fr; gap:0 18px; background:var(--card); border:1px solid var(--rule-soft); margin:18px 0}
+.mech .n{background:var(--lock-wash); display:flex; align-items:flex-start; justify-content:center; padding-top:20px;
+  font-family:"Zilla Slab",Georgia,serif; font-weight:700; font-size:1.6rem; color:var(--lock)}
+.mech .b{padding:20px 22px 20px 0}
+.mech .b>*:last-child{margin-bottom:0}
+.mech blockquote{margin:12px 0; padding:12px 16px; background:var(--band); border-left:2px solid var(--lock); font-size:.96rem; color:var(--ink-2)}
+
+.scroll{overflow-x:auto; margin:22px 0; border:1px solid var(--rule-soft); background:var(--card)}
+table{border-collapse:collapse; width:100%; min-width:500px; font-size:.94rem}
+th,td{text-align:left; padding:11px 16px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
+thead th{font-family:"Overpass Mono",monospace; font-size:9.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); font-weight:600; border-bottom:1px solid var(--rule); white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+tr.hi td{background:var(--ind-wash)}
+tr.warnrow td{background:var(--lock-wash)}
+td.n,th.n{text-align:right; white-space:nowrap; font-family:"Overpass Mono",monospace}
+caption{caption-side:bottom; text-align:left; padding:10px 16px; font-size:12px; color:var(--muted); line-height:1.45}
+
+.warn{border:1px solid var(--lock); border-left-width:3px; background:var(--card); padding:18px 20px; margin:24px 0}
+.warn>*:last-child{margin-bottom:0}
+
+.opt{display:grid; grid-template-columns:56px 1fr; gap:0 18px; border-top:1px solid var(--rule); padding:22px 0}
+.opt .r{font-family:"Zilla Slab",Georgia,serif; font-weight:700; font-size:2rem; line-height:.95; color:var(--ind); padding-top:3px}
+.opt.star .r{color:var(--ok)}
+.opt.dead .r{color:var(--lock)}
+.opt .verdict{font-family:"Overpass Mono",monospace; font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); margin:0 0 8px}
+.opt p{margin:0 0 10px} .opt p:last-child{margin-bottom:0}
+.needs{background:var(--band); border-left:2px solid var(--ind); padding:12px 16px; margin-top:12px; font-size:.95rem}
+.needs strong{color:var(--ind-ink)}
+.against{border-left:2px solid var(--lock); padding-left:14px; margin-top:12px; color:var(--ink-2); font-size:.95rem}
+
+footer{margin:70px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.88rem; line-height:1.6}
+footer p{max-width:78ch}
+a:focus-visible{outline:2px solid var(--ind); outline-offset:2px}
+@media (max-width:620px){
+  .mech,.opt{grid-template-columns:1fr}
+  .mech .n{padding:12px 0 8px; justify-content:flex-start; padding-left:20px}
+  .mech .b{padding:0 20px 20px}
+  .opt{gap:6px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="topline">
+    <span class="who">PantryChef · Research File 06</span>
+    <span class="meta">Aug 2026 · Diving economics</span>
+  </div>
+  <h1>Why Diving<br>Costs What<br>It Does</h1>
+  <p class="dek">Two answers. <strong>The spearfishing regulation idea doesn't survive contact with the app store</strong> — and the reason diving is expensive turns out to be four deliberate mechanisms, not a manufacturing cost.</p>
+</header>
+
+<!-- ===== PART 1 ===== -->
+<section id="spearfishing">
+  <div class="shead">
+    <span class="lab k">Part 1 · I have to reverse my own recommendation</span>
+    <h2>The spearfishing regulation idea already exists — free, four times over</h2>
+    <p>Last round I ranked this <strong>#1, best fit for you.</strong> Researched properly, it doesn't hold. The exact product — <em>"can I legally take this fish, at this size, here, today?"</em> — is called <strong>Fish Rules</strong>, and it has been shipping across the entire US coastline for years.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Product</th><th>Coverage</th><th class="n">Price</th></tr></thead>
+      <tbody>
+        <tr class="warnrow"><td><strong>Fish Rules</strong></td><td>Recreational saltwater regs for <strong>state AND federal waters, Maine to Texas, California, Hawaii and the Caribbean</strong>, plus freshwater for FL, AL, TX. Uses GPS and the calendar to show only the rules in effect right now. <strong>Works offline.</strong> Species images for ID. Separate commercial version.</td><td class="n"><strong>Free</strong></td></tr>
+        <tr><td><strong>FishLegal</strong></td><td>All California MPA maps with boundaries, all CA saltwater regs, GPS positioning relative to MPAs, <strong>full offline capability</strong>, continuous updates</td><td class="n">Free</td></tr>
+        <tr><td>CDFW Ocean Sportfishing Interactive Web Map</td><td>Official California state map</td><td class="n">Free</td></tr>
+        <tr><td>ProtectedSeas</td><td>MPA database with area-specific regulations across <strong>25+ activities</strong></td><td class="n">Free</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:32px">The complexity was real — it's just already handled</h3>
+  <p>Worth recording, because it shows how hard the domain genuinely is:</p>
+  <ul class="list">
+    <li><strong>Species × method × jurisdiction.</strong> In Florida state waters <strong>Permit and African Pompano are hook-and-line only — but spearing them is legal in federal waters.</strong> Same species, same day, same gear, different side of a line you cannot see.</li>
+    <li><strong>Method bans by state.</strong> <strong>Hawaii prohibits scuba for spearfishing entirely</strong>, on fair-chase grounds. California permits both scuba and breath-hold. Florida bans harvest by rebreather for everything <strong>except lionfish</strong>.</li>
+    <li><strong>Species carve-outs.</strong> California prohibits spearing giant (black) sea bass, garibaldi, gulf grouper, broomtail grouper, trout, salmon and broadbill.</li>
+    <li><strong>Geography.</strong> MPAs, the Florida Keys National Marine Sanctuary, and a specific ban in the Upper Keys from Long Key to Key Largo.</li>
+    <li><strong>Even transit is regulated.</strong> You may cross an MPA that bans spearfishing with catch aboard only if your gear is unloaded and not in hand and you stay at the surface — no stopping, anchoring or entering the water.</li>
+  </ul>
+
+  <div class="card">
+    <h3>And unlike the restaurant mandates, the penalties have teeth</h3>
+    <ul class="list">
+      <li><strong>Florida: $50–$500 per fish</strong> for a first undersized-fish offence. Multiple fish or protected species can be a misdemeanour with <strong>up to 60 days in jail</strong>. Spearfishing violations are a <strong>Level Two violation</strong>.</li>
+      <li><strong>California: fines exceeding $1,000</strong>, misdemeanour charges, potential jail.</li>
+      <li>A documented federal case: <strong>two years' probation and a $2,500 criminal fine</strong> for illegal spearfishing in Florida.</li>
+    </ul>
+    <p style="margin-bottom:0"><strong>So the pain is real and the forcing function is real.</strong> The problem is only that someone already solved it and gave it away.</p>
+  </div>
+
+  <div class="warn">
+    <span class="lab k">The one residual gap — and why it's still not a company</span>
+    <p style="margin-top:9px">⚠️ <strong>I could not verify whether Fish Rules filters by gear method.</strong> If it shows hook-and-line rules without distinguishing spearfishing restrictions, there is a narrow wedge, because the species × method × jurisdiction matrix above is genuinely distinct for spearos.</p>
+    <p style="margin-bottom:0"><strong>But that is a feature request to Fish Rules, not a startup.</strong> They have the data pipeline, the coastline coverage, the offline app and the users. Adding a gear-type filter is a sprint for them and a company for you.</p>
+  </div>
+
+  <div class="pull k">
+    <p>The method was right even though the answer was wrong.</p>
+    <span class="sub">Check whether the thing already exists <em>before</em> ranking it #1 — which is exactly the mistake I made last round, and exactly the mistake the diver feature wishlist made. It is the same failure twice in one research programme, which is worth more than the finding itself.</span>
+  </div>
+</section>
+
+<!-- ===== PART 2 ===== -->
+<section id="cost">
+  <div class="shead">
+    <span class="lab">Part 2 · Your question: why is it all so expensive?</span>
+    <h2>The price is engineered</h2>
+    <p>Diving is not expensive because regulators are hard to manufacture. It is expensive because <strong>four interlocking mechanisms hold the price up on purpose</strong>, and each one closes an exit from the others.</p>
+  </div>
+
+  <div class="mech">
+    <div class="n">1</div>
+    <div class="b">
+      <h3>Enforced retail pricing</h3>
+      <ul class="list">
+        <li>Manufacturers set an <strong>MSRP</strong> and a <strong>MAP</strong> — minimum advertised price — beneath it.</li>
+        <li><strong>Major brands do not allow authorised dealers to sell online or ship products at all.</strong> Scubapro is named specifically.</li>
+        <li>Dealers may discount roughly <strong>10–15%</strong>, and no further.</li>
+        <li><strong>Dealers have been threatened with losing their dealership</strong> for giving customers larger discounts than the manufacturer allowed.</li>
+      </ul>
+      <p style="margin-bottom:0">The stated purpose is explicit: territories and dealer margins are <em>protected</em> to maintain loyalty to manufacturers and keep local dive shops viable enough to employ knowledgeable staff.</p>
+    </div>
+  </div>
+
+  <div class="mech">
+    <div class="n">2</div>
+    <div class="b">
+      <h3>Parts lockdown</h3>
+      <p><strong>Aqualung, Atomic, Cressi, Scubapro and others do not sell regulator service kits or parts to consumers at all</strong>, arguing consumers have no right to repair, on liability and safety grounds.</p>
+      <blockquote>Their argument is not frivolous — <em>"a badly serviced regulator or a low-quality o-ring can be catastrophic at depth."</em> It is life-support equipment.</blockquote>
+      <p style="margin-bottom:0">But the effect is that <strong>the only legal path to a serviced regulator runs through an authorised dealer.</strong></p>
+    </div>
+  </div>
+
+  <div class="mech">
+    <div class="n">3</div>
+    <div class="b">
+      <h3>Warranty coupled to recurring authorised service</h3>
+      <ul class="list">
+        <li>Scubapro recommends service <strong>every 24 months or 100 dives</strong>, by a certified technician at an authorised dealer.</li>
+        <li><strong>Most manufacturers require annual authorised service to keep the warranty and the "free parts for life" programme.</strong></li>
+      </ul>
+      <p style="margin-bottom:0"><strong>"Free parts for life" is the elegant part of the design: the parts are free, and you pay labour every year, forever, at a shop the manufacturer controls.</strong> Stop, and you lose both.</p>
+    </div>
+  </div>
+
+  <div class="mech">
+    <div class="n">4</div>
+    <div class="b">
+      <h3>The used market is booby-trapped</h3>
+      <ul class="list">
+        <li><strong>Buying secondhand voids the warranty</strong> — and with it the free-parts programme.</li>
+        <li><strong>Service kits for a model may be discontinued</strong>, or the brand no longer supported. <em>"Very old models you can't service because you can't get spare parts are common in the used market."</em></li>
+        <li>A used regulator <strong>must be overhauled before first use: $100–300+.</strong></li>
+      </ul>
+      <p style="margin-bottom:0">So the obvious escape from a $1,000–3,000 purchase leads to a device that <strong>may be unserviceable</strong>, and costs $100–300 before you can breathe off it.</p>
+    </div>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>The stack, end to end. Note the $300–600 that lands before the first pool session.</caption>
+      <thead><tr><th>Line</th><th class="n">Cost</th></tr></thead>
+      <tbody>
+        <tr><td>Certification</td><td class="n">$350–900</td></tr>
+        <tr class="warnrow"><td><strong>Mask, snorkel, fins — required before the first pool session</strong></td><td class="n"><strong>$300–600</strong></td></tr>
+        <tr><td>Full personal gear</td><td class="n"><strong>$1,000–3,000</strong></td></tr>
+        <tr><td>Annual servicing <span style="color:var(--muted)">(5–8% of gear value/yr)</span></td><td class="n">$100–200</td></tr>
+        <tr><td>Boat dive, two tanks</td><td class="n">$75–150</td></tr>
+        <tr class="hi"><td><strong>Shore dive</strong></td><td class="n"><strong>$10–20</strong></td></tr>
+        <tr><td><strong>20 dives a year, incl. one modest trip</strong></td><td class="n"><strong>$1,500–2,500/yr</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull k">
+    <p>The price floor exists to keep dive shops alive. Dive shops are how the industry creates divers. And the cost is a named cause of the dropout that is shrinking the sport.</p>
+    <span class="sub">The structure protecting the channel is helping drain the pool that channel fishes in. <strong>Every cost-reduction play in scuba is therefore also an attack on the training channel</strong> — which is why DGX's founder <em>"took flak for supposedly destroying the dive industry by selling dive equipment on the internet."</em> That's a genuine strategic tension, not a rhetorical one. Take it seriously before picking a side.</span>
+  </div>
+</section>
+
+<!-- ===== HOW ===== -->
+<section id="how">
+  <div class="shead">
+    <span class="lab">So how do you make it cheaper — and what would each take?</span>
+    <h2>Four routes, ranked</h2>
+  </div>
+
+  <div class="opt star">
+    <span class="r">0</span>
+    <div>
+      <p class="verdict">★ The market already answered this</p>
+      <h3>It's called freediving</h3>
+      <div class="scroll" style="margin:14px 0">
+        <table style="min-width:420px">
+          <thead><tr><th></th><th class="n">Freediving</th><th class="n">Scuba</th></tr></thead>
+          <tbody>
+            <tr class="hi"><td><strong>Full kit</strong></td><td class="n"><strong>$300–600</strong> <span style="color:var(--muted)">(to ~$950)</span></td><td class="n"><strong>$1,250–3,000+</strong></td></tr>
+            <tr><td>Tanks and fills</td><td class="n" style="color:var(--ok)">None</td><td class="n">Recurring</td></tr>
+            <tr><td>Mandatory annual authorised servicing</td><td class="n" style="color:var(--ok)">None</td><td class="n">Yes</td></tr>
+            <tr><td>Shore access</td><td class="n" style="color:var(--ok)">Free or near-free</td><td class="n">$10–20 fill min.</td></tr>
+            <tr><td>Course length</td><td class="n">Shorter</td><td class="n">Longer</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>And the participation data matches exactly: freediving +52% since 2021, US scuba certifications −35% since 2001.</strong></p>
+      <div class="needs"><strong>What this means for you:</strong> people are not waiting for someone to make scuba cheaper — <strong>they are leaving scuba for the thing that already is.</strong> Any cost play inside scuba swims against both a defended price structure <em>and</em> a migration that has already started.</div>
+    </div>
+  </div>
+
+  <div class="opt">
+    <span class="r">1</span>
+    <div>
+      <p class="verdict">Cheapest to build · real gap · monetises badly</p>
+      <h3>A serviceability database</h3>
+      <p><strong>The problem, straight from the research:</strong> a buyer of a used regulator cannot tell whether it's a bargain or a brick. Are service kits still made? Is the brand still supported? Which independent technicians service it? What does an overhaul actually cost?</p>
+      <p><strong>Why this one is interesting:</strong> it doesn't fight the price structure head-on — it <strong>makes the used market work</strong>, and the used market is the single biggest available lever on cost.</p>
+      <div class="needs"><strong>What's needed:</strong> model-by-model parts and support data (partly public via manuals, partly hostile to collect), a directory of independent technicians, and the discipline to keep it current. <strong>Cost: time, not capital.</strong> No safety-critical failure mode if framed as reference rather than advice.</div>
+      <p class="against"><strong>Against it:</strong> it monetises badly. Affiliate revenue on used gear is small, and the people who need it most are the least willing to pay.</p>
+    </div>
+  </div>
+
+  <div class="opt">
+    <span class="r">2</span>
+    <div>
+      <p class="verdict">Proven — and not a student project</p>
+      <h3>Direct-to-consumer gear</h3>
+      <p><strong>DGX Gears is the working proof.</strong> Own-brand regulators, <strong>published service manuals, and all service kits and parts sold without restriction</strong> — explicit right-to-repair, in a category where everyone else refuses.</p>
+      <p>And the industry's own analysts say the door is open: <em>"D2C in the dive industry could be more easily implemented by a startup without an already established network of resellers, similar to how Dell disrupted the PC industry"</em> — precisely because a startup has no dealer relationships to protect.</p>
+      <div class="needs"><strong>What's needed:</strong> capital, an OEM manufacturing relationship, <strong>product liability insurance on life-support equipment</strong>, inventory, and a tolerance for being hated by every dive shop in town. <strong>This is a funded hardware company.</strong></div>
+    </div>
+  </div>
+
+  <div class="opt">
+    <span class="r">3</span>
+    <div>
+      <p class="verdict">The only one you could start this weekend</p>
+      <h3>Shore-diving infrastructure</h3>
+      <p><strong>A shore dive costs a $10–20 air fill. A boat dive costs $75–150.</strong> The cheap path already exists — it's just invisible. Entries, parking, surface conditions, hazards, tides, what's actually down there, and whether you can do it without a buddy who owns a boat.</p>
+      <div class="needs"><strong>What's needed:</strong> legwork and local knowledge. Nothing else.</div>
+      <p class="against"><strong>Against it:</strong> it overlaps the visibility-forecast wave (DiveSight, DiveViz, Marla Blue, VizFinder, Viz-app) and the buddy-matching wave (Dive Buddy, Buddy Social) — both crowded, both recent, and neither obviously making money.</p>
+    </div>
+  </div>
+
+  <div class="opt dead">
+    <span class="r">✕</span>
+    <div>
+      <p class="verdict">Won't work — don't waste a weekend</p>
+      <h3>Three dead ends</h3>
+      <ul class="list">
+        <li><strong>A price-comparison site.</strong> MAP pricing means the prices are the same everywhere <em>by design</em>. There is nothing to compare.</li>
+        <li><strong>A group-buying scheme.</strong> Dealers lose their dealership for discounting beyond the allowance.</li>
+        <li><strong>Anything assuming gear is expensive because of manufacturing cost.</strong> It isn't. It's expensive because the channel is protected.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="oneline">
+  <div class="shead">
+    <span class="lab">The one-line version</span>
+    <h2>If you read nothing else</h2>
+  </div>
+  <div class="card">
+    <p><strong>Spearfishing regs:</strong> already free, four times over. Don't build it.</p>
+    <p style="margin-bottom:0"><strong>Cost:</strong> diving is expensive on purpose, to fund the shops that create divers. The cheap alternative already exists and is growing 52% a year. And of the three ways to attack the price, the only one you could start alone is a serviceability database that makes the used market work — <strong>which is genuinely useful and probably doesn't make money.</strong></p>
+  </div>
+</section>
+
+<footer>
+  <span class="lab q">Source quality &amp; confidence</span>
+  <p style="margin-top:10px"><strong>External fetching was blocked for this research.</strong> Every figure is a search-index summary; no app store listing, manufacturer dealer agreement or statute was opened directly.</p>
+  <p><strong>High confidence:</strong> Fish Rules' coverage, offline capability and free pricing · FishLegal and the CDFW map · the species × method × jurisdiction examples · Florida and California penalty ranges · MAP and authorised-dealer restrictions including the no-internet-sales rule and dealership threats · the parts lockdown at Aqualung, Atomic, Cressi and Scubapro · warranty-coupled annual service · DGX's right-to-repair policy · the freediving vs scuba cost comparison.</p>
+  <p><strong>⚠️ Unverified:</strong> whether Fish Rules distinguishes gear method — <strong>the single thing to check before fully closing Part 1</strong> · whether any of the buddy-matching or visibility apps make money.</p>
+  <p><strong>Could not obtain:</strong> actual dealer margin percentages · manufacturer wholesale pricing · the size of the used dive gear market · whether resale price maintenance in this industry has ever been legally challenged.</p>
+  <p style="margin-top:16px; color:var(--ink-2)">PantryChef research file 06 · spearfishing regulation verdict and diving cost structure · August 2026</p>
+</footer>
+
+</div>

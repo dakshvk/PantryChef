@@ -1,0 +1,408 @@
+<title>Sonar, SubWave And What It Would Really Cost</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Libre+Franklin:ital,wght@0,400;0,600;0,700;1,400&family=Martian+Mono:wght@400;600&display=swap">
+
+<style>
+:root{
+  --ink:#171A16; --ink-2:#3F453C; --muted:#6E756A;
+  --paper:#EBEDE7; --card:#FAFBF7; --band:#E0E3DA;
+  --rule:#C6CBBE; --rule-soft:#D8DCD0;
+  --sig:#5C6E00; --sig-ink:#485700; --sig-wash:#E4E9C9;
+  --stop:#A8352C; --stop-wash:#F2E0DE;
+  --go:#1F6B4F; --go-wash:#DDEBE3;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E8EBE2; --ink-2:#B6BCAC; --muted:#848A7B;
+    --paper:#101208; --card:#1A1D14; --band:#15180F;
+    --rule:#33382A; --rule-soft:#262A1E;
+    --sig:#B9D142; --sig-ink:#C9DE60; --sig-wash:#2B3310;
+    --stop:#E38077; --stop-wash:#361A16;
+    --go:#6FBE95; --go-wash:#12301F;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E8EBE2; --ink-2:#B6BCAC; --muted:#848A7B;
+  --paper:#101208; --card:#1A1D14; --band:#15180F;
+  --rule:#33382A; --rule-soft:#262A1E;
+  --sig:#B9D142; --sig-ink:#C9DE60; --sig-wash:#2B3310;
+  --stop:#E38077; --stop-wash:#361A16;
+  --go:#6FBE95; --go-wash:#12301F;
+}
+
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Libre Franklin","Helvetica Neue",Arial,sans-serif; font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1010px; margin:0 auto; padding:0 22px 90px}
+
+h1,h2,h3,h4,.sora{font-family:Sora,"Helvetica Neue",Arial,sans-serif; font-weight:700; text-wrap:balance; letter-spacing:-.022em}
+h1{font-size:clamp(2.5rem,6.6vw,4.3rem); line-height:1.01; margin:0; font-weight:800}
+h2{font-size:clamp(1.75rem,3.7vw,2.45rem); line-height:1.08; margin:0}
+h3{font-size:1.3rem; line-height:1.2; margin:0 0 6px}
+h4{font-size:1.02rem; margin:0 0 4px; letter-spacing:-.01em}
+p{margin:0 0 14px; max-width:70ch}
+a{color:var(--sig-ink)}
+.mono,.lab,.chip,td.n,th.n{font-family:"Martian Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.lab{font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--sig); font-weight:600}
+.lab.s{color:var(--stop)} .lab.q{color:var(--muted)}
+
+header.mast{padding:50px 0 0}
+.topline{display:flex; flex-wrap:wrap; gap:8px 20px; align-items:baseline; border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:26px}
+.topline .who{font-family:"Martian Mono",monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase}
+.topline .meta{margin-left:auto; font-family:"Martian Mono",monospace; font-size:10px; color:var(--muted)}
+.dek{margin:22px 0 0; font-size:1.17rem; line-height:1.5; color:var(--ink-2); max-width:62ch}
+
+/* headline findings */
+.finds{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1px; background:var(--rule-soft); border:1px solid var(--rule-soft); margin:32px 0 0}
+.finds>div{background:var(--card); padding:20px}
+.finds .big{display:block; font-family:Sora,Arial,sans-serif; font-weight:800; font-size:1.9rem; line-height:1.05; letter-spacing:-.03em; color:var(--sig-ink)}
+.finds .cap{display:block; margin-top:9px; font-size:.88rem; line-height:1.45; color:var(--ink-2)}
+
+section{margin:62px 0 0; scroll-margin-top:14px}
+.shead{border-top:2px solid var(--ink); padding-top:12px; margin-bottom:22px}
+.shead .lab{display:block; margin-bottom:6px}
+.shead p{margin:10px 0 0; color:var(--ink-2); max-width:68ch}
+
+.card{background:var(--card); border:1px solid var(--rule-soft); padding:22px 24px; margin:22px 0}
+.card>*:last-child{margin-bottom:0}
+.card.stop{border-color:var(--stop); border-left-width:3px}
+.card.go{border-color:var(--go); border-left-width:3px}
+
+.pull{border-left:3px solid var(--sig); padding:3px 0 3px 20px; margin:26px 0; max-width:64ch}
+.pull p{font-family:Sora,Arial,sans-serif; font-weight:700; font-size:1.3rem; line-height:1.3; margin:0; letter-spacing:-.02em}
+.pull .sub{font-family:"Libre Franklin",sans-serif; font-weight:400; font-size:.95rem; color:var(--muted); line-height:1.55; margin-top:9px; letter-spacing:0}
+.pull.s{border-left-color:var(--stop)}
+
+ul.list{margin:0 0 16px; padding:0; list-style:none}
+ul.list li{position:relative; padding-left:20px; margin-bottom:9px; max-width:70ch}
+ul.list li::before{content:""; position:absolute; left:2px; top:.72em; width:8px; height:1px; background:var(--sig)}
+
+.scroll{overflow-x:auto; margin:22px 0; border:1px solid var(--rule-soft); background:var(--card)}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:.92rem}
+th,td{text-align:left; padding:11px 15px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
+thead th{font-family:"Martian Mono",monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:600; border-bottom:1px solid var(--rule); white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+tr.hi td{background:var(--sig-wash)}
+tr.bad td{background:var(--stop-wash)}
+td.n,th.n{text-align:right; white-space:nowrap; font-family:"Martian Mono",monospace}
+caption{caption-side:bottom; text-align:left; padding:10px 15px; font-size:11.5px; color:var(--muted); line-height:1.45}
+
+/* the price ladder */
+.ladder{margin:24px 0; border:1px solid var(--rule-soft); background:var(--card)}
+.rung{display:grid; grid-template-columns:1fr 150px; gap:14px; padding:15px 20px; border-bottom:1px solid var(--rule-soft); align-items:baseline}
+.rung:last-child{border-bottom:none}
+.rung .w{font-size:.95rem}
+.rung .w strong{font-family:Sora,Arial,sans-serif; display:block; font-size:1.04rem; margin-bottom:2px}
+.rung .p{font-family:"Martian Mono",monospace; text-align:right; font-weight:600; font-size:1.02rem; white-space:nowrap}
+.rung.you{background:var(--sig-wash)} .rung.you .p{color:var(--sig-ink)}
+.rung.top{background:var(--stop-wash)} .rung.top .p{color:var(--stop)}
+
+/* Q&A grid */
+.qa{border-top:1px solid var(--rule); margin-top:8px}
+.qrow{display:grid; grid-template-columns:38px 1fr; gap:0 14px; padding:16px 0; border-bottom:1px solid var(--rule-soft)}
+.qrow .num{font-family:"Martian Mono",monospace; font-size:11px; color:var(--muted); padding-top:4px}
+.qrow .q{font-family:Sora,Arial,sans-serif; font-weight:700; font-size:1.02rem; line-height:1.3; margin:0 0 7px; letter-spacing:-.015em}
+.qrow .a{margin:0; font-size:.95rem; line-height:1.55; color:var(--ink-2); max-width:74ch}
+.qrow .a strong{color:var(--ink)}
+.chip{display:inline-block; font-size:8.5px; letter-spacing:.12em; text-transform:uppercase; font-weight:600;
+  padding:3px 7px; margin-right:8px; vertical-align:2px; border:1px solid currentColor}
+.chip.ok{color:var(--go)} .chip.no{color:var(--stop)} .chip.open{color:var(--sig-ink)} .chip.warn{color:var(--muted)}
+.qgroup{font-family:"Martian Mono",monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--sig); margin:34px 0 0; padding-bottom:6px; border-bottom:2px solid var(--sig); font-weight:600}
+
+footer{margin:70px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.86rem; line-height:1.6}
+footer p{max-width:80ch}
+a:focus-visible{outline:2px solid var(--sig); outline-offset:2px}
+@media (max-width:620px){
+  .rung{grid-template-columns:1fr; gap:4px}
+  .rung .p{text-align:left}
+  .qrow{grid-template-columns:1fr; gap:4px}
+  .qrow .num{padding-top:0}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="topline">
+    <span class="who">PantryChef · Research File 07</span>
+    <span class="meta">Aug 2026 · Response to your notes</span>
+  </div>
+  <h1>Sonar, SubWave<br>And What It<br>Would Really Cost</h1>
+  <p class="dek">Your notes are well-built and the questions are the right ones. Researched properly, <strong>the premise of idea #1 is inverted, idea #2 already exists and has for twenty years</strong> — and there's one genuinely good piece of news you didn't expect.</p>
+
+  <div class="finds">
+    <div><span class="big">$4,500</span><span class="cap">Cheapest <strong>professional</strong> underwater acoustic modem. Garmin's T2 does acoustic comms for <strong>~$200–350</strong>. Garmin isn't the expensive option — it's the cheapest by an order of magnitude.</span></div>
+    <div><span class="big">$1,975</span><span class="cap">Blue Robotics Ping360 — <strong>"less than half of any other scanning sonar on the market."</strong> The floor for imaging sonar hardware, before a housing, battery or display.</span></div>
+    <div><span class="big">JANUS</span><span class="cap"><strong>The open protocol already exists.</strong> NATO STANAG 4748, GPL-licensed, reference code in Matlab and C. You don't have to invent it.</span></div>
+    <div><span class="big">1999→</span><span class="cap">Diver-held imaging sonar with navigation has shipped for two decades — <strong>Shark Marine Navigator</strong>, used by navies, police and fire departments.</span></div>
+  </div>
+</header>
+
+<!-- ===== IDEA 1 ===== -->
+<section id="idea1">
+  <div class="shead">
+    <span class="lab s">Idea #1 · The premise is backwards</span>
+    <h2>Garmin is not the expensive option. Garmin is the cheap one.</h2>
+    <p>Your notes frame the T2 at $200–350 as lock-in pricing. The right comparison isn't a Garmin computer — it's <strong>what an underwater acoustic transceiver costs when a company doesn't have consumer manufacturing volume.</strong></p>
+  </div>
+
+  <div class="ladder">
+    <div class="rung top">
+      <div class="w"><strong>Enterprise acoustic modem</strong>L3Harris GPM300, Sonardyne Scout — certified cybersecurity modules, extended temperature ratings, NATO STANAG-compliant encryption</div>
+      <div class="p">$12,000–22,000+</div>
+    </div>
+    <div class="rung">
+      <div class="w"><strong>Professional acoustic modem</strong>EvoLogics S2C TINY / Compact, Teledyne Benthos D297 — 1.5–4 kbps at 2–5 km, robust error correction</div>
+      <div class="p">$4,500–9,500</div>
+    </div>
+    <div class="rung you">
+      <div class="w"><strong>Garmin Descent T2 transceiver</strong>Acoustic comms + tank telemetry, 30 m, 8-diver network</div>
+      <div class="p">$200–350</div>
+    </div>
+    <div class="rung">
+      <div class="w"><strong>Your target price</strong>An open universal transceiver</div>
+      <div class="p">$150–300</div>
+    </div>
+  </div>
+
+  <div class="pull s">
+    <p>Garmin is already selling an underwater acoustic transceiver for roughly 3–7% of what the cheapest industrial one costs.</p>
+    <span class="sub">They got there by having Garmin's manufacturing volume <em>and</em> by deliberately restricting the spec — 30 m, preset messages only, up to 45 seconds per message — to what a cheap transducer and a small battery can actually do. <strong>"Build the same thing but cheaper and open" means beating the cheapest consumer acoustic device on earth, while buying components in startup quantities.</strong> That is the wrong end of the cost curve to attack from.</span>
+  </div>
+
+  <div class="card">
+    <h3>And Garmin has already taken the surface-relay idea too</h3>
+    <p>The <strong>Descent S1 Buoy</strong> ships: a surface buoy running SubWave that lets divers communicate through each other's dive computers <em>and</em> through the buoy — which is the bridge between the underwater acoustic network and everything above the surface.</p>
+    <p style="margin-bottom:0">Garmin describes SubWave as <strong>proprietary</strong>, and holds filings in the space including <span class="mono">US10227116</span>, "Transceiver devices and related communication and navigation methods." ⚠️ <em>I could not open the patent files to assess claim scope — that's a real gap, and it's the kind of thing a patent attorney reads before you build, not after.</em></p>
+  </div>
+
+  <div class="card go">
+    <span class="lab">The good news you didn't expect</span>
+    <h3 style="margin-top:8px">The open protocol already exists — and it's a NATO standard</h3>
+    <p><strong>JANUS</strong>, promulgated as <strong>NATO STANAG 4748 on 24 March 2017</strong>, is the first internationally adopted digital underwater acoustic communications standard.</p>
+    <ul class="list">
+      <li><strong>Frequency-hopping BFSK</strong>, chosen for resilience against multipath, Doppler shift and low SNR — it works <strong>down to −3 dB SNR</strong></li>
+      <li>Operating band <strong>3–70 kHz</strong>, message lengths from seconds to minutes</li>
+      <li><strong>Open source, GPL-licensed, with reference implementations in Matlab and C</strong> published at januswiki.org</li>
+    </ul>
+    <p style="margin-bottom:0"><strong>So question 27 answers itself: you would not need to invent an open protocol, because NATO already published one and gave it away.</strong> That genuinely removes a chunk of risk from the "open layer" framing — the protocol was never the hard part. <strong>The hard part is the transducer, the power budget and the manufacturing volume.</strong></p>
+  </div>
+</section>
+
+<!-- ===== IDEA 2 ===== -->
+<section id="idea2">
+  <div class="shead">
+    <span class="lab s">Idea #2 · It exists, and it's older than you are</span>
+    <h2>Diver-held sonar navigation has shipped since the 1990s</h2>
+  </div>
+
+  <div class="card">
+    <h3>Shark Marine Navigator</h3>
+    <p>A one-man diver-held sonar imaging and navigation system. <strong>"In use by many of the world's Navies, and has become a trusted piece of their standard kit,"</strong> plus police forces, fire departments, scientific organisations and commercial dive companies.</p>
+    <ul class="list">
+      <li><strong>Lets divers see in zero visibility and know their precise location</strong></li>
+      <li>Core navigation board with <strong>inbuilt advanced dead-reckoning</strong>, on a large pressure-resistant flat screen</li>
+      <li>The <strong>MAKO DDS</strong> variant pairs it with a propulsion device — automated flight paths plus <strong>forward-looking sonar imagery to 300 m</strong></li>
+      <li><strong>Blueprint Subsea Artemis</strong> is a second diver-held sonar in the same category</li>
+    </ul>
+    <p style="margin-bottom:0"><strong>Price: quote only</strong> — which in this industry means defence pricing. ⚠️ <em>I could not obtain a figure.</em></p>
+  </div>
+
+  <div class="pull">
+    <p>The category isn't unbuilt. It's built, mature, and priced for navies — which is a completely different problem to solve.</p>
+    <span class="sub">"Nobody has made this" would be a research question. "This exists at $50,000 and nobody has made a $300 version" is a cost-engineering question, and the answer to it is in the price ladder above.</span>
+  </div>
+
+  <h3 style="margin-top:34px; font-size:1.4rem">The bigger problem: photogrammetry already won the science use cases</h3>
+  <p>Your list of applications — reef monitoring, marine biology, conservation, shipwreck mapping, underwater archaeology, scientific surveys — is <strong>already being served, and not by sonar.</strong></p>
+  <ul class="list">
+    <li>Divers swim over a reef with a <strong>consumer action camera</strong> and learning-based Structure-from-Motion reconstructs the 3D geometry — <strong>in real time</strong> (DeepReefMap, <em>Scientific Reports</em>, 2025)</li>
+    <li>Underwater photogrammetry has grown rapidly over five years on cheap cameras, more compute, and a push for reproducible data</li>
+    <li>Researchers explicitly note it <strong>"does not require large or highly specialized equipment"</strong> — GoPro-class hardware plus software</li>
+  </ul>
+
+  <div class="card stop">
+    <p style="margin-bottom:0"><strong>A $300 camera already produces far higher-resolution 3D reef models than any diver-portable sonar could, and it is the established method in the literature.</strong> Sonar's remaining advantage is narrow and specific: <strong>zero visibility, and range beyond what light reaches.</strong> That is a real niche — search and recovery, murky harbours, low-vis inland water. It is also precisely the niche Shark Marine already sells into.</p>
+  </div>
+</section>
+
+<!-- ===== Q&A ===== -->
+<section id="qa">
+  <div class="shead">
+    <span class="lab">Your 29 questions</span>
+    <h2>Answered, in your numbering</h2>
+    <p>Where I could not verify something, it says so rather than guessing.</p>
+  </div>
+
+  <p class="qgroup">Hardware · 1–7</p>
+  <div class="qa">
+    <div class="qrow"><span class="num">1</span><div>
+      <p class="q">How small can an underwater sonar system realistically be?</p>
+      <p class="a"><span class="chip ok">Answered</span>Small enough. The <strong>Blue Robotics Ping360</strong> is a compact scanning sonar rated to <strong>300 m depth with 50 m range</strong>, designed for small ROVs. Size is not your constraint — <strong>price and scan rate are.</strong></p>
+    </div></div>
+    <div class="qrow"><span class="num">2</span><div>
+      <p class="q">How much would the hardware cost?</p>
+      <p class="a"><span class="chip no">Blocker</span><strong>$1,975 for the Ping360 alone</strong>, described by its maker as <em>"less than half of any other scanning sonar on the market."</em> That is a retail sonar head with no housing, battery, display, processor or transceiver. Blueprint Subsea's Oculus multibeam is quote-only, i.e. more.</p>
+    </div></div>
+    <div class="qrow"><span class="num">3</span><div>
+      <p class="q">Could a consumer device achieve useful mapping resolution?</p>
+      <p class="a"><span class="chip warn">Partly</span>Useful for <strong>obstacle avoidance and navigation in zero visibility</strong> — that's what the Ping360 is sold for. Not useful for the reef and archaeology detail in your applications list; photogrammetry beats it there by a wide margin.</p>
+    </div></div>
+    <div class="qrow"><span class="num">4</span><div>
+      <p class="q">What battery life is realistic?</p>
+      <p class="a"><span class="chip warn">Unverified</span>No figure obtained. But note the structural pressure: <strong>Garmin's 45-second message latency at 30 m is a power-and-size tradeoff, not a physics limit.</strong> A device that both pings continuously and transmits will draw far more than one that sends a preset every few minutes.</p>
+    </div></div>
+    <div class="qrow"><span class="num">5</span><div>
+      <p class="q">How deep could the device operate?</p>
+      <p class="a"><span class="chip ok">Answered</span>Not a constraint. Ping360 is rated to <strong>300 m</strong>; Oculus models go to <strong>4,000 m</strong>. Recreational diving stops around 40 m.</p>
+    </div></div>
+    <div class="qrow"><span class="num">6</span><div>
+      <p class="q">How much does waterproofing add to cost/complexity?</p>
+      <p class="a"><span class="chip warn">Unverified</span>No isolated figure. Indirect evidence: it's clearly not the dominant cost, since a 300 m-rated Ping360 sells for under $2,000 — <strong>the transducer and electronics dominate, not the housing.</strong></p>
+    </div></div>
+    <div class="qrow"><span class="num">7</span><div>
+      <p class="q">Can sonar and acoustic communication operate simultaneously?</p>
+      <p class="a"><span class="chip warn">Unverified — and it's a real risk</span>No direct source found. But both occupy the same acoustic channel, and JANUS was specifically designed for <strong>resilience against multipath and low SNR</strong> — which tells you the channel is already hostile before you add your own sonar pinging into it. <strong>Treat co-existence as an open engineering risk, not an assumption.</strong></p>
+    </div></div>
+  </div>
+
+  <p class="qgroup">Mapping · 8–15</p>
+  <div class="qa">
+    <div class="qrow"><span class="num">8</span><div>
+      <p class="q">Can sonar generate a sufficiently detailed local 2D/3D map?</p>
+      <p class="a"><span class="chip warn">Yes in research, on vehicles</span>Published work covers 3D mapping of submerged structures with a single-beam scanning sonar, multibeam forward-looking sonar localization, and 3D profiling sonar SLAM — <strong>the most recent published February 2026.</strong> All on ROVs and AUVs, none on a diver.</p>
+    </div></div>
+    <div class="qrow"><span class="num">9</span><div>
+      <p class="q">Could underwater sonar support something analogous to SLAM?</p>
+      <p class="a"><span class="chip open">Yes — but not from sonar alone</span>State of the art is <strong>tightly-coupled fusion: DVL + IMU + camera + sonar</strong> in a graph-optimisation framework (AQUA-SLAM, VIMS, TURTLMap). <strong>The Doppler Velocity Log is the backbone</strong>, and the smallest one — Water Linked A50, 300 m rated, ±1% long-term accuracy — is <strong>quote-only priced.</strong> Sonar plus an IMU on its own is not the published approach.</p>
+    </div></div>
+    <div class="qrow"><span class="num">10</span><div>
+      <p class="q">How accurately could the system determine the diver's position?</p>
+      <p class="a"><span class="chip warn">Unverified for divers</span>The DVL spec is <strong>±1% long-term accuracy</strong> — meaning ~1 m of error per 100 m travelled, which is genuinely good. Without a DVL you are back to dead reckoning with unbounded drift, which is what Shark Marine's system uses and what Garmin's watches cannot do.</p>
+    </div></div>
+    <div class="qrow"><span class="num">11</span><div>
+      <p class="q">How quickly would the map update?</p>
+      <p class="a"><span class="chip no">This is a named blocker</span>Directly from the literature: real-time underwater SLAM on a small platform is limited by <strong>"the vast amount of image sonar data and acoustic equipment's inherent high latency."</strong> And a mechanical scanning sonar like the Ping360 <em>physically rotates a head</em> to build each frame — it is slow by construction.</p>
+    </div></div>
+    <div class="qrow"><span class="num">12</span><div>
+      <p class="q">What happens in murky water?</p>
+      <p class="a"><span class="chip ok">Your best answer</span><strong>This is where sonar wins.</strong> The Ping360 is explicitly sold for <em>"ROV navigation in poor visibility underwater environments"</em>, and Shark Marine's pitch is that it <em>"allows divers to see in zero visibility."</em> Optical methods fail here; acoustics don't. <strong>It is also the only defensible niche you have against photogrammetry.</strong></p>
+    </div></div>
+    <div class="qrow"><span class="num">13</span><div>
+      <p class="q">How do sediment, bubbles, vegetation and reef structure affect sonar?</p>
+      <p class="a"><span class="chip warn">Partly</span>No direct study obtained. The SLAM literature names <strong>suspended particles</strong> as a challenge, and the acoustic-channel research names <strong>multipath and Doppler</strong> — reef structure is a multipath generator by definition. ⚠️ <em>Bubbles specifically: no source found, and a diver exhales continuously right next to the sensor. Worth checking before anything else.</em></p>
+    </div></div>
+    <div class="qrow"><span class="num">14</span><div>
+      <p class="q">What is the realistic range?</p>
+      <p class="a"><span class="chip ok">Answered</span><strong>50 m</strong> for the Ping360, <strong>up to 200 m</strong> for Oculus multibeam, <strong>300 m</strong> for Shark Marine's forward-looking sonar. Range is not the problem.</p>
+    </div></div>
+    <div class="qrow"><span class="num">15</span><div>
+      <p class="q">Could multiple sonar-equipped divers interfere with each other?</p>
+      <p class="a"><span class="chip warn">Unverified — assume yes</span>No source found. But it is the same shared acoustic channel, and your own design has up to eight divers on it. <strong>Mutual interference between co-located active sonars is a classic problem, and you should treat it as one until proven otherwise.</strong></p>
+    </div></div>
+  </div>
+
+  <p class="qgroup">Communication · 16–20</p>
+  <div class="qa">
+    <div class="qrow"><span class="num">16</span><div>
+      <p class="q">Can an open protocol compete with Garmin SubWave?</p>
+      <p class="a"><span class="chip warn">The protocol isn't the problem</span>JANUS is technically credible and free. <strong>But protocols don't compete — products do</strong>, and Garmin's has a wrist computer, a transceiver, a buoy, retail distribution and a customer base. An open standard with no hardware behind it competes with nothing.</p>
+    </div></div>
+    <div class="qrow"><span class="num">17</span><div>
+      <p class="q">Could the system communicate with existing dive computers?</p>
+      <p class="a"><span class="chip no">No</span>Not without the manufacturers' cooperation. Air-integration pairing lives in the <strong>radio protocol inside the transmitter and receiver chip</strong>. Four brands already share one standard (Oceanic, Aqualung, Sherwood and Shearwater all use Pelagic transmitters, <span class="mono">FCC ID MH8A</span>) — <strong>Garmin and Suunto deliberately don't.</strong> There is no software seam to enter through.</p>
+    </div></div>
+    <div class="qrow"><span class="num">18</span><div>
+      <p class="q">Could an API allow other companies to integrate it?</p>
+      <p class="a"><span class="chip warn">Technically trivial, commercially the whole game</span>Publishing an API is easy. Getting Shearwater or Garmin to consume it means asking them to give up the accessory lock-in that funds the ecosystem. <strong>See the pricing research: the accessory <em>is</em> the business model.</strong></p>
+    </div></div>
+    <div class="qrow"><span class="num">19</span><div>
+      <p class="q">Could one transceiver communicate with multiple divers?</p>
+      <p class="a"><span class="chip ok">Yes — Garmin already does</span><strong>Up to 8 divers</strong> on a SubWave network, sharing depth, distance, tank pressure, air consumption rate and remaining time. Preset messages to 30 m; tank data within 10 m.</p>
+    </div></div>
+    <div class="qrow"><span class="num">20</span><div>
+      <p class="q">Could it eventually form an underwater mesh network?</p>
+      <p class="a"><span class="chip warn">Exists, industrially</span>L3Harris <strong>CUUUWi</strong> already bridges above-water mobile and SATCOM users to submerged platforms. Underwater networking is a real, funded field. <strong>At recreational-diver prices, nothing.</strong></p>
+    </div></div>
+  </div>
+
+  <p class="qgroup">Business · 21–29</p>
+  <div class="qa">
+    <div class="qrow"><span class="num">21</span><div>
+      <p class="q">What would the actual BOM/manufacturing cost be?</p>
+      <p class="a"><span class="chip warn">Not obtainable — but bounded</span>No BOM data is public. The bound that matters: <strong>a retail scanning sonar is $1,975 and the cheapest professional acoustic modem is $4,500.</strong> Those are selling prices at industrial volume, and your BOM at prototype quantities will not be dramatically under them.</p>
+    </div></div>
+    <div class="qrow"><span class="num">22</span><div>
+      <p class="q">Could this realistically sell for $150–300?</p>
+      <p class="a"><span class="chip no">No — not with sonar</span>The cheapest imaging sonar head on earth costs <strong>6× your top price</strong> before housing, battery, display or transceiver. <strong>A comms-only device at that price is conceivable — but that device already exists and is called the Garmin T2.</strong></p>
+    </div></div>
+    <div class="qrow"><span class="num">23</span><div>
+      <p class="q">Would divers actually buy another piece of hardware?</p>
+      <p class="a"><span class="chip no">The evidence says no</span>Fewer than 42% of certified divers dive even once a year. Annual spend for an active diver is <strong>$1,500–2,500</strong> and rising. <strong>Deepblu built its own dive computer to push its app and shut down citing "lack of paid users."</strong> Mask HUDs have existed for a decade and stayed niche on price alone.</p>
+    </div></div>
+    <div class="qrow"><span class="num">24</span><div>
+      <p class="q">Is the market large enough?</p>
+      <p class="a"><span class="chip no">No, for a consumer accessory</span><strong>The entire dive-computer category — all brands, all hardware — is ~$250M/yr.</strong> An accessory attaching to a fraction of it, in a US market where certifications fell 35% in twenty years, is not a venture-scale market.</p>
+    </div></div>
+    <div class="qrow"><span class="num">25</span><div>
+      <p class="q">Is Garmin's lock-in actually a painful enough problem?</p>
+      <p class="a"><span class="chip no">This is the load-bearing question, and the answer is no</span>Lock-in hurts when the locked product is <em>overpriced</em>. <strong>Garmin's is the cheapest underwater acoustic device in existence by roughly 15×.</strong> Divers complain about the ecosystem, but they are not being gouged — they are getting industrial technology at consumer prices <em>because</em> of the volume the ecosystem funds.</p>
+    </div></div>
+    <div class="qrow"><span class="num">26</span><div>
+      <p class="q">What patents/proprietary technology does Garmin have?</p>
+      <p class="a"><span class="chip warn">Partly — needs a lawyer</span>Garmin describes SubWave as <strong>proprietary</strong> and holds filings including <span class="mono">US10227116</span>, "Transceiver devices and related communication and navigation methods." ⚠️ <strong>I could not open patent files to assess claim scope.</strong> This is a freedom-to-operate question and it needs an actual attorney before any build.</p>
+    </div></div>
+    <div class="qrow"><span class="num">27</span><div>
+      <p class="q">Are there existing open underwater acoustic protocols?</p>
+      <p class="a"><span class="chip ok">Yes — and it's the best news here</span><strong>JANUS / NATO STANAG 4748</strong>, promulgated 24 March 2017. FH-BFSK, 3–70 kHz, works to −3 dB SNR, <strong>GPL-licensed with Matlab and C reference implementations.</strong> You do not need to invent the protocol.</p>
+    </div></div>
+    <div class="qrow"><span class="num">28</span><div>
+      <p class="q">Who else is already building small underwater sonar/mapping systems?</p>
+      <p class="a"><span class="chip no">A mature field</span><strong>Shark Marine</strong> (Navigator, MAKO DDS — navies, police, fire, commercial), <strong>Blueprint Subsea</strong> (Artemis diver-held, Oculus multibeam), <strong>Blue Robotics</strong> (Ping360 at the low end), <strong>Water Linked</strong> (DVL), plus Teledyne, Nortek, EvoLogics, Sonardyne, L3Harris. <strong>And for the science applications, photogrammetry on a consumer camera.</strong></p>
+    </div></div>
+    <div class="qrow bad"><span class="num">29</span><div>
+      <p class="q">Is this realistically a startup opportunity or primarily a research project?</p>
+      <p class="a"><span class="chip no">Research project</span>Underwater SLAM papers were still being published in <strong>February 2026</strong>. The approach that works needs a quote-priced DVL. The cheapest sonar is 6× your target retail. The comms half is already solved more cheaply than you could. <strong>This is a funded robotics lab or a defence supplier, not a solo undergraduate startup.</strong></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ===== VERDICT ===== -->
+<section id="verdict">
+  <div class="shead">
+    <span class="lab">Your biggest unresolved question</span>
+    <h2>"Is diver-worn real-time sonar mapping achievable at consumer size, cost, power and resolution?"</h2>
+  </div>
+
+  <div class="card stop">
+    <p style="font-family:Sora,Arial,sans-serif; font-weight:700; font-size:1.24rem; line-height:1.32; letter-spacing:-.02em">Size: yes. Depth: yes. Range: yes. Cost: no. Real-time: not yet, anywhere. Resolution: worse than a GoPro for everything except zero visibility.</p>
+    <p style="margin-bottom:0">Four of six are fine. <strong>The two that fail are the two that decide it</strong> — and they fail by margins that engineering effort doesn't close: the sonar head alone is 6× your target retail price, and real-time underwater SLAM on a small platform is still generating research papers rather than products.</p>
+  </div>
+
+  <h3 style="margin-top:34px; font-size:1.4rem">What I'd actually keep from these notes</h3>
+  <ul class="list">
+    <li><strong>The framing instinct was right.</strong> "An open communication layer for underwater devices" is a better position than "a cheaper T2" — you correctly spotted that platform beats accessory. The problem is that the layer is already standardised and given away, and the accessory is already cheap.</li>
+    <li><strong>Zero visibility is your only defensible wedge.</strong> Everything else in the applications list belongs to photogrammetry now. If any version of this survives, it's search-and-recovery in murky water — and Shark Marine is already there.</li>
+    <li><strong>The questions were the right questions.</strong> Nine of twenty-nine had answers that kill or reshape the idea, and you asked all nine yourself. <strong>That's the process working.</strong> Asking 21–29 before writing code is the whole difference between a month of research and a year of building.</li>
+  </ul>
+
+  <div class="pull">
+    <p>The pattern across this whole research programme is now four for four: SubWave, fish ID, visibility forecasting, spearfishing regulations, and now diver sonar — every idea was already built, and the build was better funded than a student could match.</p>
+    <span class="sub">That isn't bad luck and it isn't a reason to stop. <strong>It means you're generating ideas from the same information everyone else has</strong> — public, searchable, obvious to anyone who dives. The ideas that survive come from information other people don't have, which is what fifteen conversations buy you and no amount of desk research does.</span>
+  </div>
+</section>
+
+<footer>
+  <span class="lab q">Source quality &amp; confidence</span>
+  <p style="margin-top:10px"><strong>External fetching was blocked for this research.</strong> Every figure is a search-index summary; no patent file, datasheet, academic PDF or vendor quote was opened directly.</p>
+  <p><strong>High confidence:</strong> JANUS/STANAG 4748 status, modulation, band and GPL licensing · Ping360 price, range and depth rating · acoustic modem tier pricing · Shark Marine Navigator's customer base and 300 m sonar range · SubWave's 8-diver network and the Descent S1 Buoy · the DVL-centric state of the art in underwater SLAM · underwater photogrammetry as the established reef-survey method · the ~$250M dive computer market.</p>
+  <p><strong>⚠️ Unverified — and each one matters:</strong> Garmin's patent claim scope <strong>(get an attorney)</strong> · whether sonar and acoustic comms can co-exist on one device <strong>(Q7)</strong> · bubble interference from a diver's own exhaust <strong>(Q13)</strong> · multi-diver sonar interference <strong>(Q15)</strong> · battery life · waterproofing cost share · Shark Marine and DVL pricing, both quote-only · any real BOM data.</p>
+  <p><strong>My inference, not a sourced finding:</strong> that Garmin's 45-second latency is a power-and-size tradeoff rather than a physical limit, derived from the ~1 Mbps-at-100 m figure in the acoustic literature.</p>
+  <p style="margin-top:16px; color:var(--ink-2)">PantryChef research file 07 · response to the underwater technology startup notes · August 2026</p>
+</footer>
+
+</div>
