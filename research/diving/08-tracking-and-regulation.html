@@ -1,0 +1,292 @@
+<title>Two Kilos In Water</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Rubik:ital,wght@0,400;0,500;0,700;1,400&family=Space+Mono:wght@400;700&display=swap">
+
+<style>
+:root{
+  --ink:#1E1813; --ink-2:#4A3F35; --muted:#7C6F62;
+  --paper:#EDE7DF; --card:#FBF7F2; --band:#E2DACE;
+  --rule:#CCC0B1; --rule-soft:#DED5C7;
+  --rust:#8A4B2A; --rust-ink:#6F3B20; --rust-wash:#EFE0D5;
+  --blue:#1F5E8C; --blue-wash:#DCE7EF;
+  --gold:#8A6614; --gold-wash:#F0E7CE;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#EEE7DE; --ink-2:#C0B4A6; --muted:#8D8073;
+    --paper:#141110; --card:#1F1A16; --band:#191512;
+    --rule:#3A322A; --rule-soft:#2B2520;
+    --rust:#D9895F; --rust-ink:#E7A17C; --rust-wash:#332014;
+    --blue:#7FB2D6; --blue-wash:#14252F;
+    --gold:#D2A93F; --gold-wash:#2E2510;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#EEE7DE; --ink-2:#C0B4A6; --muted:#8D8073;
+  --paper:#141110; --card:#1F1A16; --band:#191512;
+  --rule:#3A322A; --rule-soft:#2B2520;
+  --rust:#D9895F; --rust-ink:#E7A17C; --rust-wash:#332014;
+  --blue:#7FB2D6; --blue-wash:#14252F;
+  --gold:#D2A93F; --gold-wash:#2E2510;
+}
+
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink);
+  font-family:Rubik,"Helvetica Neue",Arial,sans-serif; font-size:16px; line-height:1.63;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:970px; margin:0 auto; padding:0 22px 90px}
+
+h1,h2,h3,h4,.fr{font-family:Fraunces,Georgia,serif; font-weight:700; text-wrap:balance; letter-spacing:-.015em}
+h1{font-size:clamp(2.7rem,7.4vw,4.8rem); line-height:1.0; margin:0}
+h2{font-size:clamp(1.8rem,3.9vw,2.5rem); line-height:1.08; margin:0}
+h3{font-size:1.35rem; line-height:1.2; margin:0 0 6px}
+h4{font-size:1.05rem; margin:0 0 4px}
+p{margin:0 0 14px; max-width:68ch}
+a{color:var(--rust-ink)}
+.mono,.lab,td.n,th.n{font-family:"Space Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.lab{font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--rust); font-weight:700}
+.lab.b{color:var(--blue)} .lab.g{color:var(--gold)} .lab.q{color:var(--muted)}
+
+header.mast{padding:50px 0 0}
+.topline{display:flex; flex-wrap:wrap; gap:8px 20px; align-items:baseline; border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:26px}
+.topline .who{font-family:"Space Mono",monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase}
+.topline .meta{margin-left:auto; font-family:"Space Mono",monospace; font-size:10.5px; color:var(--muted)}
+.dek{margin:22px 0 0; font-size:1.18rem; line-height:1.5; color:var(--ink-2); max-width:60ch}
+
+section{margin:60px 0 0; scroll-margin-top:14px}
+.shead{border-top:2px solid var(--ink); padding-top:12px; margin-bottom:22px}
+.shead .lab{display:block; margin-bottom:6px}
+.shead p{margin:10px 0 0; color:var(--ink-2); max-width:66ch}
+
+.card{background:var(--card); border:1px solid var(--rule-soft); padding:22px 24px; margin:22px 0}
+.card>*:last-child{margin-bottom:0}
+.card.rust{border-color:var(--rust); border-left-width:3px}
+.card.blue{border-color:var(--blue); border-left-width:3px}
+.card.gold{border-color:var(--gold); border-left-width:3px}
+
+.pull{border-left:3px solid var(--rust); padding:3px 0 3px 20px; margin:26px 0; max-width:62ch}
+.pull p{font-family:Fraunces,Georgia,serif; font-weight:700; font-size:1.4rem; line-height:1.26; margin:0}
+.pull .sub{font-family:Rubik,sans-serif; font-weight:400; font-size:.94rem; color:var(--muted); line-height:1.55; margin-top:9px; letter-spacing:0}
+.pull.b{border-left-color:var(--blue)}
+
+ul.list{margin:0 0 16px; padding:0; list-style:none}
+ul.list li{position:relative; padding-left:20px; margin-bottom:9px; max-width:68ch}
+ul.list li::before{content:""; position:absolute; left:2px; top:.72em; width:8px; height:1px; background:var(--rust)}
+
+.scroll{overflow-x:auto; margin:22px 0; border:1px solid var(--rule-soft); background:var(--card)}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:.93rem}
+th,td{text-align:left; padding:11px 15px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
+thead th{font-family:"Space Mono",monospace; font-size:9.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); font-weight:700; border-bottom:1px solid var(--rule); white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+tr.hi td{background:var(--rust-wash)}
+tr.blu td{background:var(--blue-wash)}
+td.n,th.n{text-align:right; white-space:nowrap; font-family:"Space Mono",monospace}
+caption{caption-side:bottom; text-align:left; padding:10px 15px; font-size:12px; color:var(--muted); line-height:1.45}
+
+.corr{border:2px solid var(--blue); background:var(--card); padding:20px 22px; margin:26px 0}
+.corr>*:last-child{margin-bottom:0}
+.corr .was{background:var(--band); border-left:2px solid var(--muted); padding:10px 14px; margin:10px 0; font-size:.94rem; color:var(--ink-2)}
+.corr .is{background:var(--blue-wash); border-left:2px solid var(--blue); padding:10px 14px; margin:10px 0; font-size:.94rem}
+
+.risk{display:grid; grid-template-columns:1fr auto; gap:10px 18px; padding:13px 0; border-bottom:1px solid var(--rule-soft); align-items:baseline}
+.risk:last-child{border-bottom:none}
+.risk .w{font-size:.97rem}
+.risk .w strong{display:block; font-family:Fraunces,Georgia,serif; font-size:1.05rem; margin-bottom:1px}
+.risk .d{font-family:"Space Mono",monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; white-space:nowrap}
+.d.r{color:var(--rust)} .d.g{color:var(--gold)} .d.b{color:var(--blue)}
+
+footer{margin:68px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.87rem; line-height:1.6}
+footer p{max-width:78ch}
+a:focus-visible{outline:2px solid var(--rust); outline-offset:2px}
+@media (max-width:620px){ .risk{grid-template-columns:1fr; gap:2px} }
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="topline">
+    <span class="who">PantryChef · Research File 10</span>
+    <span class="meta">Aug 2026 · Tracking &amp; regulation</span>
+  </div>
+  <h1>Two Kilos<br>In Water</h1>
+  <p class="dek">Real-time fish tracking from a forward-looking sonar is a <strong>deployed commercial technology</strong>, and the instrument that does it is already diver-sized. Meanwhile the regulatory picture is <strong>less alarming than I told you</strong> — and I need to correct that.</p>
+</header>
+
+<!-- ===== PART 1 ===== -->
+<section id="tracking">
+  <div class="shead">
+    <span class="lab">Part 1 · Your core technical question</span>
+    <h2>Can a small forward-looking sonar continuously track moving fish?</h2>
+    <p><strong>Yes — and it's been doing it commercially for two decades.</strong> The instrument is the acoustic camera: DIDSON, and its current generation, the Sound Metrics ARIS.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption><strong>ARIS Explorer 3000.</strong> Read the last three rows twice.</caption>
+      <thead><tr><th>Spec</th><th class="n">Value</th></tr></thead>
+      <tbody>
+        <tr><td>Physical beams</td><td class="n">128</td></tr>
+        <tr><td>Frequency</td><td class="n">3.0 MHz / 1.8 MHz dual</td></tr>
+        <tr class="hi"><td><strong>Field of view</strong></td><td class="n"><strong>30° horizontal × 15° vertical</strong></td></tr>
+        <tr class="hi"><td><strong>Detection mode, 1.8 MHz</strong></td><td class="n"><strong>~15 m</strong></td></tr>
+        <tr class="hi"><td><strong>Identification mode, 3.0 MHz</strong></td><td class="n"><strong>~5 m</strong></td></tr>
+        <tr><td>Downrange resolution</td><td class="n">3–19 mm</td></tr>
+        <tr><td>Minimum range</td><td class="n">0.7 m</td></tr>
+        <tr class="blu"><td><strong>Weight</strong></td><td class="n"><strong>5 kg in air · 2 kg in water</strong></td></tr>
+        <tr class="blu"><td><strong>Dimensions</strong></td><td class="n"><strong>26 × 16 × 14 cm</strong></td></tr>
+        <tr class="blu"><td><strong>Power</strong></td><td class="n"><strong>15 W</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>And the tracking performance is exactly what you described wanting.</strong> DIDSON runs <strong>seven frames per second at 12 m range</strong>, producing near video-quality imagery through time. It yields quantifiable <strong>fish length, depth and distance from the camera</strong>. Technicians can distinguish fish swimming side-by-side from head-to-tail, and <strong>determine which direction each fish is swimming.</strong> ARIS resolves details as small as a few millimetres out to 40 m, and there is already a published deep neural network doing <strong>multi-species fish detection across multiple acoustic cameras.</strong></p>
+
+  <div class="pull b">
+    <p>Two kilograms in water. Twenty-six centimetres. Fifteen watts. Divers routinely carry bigger lights than that.</p>
+    <span class="sub">The "shrink it until a diver can wear it" problem you were bracing for has largely been solved by somebody else. <strong>This is not a lab rig on a cart — it is already, physically, a diver-carryable instrument.</strong></span>
+  </div>
+
+  <div class="card blue">
+    <span class="lab b">Worth noticing about your own reasoning</span>
+    <h3 style="margin-top:8px">You independently arrived at their architecture</h3>
+    <p>Last round you reasoned toward a narrow forward-looking fan, very high frequency, many elements, short range — from first principles, working from the physics. <strong>That is precisely what Sound Metrics ships:</strong> a 30° horizontal fan, 128 beams, 1.8–3.0 MHz, and a deliberate 15 m / 5 m range split between detection and identification.</p>
+    <p style="margin-bottom:0">It also confirms the array math. At 3 MHz, λ in water is <strong>0.5 mm</strong>, so 0.7λ spacing is 0.35 mm — <strong>128 elements is a 45 mm aperture.</strong> Under five centimetres. And 72/N gives <strong>~0.56° beamwidth.</strong> That's how they fit millimetre resolution into a housing the size of a lunchbox, and it's the design you were already converging on.</p>
+  </div>
+
+  <div class="card rust">
+    <h3>What is still not solved</h3>
+    <ul class="list">
+      <li><strong>Every deployment is stationary.</strong> ARIS and DIDSON sit on tripods, weirs, river mounts and ROVs — counting salmon escapement, monitoring restored wetlands, observing fish around hydroelectric facilities. <strong>Nobody swims with one.</strong> The moving-platform problem is untouched.</li>
+      <li><strong>128 phase-coherent receive channels at 3 MHz</strong> is the wall between Harvey Mudd's $1,710 array and this. Pricing is quote-only ⚠️ <em>— I could not obtain a figure, but this class of instrument is not consumer-priced.</em></li>
+      <li><strong>0.7 m minimum range.</strong> Fine for tracking; awkward for a device worn on your body.</li>
+    </ul>
+    <p style="margin-bottom:0"><strong>So the honest answer: the sensor exists, works, tracks individual moving fish with length and heading in real time, and is already diver-sized. The two open problems are cost and diver motion.</strong> Neither is a physics wall. Both are hard.</p>
+  </div>
+
+  <div class="card gold">
+    <span class="lab g">One product note on "the right aim"</span>
+    <p style="margin-top:8px">A speargun shot happens at a few metres. ARIS's identification mode reaches 5 m and its minimum range is 0.7 m, so <strong>the geometry works.</strong> But think about when the information is worth most.</p>
+    <p style="margin-bottom:0"><strong>At the moment of the shot, in the water clarity where spearfishing actually happens, you are looking directly at the fish.</strong> Your eyes and the camera both beat sonar there. The sonar's real value is in the <strong>5–15 m approach</strong> — knowing something is there, how big, which way it's moving, before you can see it. <strong>Aim assist is the demo. Approach awareness is the product.</strong></p>
+  </div>
+</section>
+
+<!-- ===== PART 2 ===== -->
+<section id="regulation">
+  <div class="shead">
+    <span class="lab b">Part 2 · You were right to push</span>
+    <h2>The regulations, jurisdiction by jurisdiction</h2>
+    <p>You said this needed researching rather than assuming "sonar is banned." You were right, and <strong>I overstated it last time.</strong></p>
+  </div>
+
+  <div class="corr">
+    <span class="lab b">Correction</span>
+    <div class="was"><strong>What I said:</strong> "Twelve states are moving to ban or restrict it on state fisheries."</div>
+    <div class="is"><strong>What the evidence actually supports:</strong> twelve state agencies were reported to be <em>in agreement with a proposal</em>, discussed at an annual consortium of fish and wildlife resource officers. Separately, Wisconsin's DNR <em>asked anglers whether they would support</em> a ban. <strong>Neither is adopted law, and I could not confirm that any state has adopted a recreational forward-facing sonar restriction.</strong></div>
+    <p style="margin-bottom:0">That's a meaningful difference. "Twelve states are banning it" and "officers at a conference agreed a proposal was worth pursuing" are not the same fact, and the second one shouldn't change what you build.</p>
+  </div>
+
+  <h3 style="margin-top:34px; font-size:1.5rem">What is actually adopted for 2026 — and it's all private tournament rules</h3>
+  <div class="scroll">
+    <table>
+      <caption>These are competition rules set by private organisations, not government regulation.</caption>
+      <thead><tr><th>Body</th><th>Rule for 2026</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Major League Fishing</strong></td><td>Forward-facing and 360-degree sonar <strong>not permitted during any regular-season competition</strong>, at every level from the Phoenix Bass Fishing League to the Bass Pro Tour</td></tr>
+        <tr class="hi"><td><strong>B.A.S.S. / Bassmaster</strong></td><td>FFS allowed at only <strong>5 of 9</strong> regular-season Elite events; the other four ban it entirely, <strong>including official practice</strong> — and <em>which</em> events allow it is <strong>decided randomly and revealed on a live show</strong></td></tr>
+        <tr><td>Outlaw Outdoors <span style="color:var(--muted)">(East Texas amateur circuit)</span></td><td>Full ban from January 2026</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:34px; font-size:1.5rem">And for spearfishing specifically — nothing about electronics</h3>
+  <p>California and Florida spearfishing rules regulate <strong>locations, species and gear</strong> — powerheads, bangsticks, rebreathers, and Hawaii's scuba prohibition. <strong>No electronic-aid restriction was found in any of them.</strong></p>
+
+  <div class="card rust">
+    <span class="lab">The one real precedent, and it's the template</span>
+    <p style="margin-top:10px; font-family:Fraunces,Georgia,serif; font-weight:700; font-size:1.24rem; line-height:1.3">Minnesota prohibits using artificial lights to lure or attract fish — or to see fish in the water — while spearing.</p>
+    <p style="margin-bottom:0">That is a <strong>sensory-aid ban written specifically for spearing.</strong> In plain language, an AR sonar HUD is a device to see fish in the water while spearing. <strong>If a regulator wanted to prohibit your product, that sentence already exists and they would only have to change one noun.</strong></p>
+  </div>
+
+  <div class="card">
+    <h3>Your find / track / target distinction — honest answer</h3>
+    <p><strong>Current regulation doesn't make it.</strong> Every rule found bans a <em>device or a method</em> — powerhead, bangstick, rebreather, scuba, artificial light — not a capability. A device that finds, tracks and aims is regulated as one device.</p>
+    <p style="margin-bottom:0">The one hint in your favour: the forward-facing sonar debate is argued in terms of <strong>locating</strong> efficiency — the technology <em>"has increased the pressure on fish populations by making anglers more efficient in locating and catching fish."</em> That suggests regulators care about finding rather than aiming. ⚠️ <strong>But that's my read of the pattern, not a documented distinction, and I would not build a strategy on it.</strong></p>
+  </div>
+
+  <h3 style="margin-top:34px; font-size:1.5rem">Revised risk assessment</h3>
+  <div class="card">
+    <div class="risk"><div class="w"><strong>Technical feasibility — tracking moving fish</strong>Deployed commercially at 7 fps with length and heading</div><div class="d b">Green</div></div>
+    <div class="risk"><div class="w"><strong>Diver-portable form factor</strong>2 kg in water, 26 cm, 15 W — already there</div><div class="d b">Green</div></div>
+    <div class="risk"><div class="w"><strong>Real-time tracking from a <em>swimming</em> platform</strong>Never done. Same motion problem as the mapping thesis.</div><div class="d r">Red</div></div>
+    <div class="risk"><div class="w"><strong>Hardware cost</strong>128 coherent channels is the wall; quote-only pricing</div><div class="d r">Red</div></div>
+    <div class="risk"><div class="w"><strong>Regulatory risk — spearfishing</strong>Was red. <strong>Now amber:</strong> nothing prohibits it today in CA, FL or HI, and the adopted bans are private tournament rules. But the Minnesota template exists and spearfishing's fair-chase culture is stricter than angling's.</div><div class="d g">Amber</div></div>
+    <div class="risk"><div class="w"><strong>Regulatory risk — general situational awareness</strong>Search and rescue, inspection, science, low-vis navigation</div><div class="d b">Green</div></div>
+    <div class="risk"><div class="w"><strong>Competitive differentiation vs AREX</strong>See below — smaller overlap than I implied</div><div class="d g">Amber</div></div>
+  </div>
+</section>
+
+<!-- ===== PART 3 ===== -->
+<section id="arex">
+  <div class="shead">
+    <span class="lab">Part 3 · Your AREX distinction</span>
+    <h2>You're right, and it means they're not really a competitor</h2>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <thead><tr><th></th><th>AREX</th><th>Yours</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Core problem</strong></td><td>Display life-support data hands-free; identify what you're looking at</td><td><strong>Detect and continuously track a target in 3D with kinematics</strong></td></tr>
+        <tr><td>Primary sensor</td><td>Camera + dive computer</td><td>Sonar + IMU + camera</td></tr>
+        <tr><td>Hard part</td><td><strong>Optics</strong> — glare, field of view, contrast without occluding vision</td><td><strong>Perception</strong> — detection, association, tracking from a moving platform</td></tr>
+        <tr class="hi"><td><strong>Relationship</strong></td><td colspan="2"><strong>Complementary, not competing.</strong> They solved the display. You'd be solving what goes on it.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull">
+    <p>A classifier tells you what something is. A tracker tells you where it will be. Those are different products built on different mathematics.</p>
+    <span class="sub">Which upgrades AREX from "competitor who got there first" to <strong>"the team that already solved the half of the problem you least want to solve."</strong> Their documented pain — months of lens positioning and FOV calibration, glare, mechanical dials because touchscreens fail underwater — is a year of work you would otherwise repeat. <strong>Email them.</strong></span>
+  </div>
+</section>
+
+<!-- ===== VERDICT ===== -->
+<section id="verdict">
+  <div class="shead">
+    <span class="lab">Where this leaves it</span>
+    <h2>The thesis narrows, and gets better</h2>
+  </div>
+
+  <div class="card blue">
+    <p><strong>Every capability you want has been demonstrated — just never all at once, and never on a swimming human.</strong></p>
+    <ul class="list">
+      <li>Real-time tracking of individual moving fish with length and heading — <strong>ARIS, commercially, for years</strong></li>
+      <li>Diver-scale size, weight and power — <strong>ARIS, already</strong></li>
+      <li>The array architecture and physics — <strong>ARIS, and you reasoned to it independently</strong></li>
+      <li>Cheap acoustic electronics — <strong>Open Echo</strong></li>
+      <li>An open, buildable array — <strong>Harvey Mudd, $1,710</strong></li>
+      <li>Motion-distortion correction — <strong>published, but leaning on a DVL</strong></li>
+      <li>The display — <strong>AREX, this year</strong></li>
+    </ul>
+    <p style="margin-bottom:0"><strong>The unclaimed thing is the join: perception from a moving diver, at a price that isn't a defence budget.</strong> That is a narrower and much better-defined research question than where you started, and every one of those seven lines is a component you can start from rather than invent.</p>
+  </div>
+
+  <div class="card gold">
+    <h3>And your own conclusion stands, now better supported</h3>
+    <p style="margin-bottom:0"><strong>Don't make spearfishing the wedge.</strong> Not because it's banned — it isn't, today, anywhere I could find — but because <strong>the capability that makes it exciting is the capability that invites the ban</strong>, the template for that ban is already written in Minnesota, and the sport's own fair-chase culture is stricter than angling's. Search and rescue, low-visibility navigation and inspection buy the same technology with none of that exposure. <strong>Spearfishing is the demo you show. It isn't the company you build.</strong></p>
+  </div>
+</section>
+
+<footer>
+  <span class="lab q">Source quality &amp; confidence</span>
+  <p style="margin-top:10px"><strong>External fetching was blocked for this research.</strong> Every figure is a search-index summary; no statute, datasheet or paper was opened directly.</p>
+  <p><strong>High confidence:</strong> ARIS Explorer 3000 specifications — beams, dual frequency, field of view, range modes, resolution, weight, dimensions and power · DIDSON's 7 fps at 12 m and its length, depth, distance and swim-direction outputs · the MLF, B.A.S.S. and Outlaw Outdoors 2026 tournament rules · Minnesota's artificial-light prohibition for spearing · the absence of electronic-aid restrictions in the California and Florida spearfishing rules found.</p>
+  <p><strong>⚠️ Corrected from my earlier claim:</strong> the "twelve states" figure describes agency agreement with a <em>proposal</em> at a resource-officers consortium, not adopted law. Wisconsin's DNR action found was a <em>survey of anglers</em>. <strong>No adopted state-level recreational FFS restriction was confirmed.</strong></p>
+  <p><strong>⚠️ My inference, not documented:</strong> that regulators focus on locating rather than aiming. Derived from the language of the FFS debate; no regulation draws that line.</p>
+  <p><strong>Could not obtain:</strong> ARIS or DIDSON pricing · any instance of an acoustic camera deployed from a swimming diver · Hawaii's spearfishing statute text on electronic aids · whether any jurisdiction has proposed an electronic-aid ban for spearfishing specifically.</p>
+  <p style="margin-top:16px; color:var(--ink-2)">PantryChef research file 10 · fish tracking feasibility and the regulatory picture · August 2026</p>
+</footer>
+
+</div>
