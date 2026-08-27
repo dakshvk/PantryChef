@@ -1,0 +1,453 @@
+<title>Kill The Hypothesis First</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Sans+Mono:wght@400;600&display=swap">
+
+<style>
+:root{
+  --ink:#16181C; --ink-2:#414651; --muted:#6E7480;
+  --paper:#ECEDEF; --card:#FBFBFC; --band:#E0E2E6;
+  --rule:#C3C6CC; --rule-soft:#D8DBE0;
+  --acc:#0B5FD9; --acc-ink:#0949A8; --acc-wash:#DDE7F8;
+  --warn:#96650C; --warn-wash:#F2E9D4;
+  --stop:#A6322A; --stop-wash:#F3DEDC;
+  --go:#1D6647; --go-wash:#DBEBE2;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E9EBEE; --ink-2:#B3B8C1; --muted:#7F858F;
+    --paper:#15171A; --card:#1E2126; --band:#191C20;
+    --rule:#333840; --rule-soft:#262A30;
+    --acc:#6BA5F0; --acc-ink:#8DBBF5; --acc-wash:#132743;
+    --warn:#D8AA4D; --warn-wash:#33280F;
+    --stop:#E58278; --stop-wash:#361B18;
+    --go:#68B591; --go-wash:#122E22;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E9EBEE; --ink-2:#B3B8C1; --muted:#7F858F;
+  --paper:#15171A; --card:#1E2126; --band:#191C20;
+  --rule:#333840; --rule-soft:#262A30;
+  --acc:#6BA5F0; --acc-ink:#8DBBF5; --acc-wash:#132743;
+  --warn:#D8AA4D; --warn-wash:#33280F;
+  --stop:#E58278; --stop-wash:#361B18;
+  --go:#68B591; --go-wash:#122E22;
+}
+
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink);
+  font-family:Lora,Georgia,serif; font-size:16.5px; line-height:1.64;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1020px; margin:0 auto; padding:0 22px 90px}
+
+h1,h2,h3,h4,.is{font-family:"Instrument Sans","Helvetica Neue",Arial,sans-serif; font-weight:700; text-wrap:balance; letter-spacing:-.028em}
+h1{font-size:clamp(2.6rem,7vw,4.6rem); line-height:1.0; margin:0}
+h2{font-size:clamp(1.75rem,3.8vw,2.45rem); line-height:1.08; margin:0}
+h3{font-size:1.3rem; line-height:1.2; margin:0 0 6px}
+h4{font-size:1.03rem; margin:0 0 4px; font-weight:600}
+p{margin:0 0 14px; max-width:70ch}
+a{color:var(--acc-ink)}
+.mono,.lab,td.n,th.n,.tag{font-family:"Noto Sans Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.lab{font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--acc); font-weight:600}
+.lab.w{color:var(--warn)} .lab.s{color:var(--stop)} .lab.g{color:var(--go)} .lab.q{color:var(--muted)}
+
+header.mast{padding:50px 0 0}
+.topline{display:flex; flex-wrap:wrap; gap:8px 20px; align-items:baseline; border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:26px}
+.topline .who{font-family:"Noto Sans Mono",monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase}
+.topline .meta{margin-left:auto; font-family:"Noto Sans Mono",monospace; font-size:10.5px; color:var(--muted)}
+.dek{margin:22px 0 0; font-size:1.2rem; line-height:1.52; color:var(--ink-2); max-width:62ch}
+
+nav.toc{margin:34px 0 0; border-top:1px solid var(--rule); padding-top:14px}
+nav.toc ol{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:2px 24px}
+nav.toc a{display:flex; gap:10px; padding:5px 0; text-decoration:none; color:var(--ink); border-bottom:1px solid transparent;
+  font-family:"Instrument Sans",Arial,sans-serif; font-size:1rem; font-weight:600; letter-spacing:-.015em}
+nav.toc a:hover{border-bottom-color:var(--acc)}
+nav.toc .mono{color:var(--muted); font-size:11px; padding-top:3px}
+
+section{margin:60px 0 0; scroll-margin-top:14px}
+.shead{border-top:2px solid var(--ink); padding-top:12px; margin-bottom:22px}
+.shead .lab{display:block; margin-bottom:6px}
+.shead p{margin:10px 0 0; color:var(--ink-2); max-width:68ch}
+
+.card{background:var(--card); border:1px solid var(--rule-soft); padding:22px 24px; margin:22px 0}
+.card>*:last-child{margin-bottom:0}
+.card.acc{border-color:var(--acc); border-left-width:3px}
+.card.go{border-color:var(--go); border-left-width:3px}
+.card.stop{border-color:var(--stop); border-left-width:3px}
+
+.pull{border-left:3px solid var(--acc); padding:3px 0 3px 20px; margin:26px 0; max-width:64ch}
+.pull p{font-family:"Instrument Sans",Arial,sans-serif; font-weight:700; font-size:1.34rem; line-height:1.28; margin:0; letter-spacing:-.028em}
+.pull .sub{font-family:Lora,serif; font-weight:400; font-size:.96rem; color:var(--muted); line-height:1.55; margin-top:9px; letter-spacing:0}
+
+ul.list{margin:0 0 16px; padding:0; list-style:none}
+ul.list li{position:relative; padding-left:20px; margin-bottom:9px; max-width:70ch}
+ul.list li::before{content:""; position:absolute; left:2px; top:.74em; width:8px; height:1px; background:var(--acc)}
+
+.scroll{overflow-x:auto; margin:22px 0; border:1px solid var(--rule-soft); background:var(--card)}
+table{border-collapse:collapse; width:100%; min-width:560px; font-size:.93rem}
+th,td{text-align:left; padding:11px 15px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
+thead th{font-family:"Noto Sans Mono",monospace; font-size:9.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); font-weight:600; border-bottom:1px solid var(--rule); white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+tr.hi td{background:var(--acc-wash)}
+tr.warnr td{background:var(--warn-wash)}
+tr.stopr td{background:var(--stop-wash)}
+td.n,th.n{text-align:right; white-space:nowrap; font-family:"Noto Sans Mono",monospace}
+caption{caption-side:bottom; text-align:left; padding:10px 15px; font-size:12px; color:var(--muted); line-height:1.45}
+.tag{font-size:9px; letter-spacing:.1em; text-transform:uppercase; font-weight:600; padding:2px 6px; border:1px solid currentColor; white-space:nowrap}
+.tag.free{color:var(--go)} .tag.cheap{color:var(--acc-ink)} .tag.dear{color:var(--stop)}
+
+/* phase ladder — a real gated sequence */
+.phase{display:grid; grid-template-columns:104px 1fr; gap:0 20px; border-top:1px solid var(--rule); padding:22px 0}
+.phase .p{font-family:"Instrument Sans",Arial,sans-serif}
+.phase .p .n{display:block; font-weight:700; font-size:1.5rem; line-height:1; letter-spacing:-.03em}
+.phase .p .c{display:block; font-family:"Noto Sans Mono",monospace; font-size:12px; color:var(--acc-ink); margin-top:5px; font-weight:600}
+.phase .b>*:last-child{margin-bottom:0}
+.phase .q{background:var(--band); border-left:2px solid var(--acc); padding:11px 15px; margin:12px 0 0; font-size:.96rem}
+.phase .q strong{font-family:"Instrument Sans",Arial,sans-serif}
+.gate{display:inline-block; font-family:"Noto Sans Mono",monospace; font-size:10px; letter-spacing:.1em;
+  text-transform:uppercase; font-weight:600; color:var(--stop); margin-top:10px}
+
+.ledger{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule-soft); border:1px solid var(--rule-soft); margin:24px 0}
+.ledger>div{background:var(--card); padding:20px 22px}
+.ledger h4{font-family:"Noto Sans Mono",monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; margin-bottom:12px}
+.ledger .done h4{color:var(--go)} .ledger .gap h4{color:var(--stop)}
+.ledger ul.list li::before{background:currentColor}
+.ledger .done{color:var(--ink)} .ledger .gap{color:var(--ink)}
+.ledger .done ul.list li::before{background:var(--go)}
+.ledger .gap ul.list li::before{background:var(--stop)}
+.ledger ul.list{margin:0} .ledger ul.list li{font-size:.94rem}
+
+footer{margin:68px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.87rem; line-height:1.6}
+footer p{max-width:80ch}
+a:focus-visible{outline:2px solid var(--acc); outline-offset:2px}
+@media (max-width:680px){
+  .phase{grid-template-columns:1fr; gap:8px}
+  .ledger{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="topline">
+    <span class="who">Master file · supersedes research files 05–10</span>
+    <span class="meta">Aug 2026</span>
+  </div>
+  <h1>Kill The<br>Hypothesis First</h1>
+  <p class="dek">One project, not two. <strong>Low-cost underwater perception and localisation</strong> — with the spearfishing HUD demoted from business to demo. Everything proven, everything missing, everything free, and who would actually buy it.</p>
+
+  <nav class="toc" aria-label="Contents">
+    <ol>
+      <li><a href="#what"><span class="mono">01</span> What this actually is</a></li>
+      <li><a href="#make"><span class="mono">02</span> What you'd be making</a></li>
+      <li><a href="#ledger"><span class="mono">03</span> Proven vs missing</a></li>
+      <li><a href="#parts"><span class="mono">04</span> The free and cheap parts list</a></li>
+      <li><a href="#phases"><span class="mono">05</span> The gated plan</a></li>
+      <li><a href="#market"><span class="mono">06</span> Who buys it, and how many</a></li>
+      <li><a href="#spearfishing"><span class="mono">07</span> Where spearfishing sits</a></li>
+      <li><a href="#questions"><span class="mono">08</span> The open questions, ranked</a></li>
+    </ol>
+  </nav>
+</header>
+
+<!-- 01 -->
+<section id="what">
+  <div class="shead">
+    <span class="lab">01 · The disorganisation, fixed</span>
+    <h2>There is one project here, and one demo</h2>
+  </div>
+
+  <div class="card acc">
+    <h3>The project</h3>
+    <p style="font-family:'Instrument Sans',Arial,sans-serif; font-weight:700; font-size:1.3rem; line-height:1.3; letter-spacing:-.028em; margin-bottom:12px">Can a small forward-looking acoustic array plus a cheap IMU plus sonar scan matching give a <em>swimming human</em> enough spatial and motion information to localise and map — without a DVL and without a $2,000 commercial sonar?</p>
+    <p style="margin-bottom:0">That is a single technical question. Everything else — the HUD, fish tracking, search and rescue, cave navigation, inspection — is an <strong>application layered on top of it</strong>, and none of them matter if the answer is no.</p>
+  </div>
+
+  <div class="pull">
+    <p>You were treating these as two ideas. They're one sensor problem and a list of display problems.</p>
+    <span class="sub">The sonar mapping project and the fish-tracking HUD run on identical hardware: acoustic array, IMU, embedded compute, and a way to show a human what it found. <strong>The only difference is what you point it at and what you draw on the screen.</strong> Solve perception once; the applications are software.</span>
+  </div>
+</section>
+
+<!-- 02 -->
+<section id="make">
+  <div class="shead">
+    <span class="lab">02 · Concretely</span>
+    <h2>What you'd actually be making</h2>
+    <p>Not a product yet. A sequence of increasingly real things, each of which answers one question.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>The physical object only becomes a "product" at the last row, and you may never need to get there.</caption>
+      <thead><tr><th>Stage</th><th>The physical thing</th><th class="n">Cost</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td><strong>Phase 0</strong></td><td>Nothing. A laptop, public datasets, open-source SLAM code.</td><td class="n"><strong>$0</strong></td></tr>
+        <tr><td><strong>Phase 0.5</strong></td><td>An Arduino Uno, an Open Echo TUSS4470 shield, one commercial fish-finder transducer, a cheap 9-axis IMU, on a tether to a laptop. Not waterproof — the <em>sensor</em> goes in the water on a pole, the electronics stay dry.</td><td class="n">&lt;$200</td></tr>
+        <tr><td><strong>Phase 1.5</strong></td><td>The same thing, but moved deliberately — forward translation, rotation, depth change — with ground truth from a tape measure and a tripod.</td><td class="n">$300–500</td></tr>
+        <tr><td><strong>Phase 2</strong></td><td>A forked Harvey Mudd array: <strong>~16 elements, ~450 kHz, forward-looking fan</strong>, in a Blue Robotics off-the-shelf enclosure. Still tethered.</td><td class="n">~$1,700</td></tr>
+        <tr><td><strong>Phase 3</strong></td><td>The array strapped to a swimmer, tethered to a laptop on the pool deck. <strong>No HUD. No mask. No app.</strong> Just a map forming on a screen.</td><td class="n">+$200</td></tr>
+        <tr class="warnr"><td>Phase 4+</td><td>Only now: pressure housing, battery, embedded compute, wireless, display. This is where every previous version of this plan wanted to start.</td><td class="n">unknown</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card go">
+    <p style="margin-bottom:0"><strong>Your Phase 3 image is the right target and you should keep it exactly as written.</strong> A diver swims around a pool; a laptop shows a wall, a diver dot, and a track forming behind them, built from ~$2,000 of hardware with no DVL. <strong>That single screenshot is worth more than any deck.</strong> It is legible to a professor, a robotics lab, an ocean-engineering department, an NVC judge and an underwater-tech company without a word of explanation.</p>
+  </div>
+</section>
+
+<!-- 03 -->
+<section id="ledger">
+  <div class="shead">
+    <span class="lab">03 · The honest ledger</span>
+    <h2>What's proven, and what nobody has done</h2>
+    <p>Every capability you need has been demonstrated. Just never all at once, and never on a swimming human.</p>
+  </div>
+
+  <div class="ledger">
+    <div class="done">
+      <h4>Proven — you can start from these</h4>
+      <ul class="list">
+        <li><strong>Real-time tracking of individual moving fish</strong> — ARIS/DIDSON, commercially, ~7 fps at 12 m, with length, depth, distance and swim direction</li>
+        <li><strong>Diver-scale form factor</strong> — ARIS Explorer 3000 is <strong>2 kg in water, 26 cm, 15 W</strong></li>
+        <li><strong>The array architecture</strong> — 128 beams, 30° forward fan, 1.8 MHz/15 m and 3.0 MHz/5 m modes. You reasoned to this independently.</li>
+        <li><strong>Cheap acoustic electronics</strong> — Open Echo drives commercial fish-finder transducers from an Arduino</li>
+        <li><strong>A buildable open array</strong> — Harvey Mudd, $1,710, published and designed to be modified</li>
+        <li><strong>Motion-distortion correction for scanning sonar</strong> — EKF undistortion, modified-FastSLAM, RBPF with sliding-window scan modules</li>
+        <li><strong>The display</strong> — AREX AR dive mask, tested to 45 m</li>
+        <li><strong>Fish detection by neural net on acoustic-camera data</strong> — published, multi-species</li>
+      </ul>
+    </div>
+    <div class="gap">
+      <h4>The gap — nobody has done this</h4>
+      <ul class="list">
+        <li><strong>Any of it from a swimming diver.</strong> Every acoustic-camera deployment is a tripod, weir, mount or ROV. ROVs hover; divers don't.</li>
+        <li><strong>Motion estimation without a DVL.</strong> Every published undistortion method uses DVL velocity. Scan-matching-only motion estimation exists in the literature but has not been tested at diver speeds or diver motion profiles.</li>
+        <li><strong>Exhaust bubbles.</strong> A diver vents a plume of near-perfect acoustic reflectors beside the sensor every few seconds. <strong>No measurement of this exists that I could find.</strong></li>
+        <li><strong>Cost.</strong> 128 phase-coherent receive channels at 3 MHz is the wall between a $1,710 array and an ARIS.</li>
+        <li><strong>Multi-diver interference.</strong> Two people with active sonar in the same band, unstudied at this scale.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pull">
+    <p>The unclaimed thing is the join: perception from a moving diver, at a price that isn't a defence budget.</p>
+    <span class="sub">That is a much better-defined research question than anything earlier in this programme, and <strong>every one of the eight proven lines is a component you start from rather than invent.</strong></span>
+  </div>
+</section>
+
+<!-- 04 -->
+<section id="parts">
+  <div class="shead">
+    <span class="lab g">04 · Everything free or cheap</span>
+    <h2>The parts list</h2>
+    <p>You asked for this specifically. Everything below is open source, off-the-shelf, or both.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>⚠️ Hardware prices are the figures found in research, not quotes. Open-source licences should be checked against each repository before use.</caption>
+      <thead><tr><th>What</th><th>Which</th><th class="n">Cost</th><th>Use it for</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td><strong>Sonar electronics</strong></td><td><span class="mono">Neumi/open_echo</span> — TUSS4470 Arduino shield, RAW-data firmware, 40 kHz–1 MHz, Python visualiser, NMEA out</td><td class="n"><span class="tag free">Open</span></td><td><strong>Phase 0.5.</strong> Drives commercial transducers from car parking sensors to Lowrance TripleShot heads — <em>you do not fabricate a transducer</em></td></tr>
+        <tr class="hi"><td><strong>Array design</strong></td><td>Harvey Mudd <em>Low-Cost Underwater Ultrasonic Phased Array Research Platform</em> — open, built to be modified</td><td class="n">$1,710</td><td><strong>Phase 2.</strong> Fork it. Their front-end trick: cheap microcontrollers + analog pulse-shaping instead of a multichannel ADC</td></tr>
+        <tr><td>Sonar driver</td><td><span class="mono">CentraleNantesRobotics/ping360_sonar</span> — ROS2, MIT licence, C++ and Python</td><td class="n"><span class="tag free">Open</span></td><td>Reference implementation and API shape</td></tr>
+        <tr><td>Second driver</td><td><span class="mono">GSO-soslab/bluerobotics_ping360</span></td><td class="n"><span class="tag free">Open</span></td><td>Cross-check when the first misbehaves</td></tr>
+        <tr class="hi"><td><strong>Sonar SLAM</strong></td><td><span class="mono">jake3991/sonar-SLAM</span> — multibeam, <strong>ships with test data</strong></td><td class="n"><span class="tag free">Open</span></td><td><strong>Phase 0.</strong> The single most useful repo on this list</td></tr>
+        <tr><td>Sonar+DVL+IMU SLAM</td><td><span class="mono">Tim-HW/HW-BlueRov2-Sonar-based-SLAM</span></td><td class="n"><span class="tag free">Open</span></td><td>The baseline you're trying to beat <em>without</em> the DVL</td></tr>
+        <tr><td>Multi-robot sonar SLAM</td><td><strong>DRACo-SLAM</strong> — distributed, communication-efficient</td><td class="n"><span class="tag free">Open</span></td><td>Later, for buddy-pair mapping</td></tr>
+        <tr class="hi"><td><strong>Datasets</strong></td><td>BlueROV2 sonar + camera recordings (figshare), plus jake3991's bundled test data</td><td class="n"><span class="tag free">$0</span></td><td><strong>Phase 0 runs entirely on these.</strong> No hardware required</td></tr>
+        <tr><td>Acoustic comms protocol</td><td><strong>JANUS / NATO STANAG 4748</strong> — GPL, Matlab and C reference code</td><td class="n"><span class="tag free">Open</span></td><td>Much later. Don't build comms first.</td></tr>
+        <tr><td>Open acoustic modem</td><td><strong>ahoi</strong> (TU Hamburg) — 50×50×25 mm, 150 m, ranging built in</td><td class="n">~€600</td><td>Only if you ever need diver-to-diver</td></tr>
+        <tr><td>Transducer</td><td>Commercial fish-finder head</td><td class="n"><span class="tag cheap">$50–150</span> ⚠️ est.</td><td>Phase 0.5 — Open Echo already drives these</td></tr>
+        <tr><td>IMU</td><td>Consumer 9-axis MEMS / flight-controller class</td><td class="n"><span class="tag cheap">$20–100</span></td><td>Start cheap. Whether IMU grade matters <em>is</em> Experiment 3.</td></tr>
+        <tr><td>Compute</td><td>Laptop first. Pi- or Jetson-class only at Phase 4.</td><td class="n"><span class="tag cheap">$0–500</span></td><td><strong>Keep expensive computation out of the water.</strong></td></tr>
+        <tr><td>Enclosure</td><td>Blue Robotics configurable 2–8" locking series, modular end caps, commercial penetrators</td><td class="n">⚠️ not obtained</td><td>Phase 2+. Never design a pressure vessel yourself.</td></tr>
+        <tr><td>Battery</td><td>~20 Wh for a one-hour system <span style="color:var(--muted)">(sonar ~5 W + compute)</span></td><td class="n"><span class="tag cheap">$20–50</span></td><td>Genuinely not your blocker</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card go">
+    <span class="lab g">The design constraint that saves you money</span>
+    <p style="margin-top:9px">Element spacing is pinned near <strong>0.7 λ</strong>, and beamwidth for a uniform linear array works out to roughly <strong>72 / N degrees</strong> — so 8 elements gives ~9°, 16 gives ~4.5°, 32 gives ~2.3°. <strong>Resolution is bought with element count, not with money or frequency.</strong></p>
+    <p style="margin-bottom:0">Because the wavelength cancels, <strong>frequency only sets physical size</strong> — and since your range target is short, you can go high-frequency for free. At 450 kHz a 16-element array is <strong>~37 mm wide</strong>. ⚠️ <em>That derivation is mine from standard array theory — verify before building to it.</em></p>
+  </div>
+</section>
+
+<!-- 05 -->
+<section id="phases">
+  <div class="shead">
+    <span class="lab">05 · Your plan, adopted</span>
+    <h2>The gated ladder</h2>
+    <p>Your phase revision is better than mine and I'm taking it as written. The only thing I've added is the bubble test, which is the cheapest way to find the most likely late-stage killer.</p>
+  </div>
+
+  <div class="phase">
+    <div class="p"><span class="n">0</span><span class="c">$0</span></div>
+    <div class="b">
+      <h3>Datasets on a laptop</h3>
+      <p>Public BlueROV2 sonar recordings plus <span class="mono">jake3991/sonar-SLAM</span>'s bundled test data. Run scan matching, estimate motion, measure drift with the DVL channel removed.</p>
+      <div class="q"><strong>Question:</strong> Can motion be estimated from sonar scan matching without a DVL?</div>
+      <span class="gate">If no → stop. You've spent nothing.</span>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="p"><span class="n">0.5</span><span class="c">&lt; $200</span></div>
+    <div class="b">
+      <h3>Single-channel Open Echo</h3>
+      <p>Arduino, TUSS4470 shield, one fish-finder transducer, tethered. Static objects at known distances, in a pool. Then move the sensor. <strong>Then breathe under it.</strong></p>
+      <div class="q"><strong>Question:</strong> Does inexpensive hardware produce returns the algorithm can actually use — and do exhaust bubbles destroy them?</div>
+      <span class="gate">If no → stop. ~$200 spent.</span>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="p"><span class="n">1.5</span><span class="c">$300–500</span></div>
+    <div class="b">
+      <h3>Move the single-channel rig deliberately</h3>
+      <p>Forward translation, rotation, depth change, with tape-measure ground truth. <strong>You're right that this matters more than building the array.</strong> It is the DVL-replacement question asked of real hardware instead of somebody else's recording.</p>
+      <div class="q"><strong>Question:</strong> Can you estimate your own movement, from your own sensor, without a DVL?</div>
+      <span class="gate">If no → stop. Under $500 total.</span>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="p"><span class="n">2</span><span class="c">~$1,700</span></div>
+    <div class="b">
+      <h3>Fork the Harvey Mudd array</h3>
+      <p>Target <strong>~16 elements, ~450 kHz, forward-looking fan</strong> — roughly 4.5° beamwidth in a 37 mm aperture. Still tethered, still no housing you designed.</p>
+      <div class="q"><strong>Question:</strong> Does electronic steering give substantially better spatial information and faster updates than one channel?</div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="p"><span class="n">3</span><span class="c">+$200</span></div>
+    <div class="b">
+      <h3>Put it on a swimmer</h3>
+      <p>Pool. Tether. Laptop on the deck. <strong>No HUD, no mask, no app, no website.</strong> A map forming on a screen while a human swims.</p>
+      <div class="q"><strong>Question:</strong> Does any of it survive a body that kicks, rolls, changes depth and exhales?</div>
+    </div>
+  </div>
+
+  <div class="card stop">
+    <span class="lab s">The rule at the top of the document</span>
+    <p style="margin-top:9px; font-family:'Instrument Sans',Arial,sans-serif; font-weight:700; font-size:1.28rem; line-height:1.3; letter-spacing:-.028em">"Don't build the product. Try to kill the hypothesis."</p>
+    <p style="margin-bottom:0">Your line, and it's the correct one. Custom PCB, pressure housing, AR mask, AI fish detection, mobile app, Bluetooth, waterproof battery and a website are <strong>all downstream of a question that costs $0 to ask.</strong></p>
+  </div>
+</section>
+
+<!-- 06 -->
+<section id="market">
+  <div class="shead">
+    <span class="lab w">06 · The number you asked for</span>
+    <h2>Who would buy this, and how many are there</h2>
+    <p>Honest answer up front: <strong>the counts you most need do not exist publicly.</strong> Below is what's real, what's bounded, and what's my estimate — labelled.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>⚠️ Rows marked <em>est.</em> are my reasoning from adjacent figures, not sourced counts. Treat them as order-of-magnitude only.</caption>
+      <thead><tr><th>Segment</th><th class="n">How many</th><th class="n">Would pay</th><th>Why they'd buy — or wouldn't</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td><strong>Public safety / SAR divers</strong><br><span style="color:var(--muted)">police, fire, sheriff, volunteer teams</span></td><td class="n"><strong>No national count exists</strong><br><span style="color:var(--muted)">⚠️ my est. 1,000–3,000 US teams</span></td><td class="n"><strong>$3,000–15,000</strong><br><span style="color:var(--muted)">⚠️ est.</span></td><td><strong>The best wedge.</strong> They work in zero visibility by definition, agency budgets and grants exist, and <strong>FEMA maintains a formal "Public Safety Dive Team" resource typing definition</strong> — meaning the category is nationally standardised for mutual aid. Small count, high willingness to pay.</td></tr>
+        <tr><td><strong>Scientific diving</strong></td><td class="n"><strong>149</strong> AAUS organisational members (2022)</td><td class="n">$2,000–10,000<br><span style="color:var(--muted)">⚠️ est.</span></td><td>Universities and institutions with grant budgets and a reason to want quantitative spatial data. Tiny, but they publish — which is worth more than revenue at this stage.</td></tr>
+        <tr><td><strong>Commercial / inspection</strong></td><td class="n"><strong>25,000</strong> certified commercial divers globally, 47% offshore energy</td><td class="n">$5,000+</td><td>Real budgets, offshore wind driving a 50% rise in subsea inspection demand — but you cannot reach them without industry access, which takes years.</td></tr>
+        <tr><td>Technical / cave / wreck divers</td><td class="n">⚠️ no count found<br><span style="color:var(--muted)">a fraction of ~6M certified</span></td><td class="n">$1,000–2,000</td><td>They already buy $1,650 HUDs and $700–1,600 computers. <strong>The one recreational group with proven high-end spend</strong>, and they dive where visibility is worst.</td></tr>
+        <tr class="warnr"><td><strong>Recreational spearfishers</strong></td><td class="n"><strong>89,750</strong> frequent, <strong>in Hawaii alone</strong><br><span style="color:var(--muted)">226,814 lifetime, 25.5% of HI adults</span><br><span style="color:var(--muted)">⚠️ global est. ~3M from the $1.2B gear market</span></td><td class="n"><strong>$200–600</strong></td><td><strong>The most enthusiastic buyers and the least able to pay.</strong> A full freediving kit is $300–600 — your Phase 2 hardware alone costs three of them.</td></tr>
+        <tr><td>Recreational scuba, general</td><td class="n">~6M certified, <strong>&lt;42% active</strong></td><td class="n">$100–300</td><td>The entire dive-computer category — every brand, all hardware — is only <strong>~$250M/yr</strong>. An accessory to that is not a venture market.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull">
+    <p>The market inverts against the product. The people who most want it pay least; the people who'd pay properly number in the thousands.</p>
+    <span class="sub">That's the same shape as everything else in this research programme — the money gets deeper as the people get fewer. <strong>It doesn't kill the project, but it does decide the order: build for public safety and science first, where a few thousand dollars is a normal purchase order, and let recreational use arrive when the hardware cost has fallen by an order of magnitude.</strong></span>
+  </div>
+
+  <div class="card">
+    <h3>What that means numerically, being blunt</h3>
+    <p>At a plausible early price of <strong>$5,000</strong> into public-safety and scientific diving, capturing even <strong>200 units</strong> is <strong>$1M</strong> — a real business for one person, and nowhere near venture scale. At a recreational price of <strong>$400</strong> you would need <strong>2,500 units</strong> for the same revenue, from buyers who currently spend $300–600 on their entire kit.</p>
+    <p style="margin-bottom:0"><strong>Neither of those is a reason not to run Phase 0.</strong> They're the reason not to design a consumer product before Phase 3.</p>
+  </div>
+</section>
+
+<!-- 07 -->
+<section id="spearfishing">
+  <div class="shead">
+    <span class="lab">07 · The other idea, put in its place</span>
+    <h2>Spearfishing is the demo, not the business</h2>
+    <p>Your own conclusion, and the research supports it for reasons beyond the regulatory one.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Argument</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Is it currently illegal?</strong></td><td><strong>No.</strong> No electronic-aid restriction was found in California, Florida or Hawaii spearfishing rules. The adopted 2026 forward-facing-sonar bans are <strong>private tournament rules</strong> (MLF, B.A.S.S., Outlaw Outdoors), not law.</td></tr>
+        <tr class="warnr"><td><strong>Could it become illegal?</strong></td><td><strong>The template is already written.</strong> Minnesota prohibits artificial lights <em>"to lure or attract fish — or to see fish in the water — while spearing."</em> Change one noun.</td></tr>
+        <tr><td><strong>Does regulation distinguish find / track / target?</strong></td><td><strong>No.</strong> Every rule found bans a <em>device or method</em> — powerhead, bangstick, rebreather, scuba, artificial light — not a capability.</td></tr>
+        <tr class="stopr"><td><strong>The commercial argument, which is stronger</strong></td><td><strong>They can't pay.</strong> Even in Hawaii — the densest spearfishing market in the US — that's ~90,000 frequent participants whose whole kit costs less than your prototype.</td></tr>
+        <tr><td><strong>The product argument, which is subtler</strong></td><td><strong>At the moment of the shot you are looking at the fish.</strong> Your eyes and a camera both beat sonar at 2 m in clear water. Sonar's value is the <strong>5–15 m approach</strong> — so "aim assist" is the least defensible framing of a genuinely useful capability.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card acc">
+    <p style="margin-bottom:0"><strong>Keep it as the demo.</strong> Tracking a moving fish is the most visceral possible proof that the perception stack works — far more legible in thirty seconds than a wall-following map. <strong>Show it; don't sell it.</strong> And note the useful accident: a system that can track a fish can track a diver, a target, a piece of debris or a structure. <strong>The hard part is the tracker, and the tracker is application-neutral.</strong></p>
+  </div>
+</section>
+
+<!-- 08 -->
+<section id="questions">
+  <div class="shead">
+    <span class="lab">08 · What actually remains unknown</span>
+    <h2>The open questions, ranked by how much they'd change things</h2>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Ordered by decision value. The top three are answerable for under $200 combined.</caption>
+      <thead><tr><th class="n">#</th><th>Question</th><th>How to answer it</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td class="n">1</td><td><strong>Can scan matching estimate motion without a DVL?</strong></td><td>Phase 0. Public datasets, laptop, <strong>$0</strong>, this week.</td></tr>
+        <tr class="hi"><td class="n">2</td><td><strong>Do exhaust bubbles destroy the returns?</strong></td><td>Phase 0.5. Open Echo, a pool, a snorkel. <strong>Under $200.</strong> <em>No published measurement of this exists.</em></td></tr>
+        <tr class="hi"><td class="n">3</td><td><strong>Does cheap hardware produce usable geometry at all?</strong></td><td>Phase 0.5, same rig, same afternoon.</td></tr>
+        <tr><td class="n">4</td><td>Can a 16-element array at 450 kHz reach 5–15 m in open water?</td><td>Phase 2. Harvey Mudd demonstrated <strong>1.2 m on a static target in a tank</strong> — your target is 2–12× further. <strong>Treat 2 m as the first milestone.</strong></td></tr>
+        <tr><td class="n">5</td><td>How much does IMU grade actually matter?</td><td>Phase 1.5. Buy two, compare. It's an experiment, not a spec decision.</td></tr>
+        <tr><td class="n">6</td><td>Do two divers with active sonar interfere?</td><td>Phase 3+. Unstudied. Borrow a friend.</td></tr>
+        <tr><td class="n">7</td><td>What does a public-safety dive team actually pay for equipment, and how many teams exist?</td><td><strong>Not answerable from a desk — no national count exists.</strong> Call three teams. This is the market question and it's fifteen conversations, same as always.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card go">
+    <h3>Three emails, still the highest-leverage thing you can do</h3>
+    <ul class="list">
+      <li><strong>Matthew Spencer, Harvey Mudd</strong> — faculty on the array paper, 40 minutes away. Their platform is what you'd fork. Ask what they'd change and whether it works beyond a tank.</li>
+      <li><strong>Jan Neumann, Open Echo</strong> — which transducers gave the cleanest water returns, and has anyone driven multiple elements from TUSS4470s?</li>
+      <li><strong>Vimicx</strong> — 2026 NVC finalist doing 2D sonar to 3D underwater AR, in your own competition. And <strong>AREX</strong>, who solved the display half you least want to build.</li>
+    </ul>
+    <p style="margin-bottom:0">All four have already spent the year you're about to spend, and none of them is a competitor.</p>
+  </div>
+
+  <div class="pull">
+    <p>Your bottom line was right, so it's the ending: no, don't spend $2,000 now. Yes, spend the next few weeks on the $0 and $200 experiments.</p>
+    <span class="sub">The downside is a couple of hundred dollars and a few weekends. The upside is a working demonstration of something nobody has built, assembled almost entirely from parts other people published for free. <strong>That asymmetry is the whole argument, and it doesn't require believing the idea will work.</strong></span>
+  </div>
+</section>
+
+<footer>
+  <span class="lab q">Source quality &amp; confidence</span>
+  <p style="margin-top:10px"><strong>External fetching was blocked throughout this research.</strong> Every figure is a search-index summary; no paper, datasheet, repository or statute was opened directly. <strong>This file supersedes research files 05–10</strong>, which remain in the repository for their detail.</p>
+  <p><strong>High confidence:</strong> the open-source parts list and licences as described in search results · ARIS Explorer 3000 specifications · DIDSON tracking performance · Open Echo's architecture and transducer compatibility · the Harvey Mudd array's cost, method and 1.2 m tank demonstration · JANUS and ahoi · the 2026 tournament sonar rules · Minnesota's spearing statute · AAUS's 149 organisational members · the Hawaii spearfishing participation study · the ~$250M dive computer market.</p>
+  <p><strong>⚠️ Estimates, not sources — labelled in the tables:</strong> the number of US public safety dive teams (<strong>no national count exists</strong>) · all willingness-to-pay figures · the ~3M global spearfisher figure, derived from the $1.2B gear market divided by a plausible annual spend · transducer and enclosure prices.</p>
+  <p><strong>⚠️ My derivation, not a source:</strong> the θ ≈ 72/N beamwidth relation and the aperture figures. Standard uniform-linear-array theory, but check it before designing to it.</p>
+  <p><strong>The single most important thing that could not be researched:</strong> whether exhaust bubbles from a diver's own regulator destroy acoustic returns at close range. <strong>No measurement was found, and you can run it yourself for under $200.</strong></p>
+  <p style="margin-top:16px; color:var(--ink-2)">Master file · low-cost underwater perception and localisation · August 2026</p>
+</footer>
+
+</div>
