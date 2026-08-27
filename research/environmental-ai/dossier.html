@@ -1,0 +1,677 @@
+<title>Ten Agents, One Verdict</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --paper:#EBEFF2; --panel:#F7F9FA; --panel-2:#E1E8EC;
+  --ink:#0F2028; --ink-2:#415B69; --ink-3:#6E8797;
+  --rule:#C3D0D7; --rule-soft:#D8E1E6;
+  --accent:#B81B67; --accent-soft:#F2DCE7;
+  --depth:#1A6A88; --depth-soft:#DDEBF1;
+  --ok:#2C6247; --ok-soft:#DCEBE2;
+  --warn:#96620A; --warn-soft:#F4E7CE;
+  --bad:#A62B22; --bad-soft:#F5DEDB;
+  --shadow:rgba(15,32,40,.09);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0B161C; --panel:#111F27; --panel-2:#182B34;
+    --ink:#DDE8ED; --ink-2:#A0B5C0; --ink-3:#748D9A;
+    --rule:#26404C; --rule-soft:#1C333D;
+    --accent:#F2589F; --accent-soft:#3A1526;
+    --depth:#57B0D0; --depth-soft:#102D3A;
+    --ok:#6FC79B; --ok-soft:#122E22;
+    --warn:#DFA943; --warn-soft:#33260C;
+    --bad:#E88079; --bad-soft:#331512;
+    --shadow:rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0B161C; --panel:#111F27; --panel-2:#182B34;
+  --ink:#DDE8ED; --ink-2:#A0B5C0; --ink-3:#748D9A;
+  --rule:#26404C; --rule-soft:#1C333D;
+  --accent:#F2589F; --accent-soft:#3A1526;
+  --depth:#57B0D0; --depth-soft:#102D3A;
+  --ok:#6FC79B; --ok-soft:#122E22;
+  --warn:#DFA943; --warn-soft:#33260C;
+  --bad:#E88079; --bad-soft:#331512;
+  --shadow:rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  font-size:16px; line-height:1.62; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:Spectral,Georgia,serif; text-wrap:balance; margin:0; line-height:1.18}
+p{margin:0}
+a{color:var(--accent)}
+
+.wrap{max-width:1180px; margin:0 auto; padding:0 28px}
+.col{max-width:74ch}
+
+/* ---------- masthead ---------- */
+.mast{border-bottom:2px solid var(--ink); padding:52px 0 0}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--accent); font-weight:600;
+}
+.mast h1{font-size:clamp(2.7rem,6.2vw,4.5rem); font-weight:700; letter-spacing:-.02em; margin:16px 0 0}
+.mast .sub{font-family:Spectral,serif; font-size:clamp(1.05rem,2vw,1.3rem); font-style:italic; color:var(--ink-2); margin:18px 0 0; max-width:62ch}
+.meta{display:flex; flex-wrap:wrap; gap:0; margin:38px 0 0; border-top:1px solid var(--rule)}
+.meta div{flex:1 1 150px; padding:16px 20px 18px 0; border-right:1px solid var(--rule-soft)}
+.meta div:last-child{border-right:0}
+.meta dt{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3)}
+.meta dd{margin:6px 0 0; font-family:Spectral,serif; font-size:1.65rem; font-weight:600; font-variant-numeric:tabular-nums}
+.meta dd small{font-size:.8rem; font-family:"IBM Plex Sans",sans-serif; font-weight:400; color:var(--ink-2); display:block; letter-spacing:0}
+
+/* ---------- sections ---------- */
+section{padding:60px 0; border-bottom:1px solid var(--rule-soft)}
+.snum{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.16em;
+  color:var(--ink-3); text-transform:uppercase; display:block; margin-bottom:12px;
+}
+h2{font-size:clamp(1.75rem,3.6vw,2.5rem); font-weight:700; letter-spacing:-.015em}
+h2 + .lede{margin-top:16px; font-size:1.06rem; color:var(--ink-2); max-width:70ch}
+h3{font-size:1.32rem; font-weight:600; margin-top:40px}
+h4{font-size:1.02rem; font-weight:600; margin-top:26px; font-family:"IBM Plex Sans",sans-serif}
+.col p + p{margin-top:16px}
+section p{margin-top:14px}
+
+/* ---------- alert ---------- */
+.alert{
+  border:1px solid var(--bad); background:var(--bad-soft);
+  padding:26px 28px; margin:32px 0; border-left-width:5px;
+}
+.alert h3{margin:0 0 10px; font-size:1.25rem; color:var(--bad)}
+.alert.warnbox{border-color:var(--warn); background:var(--warn-soft)}
+.alert.warnbox h3{color:var(--warn)}
+.alert.okbox{border-color:var(--ok); background:var(--ok-soft)}
+.alert.okbox h3{color:var(--ok)}
+.alert p{margin-top:10px}
+.alert p:first-of-type{margin-top:0}
+
+/* ---------- chips ---------- */
+.chip{
+  display:inline-flex; align-items:center; gap:6px; font-family:"IBM Plex Mono",monospace;
+  font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; font-weight:600;
+  padding:3px 9px; border:1px solid currentColor; white-space:nowrap;
+}
+.c-ok{color:var(--ok); background:var(--ok-soft)}
+.c-warn{color:var(--warn); background:var(--warn-soft)}
+.c-bad{color:var(--bad); background:var(--bad-soft)}
+.c-dep{color:var(--depth); background:var(--depth-soft)}
+
+/* ---------- legend ---------- */
+.legend{display:grid; grid-template-columns:repeat(auto-fit,minmax(232px,1fr)); gap:1px; background:var(--rule); border:1px solid var(--rule); margin-top:28px}
+.legend div{background:var(--panel); padding:16px 18px}
+.legend p{margin-top:8px; font-size:.88rem; color:var(--ink-2); line-height:1.5}
+
+/* ---------- rank cards ---------- */
+.rank{border:1px solid var(--rule); background:var(--panel); margin-top:24px}
+.rank.demoted{border-color:var(--bad); border-width:2px}
+.rank.verified{border-color:var(--ok); border-width:2px}
+.rank-head{display:flex; gap:20px; align-items:flex-start; padding:22px 26px; border-bottom:1px solid var(--rule-soft); flex-wrap:wrap}
+.rank-n{
+  font-family:Spectral,serif; font-size:2.9rem; font-weight:700; line-height:.9;
+  color:var(--accent); font-variant-numeric:tabular-nums; min-width:52px;
+}
+.rank-t{flex:1 1 300px; min-width:0}
+.rank-t h3{margin:0; font-size:1.3rem}
+.rank-t .who{font-size:.9rem; color:var(--ink-2); margin-top:8px}
+.rank-t .who b{color:var(--ink); font-weight:600}
+.rank-score{text-align:right; font-family:"IBM Plex Mono",monospace}
+.rank-score .v{font-size:1.85rem; font-weight:600; font-variant-numeric:tabular-nums; display:block; line-height:1}
+.rank-score .l{font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); margin-top:5px; display:block}
+.rank-body{padding:22px 26px}
+.rank-body dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:10px 16px; align-items:baseline}
+.rank-body dt{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-3); white-space:nowrap}
+.rank-body dd{margin:0; font-size:.94rem}
+
+/* score bars */
+.bars{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px 22px; padding:20px 26px; background:var(--panel-2); border-bottom:1px solid var(--rule-soft)}
+.bar-l{display:flex; justify-content:space-between; font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2)}
+.bar-l b{color:var(--ink); font-variant-numeric:tabular-nums}
+.bar-t{height:5px; background:var(--rule); margin-top:5px; position:relative; overflow:hidden}
+.bar-t i{position:absolute; inset:0 auto 0 0; background:var(--depth); display:block}
+.bar-t i.hi{background:var(--accent)}
+.bar-t i.lo{background:var(--warn)}
+
+/* ---------- tables ---------- */
+.scroll{overflow-x:auto; margin-top:26px; border:1px solid var(--rule)}
+table{border-collapse:collapse; width:100%; min-width:560px; font-size:.9rem; background:var(--panel)}
+th,td{text-align:left; padding:11px 15px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
+thead th{
+  background:var(--panel-2); font-family:"IBM Plex Mono",monospace; font-size:10px;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--ink-2); font-weight:600;
+  border-bottom:1px solid var(--rule); position:sticky; top:0;
+}
+tbody tr:last-child td{border-bottom:0}
+td.num{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; white-space:nowrap}
+td b{font-weight:600}
+
+/* ---------- signal grid ---------- */
+.signals{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1px; background:var(--rule); border:1px solid var(--rule); margin-top:30px}
+.sig{background:var(--panel); padding:24px 24px 26px}
+.sig .n{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em; color:var(--accent); font-weight:600}
+.sig h3{margin:10px 0 0; font-size:1.12rem}
+.sig p{margin-top:11px; font-size:.92rem; color:var(--ink-2); line-height:1.55}
+.sig .ev{margin-top:14px; padding-top:13px; border-top:1px solid var(--rule-soft); font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--ink-3); line-height:1.5}
+
+/* ---------- pull ---------- */
+blockquote{
+  margin:32px 0; padding:0 0 0 26px; border-left:3px solid var(--accent);
+  font-family:Spectral,serif; font-size:1.22rem; line-height:1.5; font-style:italic; color:var(--ink);
+}
+blockquote cite{display:block; margin-top:12px; font-size:.82rem; font-style:normal; font-family:"IBM Plex Mono",monospace; letter-spacing:.06em; color:var(--ink-3)}
+
+/* ---------- kill list ---------- */
+.kill{border:1px solid var(--rule); margin-top:22px; background:var(--panel)}
+.kill > div{padding:18px 22px; border-bottom:1px solid var(--rule-soft); display:grid; grid-template-columns:minmax(150px,230px) 1fr; gap:6px 24px}
+.kill > div:last-child{border-bottom:0}
+.kill h4{margin:0; font-size:.98rem; font-weight:600}
+.kill p{margin:0; font-size:.9rem; color:var(--ink-2)}
+
+ul.tight{margin:16px 0 0; padding-left:20px}
+ul.tight li{margin-top:9px; font-size:.95rem}
+ul.tight li::marker{color:var(--accent)}
+
+.foot{padding:48px 0 70px; color:var(--ink-2); font-size:.88rem}
+.foot p{margin-top:12px}
+
+@media (max-width:640px){
+  .wrap{padding:0 18px}
+  .meta div{border-right:0; border-bottom:1px solid var(--rule-soft); flex-basis:100%; padding-right:0}
+  .rank-score{text-align:left}
+  .kill > div{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <span class="eyebrow">Environmental AI · Opportunity Scan · 26 Aug 2026</span>
+    <h1>Ten Agents,<br>One Verdict</h1>
+    <p class="sub">A ten-agent research program across forty environmental sub-domains, scored on a weighted rubric — then run through an adversarial fact-check that knocked down the front-runner.</p>
+    <div class="meta">
+      <div><dt>Research agents</dt><dd>10<small>3 waves + fact-check + scoring</small></dd></div>
+      <div><dt>Sub-domains</dt><dd>40+<small>ocean, land, water, waste, grid, green-AI</small></dd></div>
+      <div><dt>Claims re-probed</dt><dd>25<small>plus 3 deep-verification passes</small></dd></div>
+      <div><dt>Top picks demoted</dt><dd>3<small>by their own evidence</small></dd></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap col">
+    <span class="snum">01 — What the fact-check destroyed</span>
+    <h2>The front-runner does not survive</h2>
+    <p class="lede">Seven of ten agents converged on California wildfire compliance. The scoring agent made it the single "start Monday" recommendation. Then an adversarial fact-checker re-probed every load-bearing claim, and two of the six pillars collapsed.</p>
+
+    <div class="alert">
+      <h3>Refuted — Zone 0 is not law</h3>
+      <p>The Board of Forestry voted 8–0 on <b>19 Aug 2026 to approve a <em>final draft</em></b>. OAL review has not happened. <b>There is no statewide effective date and nothing is enforceable.</b> A page titled literally <em>"Approved Aug 19, 2026 — not yet law"</em> is the top organic result on the subject.</p>
+    </div>
+
+    <div class="alert">
+      <h3>Refuted — the compliance deadlines do not exist</h3>
+      <p>There is no 1 Jan 2027 VHFHSZ deadline and no 1 Jan 2028 High-FHSZ deadline. The rule applies immediately to <b>new construction</b> on adoption; existing structures get <b>Phase 1 within 3 years</b> and <b>Phase 2 within 5 years</b> — both running from an effective date that does not yet exist.</p>
+      <p>The "twelve months to stand up a workflow" premise is off by a factor of three to five. <b>"You arrive as the requirement lands, not five years late" is precisely inverted.</b></p>
+    </div>
+
+    <div class="alert">
+      <h3>Refuted — the procurement advantage doesn't reach the buyer</h3>
+      <p>California's SB/DVBE Option is real: direct contract, no competitive bid, up to $249,999.99 on two quotes. But it is a <b>state-agency</b> authority under Gov. Code §§14838.5/.7. <b>Cities, counties, special districts and local fire agencies run their own purchasing codes.</b> This was the "no past performance required" pillar — the single best reason the opportunity ranked first on fundability. It never applied to the recommended buyer.</p>
+    </div>
+
+    <div class="alert warnbox">
+      <h3>Corrected — the incumbent is stronger than assessed</h3>
+      <p>"100+ agencies across 12 states" is confirmed only as text on <b>Fire Aside's own website</b>. Real pricing surfaced: <b>Berkeley's contract runs to a not-to-exceed $85,000 per year</b> — far above the inferred $5k–$50k range. A pilot priced at $5–15k would underprice against an incumbent already clearing $85k at one mid-size city.</p>
+    </div>
+
+    <blockquote>A founder who builds a 90-day plan around "every agency must operationalize Zone 0 by 1 Jan 2027" walks into fifteen customer interviews and is told the rule isn't in effect and nobody has a date. It is the kind of error a fire marshal catches instantly.<cite>Adversarial fact-check agent</cite></blockquote>
+
+    <p>The scoring agent had written its own escape hatch before it knew any of this. Under <em>What would change my mind</em>, item one: <em>"Board of Forestry confirms Zone 0 is still a draft with no adopted compliance date → downgrade from 'start Monday' to 'one of four.'"</em> That trigger fired. The demotion below is the agent's own rule applied to the fact-checker's evidence, not a second opinion.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap col">
+    <span class="snum">02 — How to read every claim below</span>
+    <h2>Verification status</h2>
+    <p class="lede">The egress proxy blocked direct document fetches for every agent in this program. <strong>Not one agent opened a single primary PDF.</strong> Every quote is a search-index rendering of a real URL. Nothing was invented — every agent flagged this unprompted — but the distinction below is the whole point.</p>
+    <div class="legend">
+      <div><span class="chip c-ok">Confirmed</span><p>Independently corroborated across multiple distinct query framings and source domains during the fact-check pass.</p></div>
+      <div><span class="chip c-warn">Partial</span><p>Substantially right, but a material detail — a date, an amount, an attribution — is wrong. The correction is stated inline.</p></div>
+      <div><span class="chip c-bad">Refuted</span><p>Evidence contradicts the claim, or exact-phrase probes returned nothing at all. Do not use.</p></div>
+      <div><span class="chip c-dep">Unverified</span><p>Reached this page from a single agent's search summary and was never independently re-probed. Treat as a hypothesis.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="col">
+      <span class="snum">03 — What five independent literatures agree on</span>
+      <h2>The convergent signal</h2>
+      <p class="lede">These themes were named by unrelated fields with no shared authors. Repetition across non-overlapping literatures is the strongest evidence this program produced — stronger than any single finding.</p>
+    </div>
+    <div class="signals">
+      <div class="sig">
+        <span class="n">SIGNAL 01</span>
+        <h3>Annotation labour is the universal bottleneck</h3>
+        <p>Coral, camera traps, aerial surveys, bioacoustics, terrestrial ML and marine AI each independently name manual annotation or labelled-data scarcity as <em>the</em> binding constraint. Six literatures, one sentence.</p>
+        <p class="ev">⚠ The headline statistic once attached to this — "200 full-time days per million images" — returned <b>zero corroboration across three probes</b>. <span class="chip c-bad">Refuted</span></p>
+      </div>
+      <div class="sig">
+        <span class="n">SIGNAL 02</span>
+        <h3>Data fragmentation across incompatible systems</h3>
+        <p>The Water Quality Portal holds ~25M records of which ~14.5M have missing or ambiguous metadata — 130 distinct parameter names for nitrate-plus-nitrite alone. Federal fuel treatments, ocean FAIR data, microplastics and biodiversity all report the identical structural complaint.</p>
+        <p class="ev">✓ Confirmed — but the source is Sprague et al. <b>2017</b>, nine years old, not a current finding. <span class="chip c-warn">Partial</span></p>
+      </div>
+      <div class="sig">
+        <span class="n">SIGNAL 03</span>
+        <h3>Models break when moved to a new site</h3>
+        <p>BirdNET's predictive power runs 0.16–0.23 in North America, Oceania and Europe but <b>0.03–0.04 in Africa and Asia</b>. Four literatures name domain shift. Nobody sells operational benchmarking for environmental ML.</p>
+        <p class="ev">✓ BirdNET figures confirmed exactly. MegaDetector's time-lapse gap corroborated only as "~60%", and it is a trigger-mode effect, not generalization. <span class="chip c-ok">Confirmed</span></p>
+      </div>
+      <div class="sig">
+        <span class="n">SIGNAL 04</span>
+        <h3>Cost, not capability, gates adoption</h3>
+        <p>A practitioner survey names high cost as the main barrier across occupations. Coral monitoring is limited by "expensive equipment or substantial expert time"; soil carbon is "prohibitively expensive."</p>
+        <p class="ev">→ Commercial rule: sell the removal of an expert salary or a capex line. Never sell an addition.</p>
+      </div>
+      <div class="sig">
+        <span class="n">SIGNAL 05</span>
+        <h3>The gap between reported and real</h3>
+        <p>Only <b>2.6% of the ocean</b> is implemented and highly or fully protected, against far larger headline coverage claims. Fuel treatments can't be evaluated. NEPA produces no structured record of itself.</p>
+        <p class="ev">✓ Confirmed, peer-reviewed — Pike et al. 2024, <em>Conservation Letters</em>. Every one of these is a document-processing problem hiding inside a policy problem. <span class="chip c-ok">Confirmed</span></p>
+      </div>
+      <div class="sig">
+        <span class="n">THE META-THESIS</span>
+        <h3>Don't build the model</h3>
+        <p>The technical bottlenecks are increasingly solved by open-source tools and open models. The <em>deployment</em> bottleneck — a small organisation with no ML staff, no GPU and no budget getting an answer this week — is not.</p>
+        <p class="ev">→ Build the operational layer that makes existing open models usable by people who will never install VIAME.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap col">
+    <span class="snum">04 — The structural finding</span>
+    <h2>Who actually pays</h2>
+    <p class="lede">The funding agent mapped three years of raises, exits and shutdowns. The pattern is unambiguous and it should govern every decision on this page.</p>
+
+    <blockquote>Every environmental-AI category that survived did so by selling to a buyer whose payment was compelled by <strong>liability, regulation, or capital pricing</strong>. Every category that depended on voluntary corporate virtue either collapsed or never had commercial revenue in the first place — and knows it.<cite>Funding &amp; graveyard agent</cite></blockquote>
+
+    <h3>The graveyard</h3>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Company</th><th class="num">Raised</th><th>Fate</th><th>The lesson</th></tr></thead>
+        <tbody>
+          <tr><td><b>Gro Intelligence</b></td><td class="num">$117M</td><td>Shut down June 2024</td><td>The closest analogue to "AI environmental data platform for enterprises." Elite investors, famous founder, real data assets — could not find repeat buyers.</td></tr>
+          <tr><td><b>Running Tide</b></td><td class="num">7 years</td><td>Shut down June 2024</td><td>Had <b>Microsoft, Shopify and Stripe</b> as customers. Elite logos were one-off procurements, not recurring contracts.</td></tr>
+          <tr><td><b>Cervest</b></td><td class="num">&gt;$40M</td><td>Administration, 2023</td><td>Same "AI climate risk platform" pitch as Gro.</td></tr>
+          <tr><td><b>ClimateAi</b></td><td class="num">$38M</td><td>Wound down 2026</td><td>Same pitch again. Three deaths, one thesis.</td></tr>
+          <tr><td><b>Nori</b></td><td class="num">$17.25M</td><td>Shut down Sept <b>2024</b></td><td>Had volume — 700k+ tons on track — and still died. <span class="chip c-warn">Year corrected</span></td></tr>
+          <tr><td><b>Farmers Edge</b></td><td class="num">IPO C$17</td><td>Taken private at C$0.35</td><td><b>Roughly −98% from IPO.</b></td></tr>
+          <tr><td><b>Pachama</b></td><td class="num">$88M</td><td>Sold Nov 2025</td><td>Acquirer had raised only ~$60.8M. Read as distressed.</td></tr>
+          <tr><td><b>Planetly</b></td><td class="num">acquired</td><td>Shut down ~1 yr later</td><td>All ~200 staff laid off post-acquisition. The canonical warning.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Categories that never had a buyer</h3>
+    <p>This is the finding that killed the most emotionally appealing opportunities in the corpus, including the one with the founder's only non-transferable geographic advantage.</p>
+    <ul class="tight">
+      <li><b>Biodiversity credits.</b> Of ~11.6 million credits issued or projected, <b>124,183 sold and 1,285 retired — ever</b>. The market is roughly 20 transactions, mostly under $50k. Surveyed participants report the credits serve "marketing and branding" with no direct commercial benefit.</li>
+      <li><b>Conservation technology.</b> Ai2 describes its own Skylight — the leading IUU-fishing platform — as a <b>"zero-revenue AI for the environment program"</b> whose API is "not intended for commercial use." Global Fishing Watch is free. Wild Me, the most technically successful conservation AI project ever built, had to merge into another nonprofit.</li>
+      <li><b>NGOs as customers.</b> Every verified NGO software purchase is back-office infrastructure from a major vendor — Power BI, SAS, Esri. <b>No evidence was found of any NGO paying a subscription to an early-stage conservation software company.</b> Nature-tech VC exceeded $2B in 2024: the sector is investor-funded, not customer-funded.</li>
+    </ul>
+    <div class="alert warnbox">
+      <h3>This is not an unbuilt market</h3>
+      <p>It is a market where the best-funded, best-engineered players deliberately give the product away, because nobody will pay. <b>The price has already been set at zero.</b> Scoring that as whitespace would be a category error.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="col">
+      <span class="snum">05 — Scored on your rubric</span>
+      <h2>The ranked eight</h2>
+      <p class="lede">Environmental impact 20% · Severity 15% · Willingness to pay 15% · Competitive whitespace 15% · AI advantage 10% · Data availability 10% · MVP feasibility 10% · Founder fit 5%.</p>
+      <p>Two scoring rules were applied throughout: whitespace measures <em>commercial</em> whitespace, not technical novelty; and willingness-to-pay is scored on evidence of payment in that specific category, never on plausibility.</p>
+    </div>
+
+    <div class="rank demoted">
+      <div class="rank-head">
+        <span class="rank-n">1</span>
+        <div class="rank-t">
+          <h3>Small-water-system compliance copilot <span style="color:var(--bad)">— demoted</span></h3>
+          <p class="who">LCRI school &amp; childcare roster construction + revised Consumer Confidence Report generation &nbsp;<span class="chip c-bad">Whitespace refuted</span></p>
+        </div>
+        <div class="rank-score"><span class="v">7.90</span><span class="l">as scored</span></div>
+      </div>
+      <div class="bars">
+        <div><div class="bar-l"><span>Environmental</span><b>9</b></div><div class="bar-t"><i class="hi" style="width:90%"></i></div></div>
+        <div><div class="bar-l"><span>Severity</span><b>9</b></div><div class="bar-t"><i class="hi" style="width:90%"></i></div></div>
+        <div><div class="bar-l"><span>Pays</span><b>6</b></div><div class="bar-t"><i class="lo" style="width:60%"></i></div></div>
+        <div><div class="bar-l"><span>Whitespace</span><b>7</b></div><div class="bar-t"><i style="width:70%"></i></div></div>
+        <div><div class="bar-l"><span>AI edge</span><b>7</b></div><div class="bar-t"><i style="width:70%"></i></div></div>
+        <div><div class="bar-l"><span>Data</span><b>9</b></div><div class="bar-t"><i class="hi" style="width:90%"></i></div></div>
+        <div><div class="bar-l"><span>MVP</span><b>8</b></div><div class="bar-t"><i style="width:80%"></i></div></div>
+        <div><div class="bar-l"><span>Fit</span><b>8</b></div><div class="bar-t"><i style="width:80%"></i></div></div>
+      </div>
+      <div class="rank-body">
+        <dl>
+          <dt>The gap</dt><dd>By 1 Nov 2027 every community water system must submit a list of all schools and licensed childcare facilities it serves. <b>No utility holds that roster.</b> The three inputs live in three unrelated places — state childcare licensing registries, NCES school directories, and water-system service-area boundaries — and nobody has joined them. All three are free and public; EPA released service-area boundaries v2 in Sept 2025, and the EPIC/SimpleLab dataset covers 45,973 systems under MIT licence. Pure geospatial entity resolution.</dd>
+          <dt>The buyer</dt><dd><b>Not the utility.</b> The state Rural Water Association circuit-rider program manager. NRWA took $9.1M of EPA's $30.7M small-system award (July 2026) plus a five-year USDA Circuit Rider contract. One sale covers hundreds of systems.</dd>
+          <dt>First 90 days</dt><dd>Build the roster join for one state end to end, produce the actual deliverable file for 20 real water systems, and take it to that state's Rural Water Association. <b>Do not build a portal first.</b></dd>
+          <dt>Kill risk</dt><dd>The regulatory substrate moved twice in 24 months. <em>AWWA v. EPA</em> was briefed through April 2026 with <b>no decision found</b>, and EPA has proposed pushing PFAS compliance 2029→2031 and rescinding four MCLs.</dd>
+        </dl>
+        <div class="alert" style="margin-bottom:0">
+          <h3>Round-two verification: the deadline held, the market didn't</h3>
+          <p><b>✓ Confirmed:</b> the 1 Nov 2027 date, 5 samples per school / 2 per childcare, ≥20% of facilities per year, and the two-documented-attempts outreach rule — all corroborated by 3+ independent sources including EPA's own factsheets. <b>The mandated audit artifact is real.</b></p>
+          <p><b>✓ The litigation risk was overstated and mis-aimed.</b> <em>AWWA v. EPA</em> has never stayed the rule; argument is set for 30 Sept 2026; and AWWA is attacking the <b>lead service line replacement mandate — not §141.92 school provisions.</b> The likeliest adverse ruling doesn't touch this opportunity.</p>
+          <p><b>✗ But "no vendor does this" is false.</b> <b>120Water</b> ships a School &amp; Daycare Sampling product, a Facilities product, an LCRI product, and a state-agency Lead-in-Facilities app — and ran a 2025 webinar specifically on this requirement, with statewide references including the Indiana Finance Authority and Chicago Public Schools.</p>
+          <p><b>✗ The buyer thesis is inverted.</b> Rural Water Associations don't buy software — <b>they endorse it.</b> 120Water already holds the NRWA partnership slot nationally plus six state associations, with preferred pricing for 31,000+ member utilities, framed explicitly around Lead and Copper compliance. The $9.1M award funds human technical assistance, not tooling.</p>
+          <p><b>✗ And EPA partially commoditised the wedge two months ago.</b> Its June 2026 List Resource Guide tells utilities to build the roster from <b>billing records, service line inventories, and existing state facility inventories</b> — not spatial modelling. A utility knows whom it bills, and a billing file is stronger legal evidence than a polygon intersection.</p>
+          <p><b>What actually survives:</b> the 50-state licensed-childcare data asset — normalised, geocoded, continuously maintained. California and Texas publish bulk CSV; <b>New York excludes all of NYC; Florida offers a search UI only.</b> That is real moat material, plus the genuine entity-resolution problem billing records fail at: a daycare inside a church, strip mall or apartment complex on someone else's meter. <b>Reframe from product to data layer — sold into 120Water, Trinnex and BlueConduit rather than against them.</b></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="rank">
+      <div class="rank-head">
+        <span class="rank-n">2</span>
+        <div class="rank-t">
+          <h3>Phantom-load intelligence</h3>
+          <p class="who">Which data-centre interconnection requests are real &nbsp;<span class="chip c-ok">Core facts confirmed</span></p>
+        </div>
+        <div class="rank-score"><span class="v">7.75</span><span class="l">weighted</span></div>
+      </div>
+      <div class="bars">
+        <div><div class="bar-l"><span>Environmental</span><b>9</b></div><div class="bar-t"><i class="hi" style="width:90%"></i></div></div>
+        <div><div class="bar-l"><span>Severity</span><b>8</b></div><div class="bar-t"><i style="width:80%"></i></div></div>
+        <div><div class="bar-l"><span>Pays</span><b>7</b></div><div class="bar-t"><i style="width:70%"></i></div></div>
+        <div><div class="bar-l"><span>Whitespace</span><b>8</b></div><div class="bar-t"><i style="width:80%"></i></div></div>
+        <div><div class="bar-l"><span>AI edge</span><b>9</b></div><div class="bar-t"><i class="hi" style="width:90%"></i></div></div>
+        <div><div class="bar-l"><span>Data</span><b>7</b></div><div class="bar-t"><i style="width:70%"></i></div></div>
+        <div><div class="bar-l"><span>MVP</span><b>6</b></div><div class="bar-t"><i class="lo" style="width:60%"></i></div></div>
+        <div><div class="bar-l"><span>Fit</span><b>6</b></div><div class="bar-t"><i class="lo" style="width:60%"></i></div></div>
+      </div>
+      <div class="rank-body">
+        <dl>
+          <dt>The gap</dt><dd>Unlike generator requests, load interconnection requests carry <b>no standardised transparency requirement</b>. The same project gets shopped to multiple utilities in multiple states, and utilities build capital plans and rate cases on the inflated total. Wood Mackenzie projects only <b>28% of 1,066 GW</b> of US requests will be honoured; ERCOT went from ~63 GW to ~226 GW of large-load requests in twelve months.</dd>
+          <dt>Why it scores</dt><dd>Best agentic-extraction-plus-entity-resolution fit in the corpus: dedupe projects from county zoning agendas, air permits, LLC and land records, utility filings and job postings into entities with a probability-of-build score. Avoided generation overbuild is plausibly the largest climate lever here — and it is a <em>byproduct</em>. You sell market intelligence.</dd>
+          <dt>The buyer</dt><dd>The diligence lead at an infrastructure fund underwriting data-centre or gas-peaker projects. Prioritise the fund; utilities are 12–24 month cycles with SOC 2 and prudency review.</dd>
+          <dt>First 90 days</dt><dd>Pick ERCOT. Build the county-level project entity graph for 10–15 Texas counties, publish a free ranked tracker of which announced projects have actually pulled air permits and filed plats, and let inbound identify the buyer.</dd>
+          <dt>Kill risk</dt><dd>The buyer with the pain (the utility) is the one you can't reach; the one you can reach (a fund) buys one-off diligence, not ARR — the Running Tide failure mode.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="rank demoted">
+      <div class="rank-head">
+        <span class="rank-n">3</span>
+        <div class="rank-t">
+          <h3>Zone 0 defensible-space inspection <span style="color:var(--bad)">— demoted</span></h3>
+          <p class="who">California local fire agencies &nbsp;<span class="chip c-bad">2 pillars refuted</span></p>
+        </div>
+        <div class="rank-score"><span class="v">7.70</span><span class="l">as scored</span></div>
+      </div>
+      <div class="rank-body">
+        <dl>
+          <dt>What survives</dt><dd>Defensible-space inspection is an <b>in-force obligation under PRC 4291</b> that agencies perform today — which is exactly why Fire Aside already has paying customers. The market is real with or without the 0–5 ft rule. Verified second driver: 10 CCR §2644.9 forces insurers using wildfire risk in pricing to discount for <em>documented</em> mitigation, and the FAIR Plan stood up 12 discrete discounts effective 15 Nov 2025, up to 16.4%. $135M in CAL FIRE prevention grants exists.</dd>
+          <dt>What broke</dt><dd>The urgency was fabricated (no effective date, 3–5 year phase-in). The procurement advantage never applied to local agencies. The incumbent charges $85k/yr at one city, not the inferred $5–50k. The FY25–26 CAL FIRE window <b>closed 6 Aug 2025</b>, grantees are agencies not vendors, and software eligibility is unestablished.</dd>
+          <dt>Where it lands</dt><dd>A credible but ordinary opportunity with a slow-burning tailwind and a funded incumbent — not a twelve-month window. It keeps its scored 7.70 because the scoring agent already gave it the lowest whitespace mark in the top eight; what it loses is the "start Monday" slot.</dd>
+        </dl>
+        <div class="alert" style="margin-bottom:0">
+          <h3>Round-two verification: no window, and the budget mostly isn't there</h3>
+          <p><b>The clock hasn't started.</b> Eight days after the vote, Zone 0 still had not been submitted to OAL. The compliance clocks run from Secretary of State publication — so Phase 1 for existing structures is <b>~late 2029</b> and Phase 2 <b>~late 2031</b>. There is no enforcement cliff in the next twelve months. Berkeley, the most aggressive jurisdiction in California, adopted in April 2025 and still slipped its own inspections from January to May 2026.</p>
+          <p><b>Scope resolved:</b> Zone 0 reaches the State Responsibility Area plus <b>Very High</b> FHSZ in the Local Responsibility Area. <b>"High" FHSZ is not covered</b> — that appears only in the separate AB 38 point-of-sale disclosure statute.</p>
+          <p><b>The $85,000 figure was mis-attributed.</b> Berkeley's actual Fire Aside contract is <b>$60,000 over two years</b> — about $30k/yr — with an option to extend to $160,000 total. The $85,000 belonged to <b>Tablet Command</b>, a different product. Grass Valley bought Fire Aside for <b>$11,660.80</b> and needed a budget adjustment from a local sales-tax measure to afford it.</p>
+          <p><b>And the decisive finding:</b> in the largest multi-agency deployment on record — the entire Lake Tahoe Basin — <b>the fire agencies didn't pay at all.</b> The Parasol Tahoe Community Foundation and the Tahoe Fund bought it for them. A market where a philanthropist buys the software for the customer is a market with no software budget.</p>
+          <p><b>Plus a free competitor:</b> OSFM publishes a <b>"Model Defensible Space Inspection platform"</b> so jurisdictions can build their own, and CAL FIRE already runs its inspection intake on Esri Survey123. Every prospect's alternative costs $0 on a licence they already hold.</p>
+          <p><b>On the incumbent:</b> Fire Aside is 18 people, seed-stage, no Series A — beatable on paper. But it is already deployed in <b>Berkeley</b> (first Zone 0 ordinance in the state, with a formal implementation plan) and <b>Marin</b> (a JPA with $24.1M/yr and a dedicated parcel tax), and it already captures the parcel attributes, photos and GPS that Zone 0 requires. <b>Zone 0 is a form change for them, not a product build.</b> Meanwhile 3Di claims more defensible-space inspections than any other SaaS nationwide. Of 838 California fire departments, 212 are all-volunteer — the serviceable set is a few hundred, and Fire Aside claims 100+ agencies already.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="rank">
+      <div class="rank-head">
+        <span class="rank-n">4</span>
+        <div class="rank-t">
+          <h3>Industrial stormwater citizen-suit exposure scoring</h3>
+          <p class="who">California SMARTS database &nbsp;<span class="chip c-dep">Market size unknown</span></p>
+        </div>
+        <div class="rank-score"><span class="v">7.55</span><span class="l">weighted</span></div>
+      </div>
+      <div class="bars">
+        <div><div class="bar-l"><span>Environmental</span><b>6</b></div><div class="bar-t"><i class="lo" style="width:60%"></i></div></div>
+        <div><div class="bar-l"><span>Severity</span><b>7</b></div><div class="bar-t"><i style="width:70%"></i></div></div>
+        <div><div class="bar-l"><span>Pays</span><b>8</b></div><div class="bar-t"><i style="width:80%"></i></div></div>
+        <div><div class="bar-l"><span>Whitespace</span><b>9</b></div><div class="bar-t"><i class="hi" style="width:90%"></i></div></div>
+        <div><div class="bar-l"><span>AI edge</span><b>6</b></div><div class="bar-t"><i class="lo" style="width:60%"></i></div></div>
+        <div><div class="bar-l"><span>Data</span><b>9</b></div><div class="bar-t"><i class="hi" style="width:90%"></i></div></div>
+        <div><div class="bar-l"><span>MVP</span><b>9</b></div><div class="bar-t"><i class="hi" style="width:90%"></i></div></div>
+        <div><div class="bar-l"><span>Fit</span><b>7</b></div><div class="bar-t"><i style="width:70%"></i></div></div>
+      </div>
+      <div class="rank-body">
+        <dl>
+          <dt>The gap</dt><dd>SMARTS is public and is <em>literally the mechanism plaintiffs use to select targets</em> for Clean Water Act citizen suits. A facility with a rolling exceedance pattern is visible to LA Waterkeeper before it is visible to its own plant manager. A small, identifiable set of repeat filers drives most California filings, so filer behaviour is learnable — and §505 requires a 60-day Notice of Intent, a fixed exploitable warning window.</dd>
+          <dt>Why it scores</dt><dd>The purest expression of the graveyard thesis in the corpus: the buyer is compelled by <b>strict liability</b>, and you sell into a litigation-avoidance budget, which is categorically larger than a compliance-software budget. And the target list <em>is</em> the dataset — you can generate a ranked outbound list of at-risk facilities for free, which solves the no-sales-relationships problem better than anything else here.</dd>
+          <dt>The buyer</dt><dd>The EHS or plant manager at a permitted facility with a live exceedance pattern — metal recyclers, scrap yards, ports, logistics, ready-mix. Second buyer: outside environmental counsel at regional defence firms, who will resell it.</dd>
+          <dt>First 90 days</dt><dd>Build the exceedance-pattern and filer-behaviour scoring engine, backtest it against 2023–25 notices already filed, publish the accuracy number, then cold-email the top 100 at-risk facilities with their own free score.</dd>
+        </dl>
+        <div class="alert okbox" style="margin-bottom:0">
+          <h3>Round-two verification: the last idea standing — and the count is one letter away</h3>
+          <p><b>The premise of the question was wrong, and that matters.</b> The prior agent's "zero results" was not a search failure — <b>the State Water Board does not publish notice counts.</b> It ran a single tracking exercise covering 60 notices from 2009–2010 and published it in 2011. Nothing since.</p>
+          <p><b>But the filer ecosystem is unambiguously alive and expanding.</b> The Ninth Circuit decided <em>Inland Empire Waterkeeper v. Corona Clay</em> on 5 Aug 2026 — affirming citizen-plaintiff standing and holding that "waters of the United States" is a merits question, not jurisdictional, which keeps cases alive past dismissal. San Diego Coastkeeper sued SeaWorld in March 2025. LA Waterkeeper is actively hiring a Stormwater Compliance Manager. A new entrant, Pacific Environmental Advocates, has appeared. SCOTUS declined to narrow citizen suits in June 2025.</p>
+          <p><b>The economics support a subscription.</b> Average California consent decree exceeds <b>$79,000</b>; typical range $75k–$250k; one documented decree ran <b>$325,000, of which $225,500 went to the plaintiff org and its lawyers.</b> Statutory exposure is $68,445 per violation per day. A facility facing that can rationally pay several thousand a year to avoid it. There are ~14,000 IGP permittees.</p>
+          <p><b>The data is genuinely usable</b> — the strongest technical finding in the program. Bulk CSV on California's open-data portal: a <b>660 MB industrial monitoring file</b>, plus violations, enforcement actions and inspections, plus a queryable ArcGIS REST layer. ⚠️ One caveat: some resource timestamps rendered as 2020. Verify refresh cadence before building.</p>
+          <p><b>⚠️ The medium-term threat:</b> EPA's proposed "Prior Notice of Citizen Suits" rule (Federal Register, 24 Feb 2026) would create a <b>free public centralised repository of notices</b> — precisely the historical filer-behaviour corpus this product's moat depends on.</p>
+          <p><b>The move:</b> file a California Public Records Act request with the State Water Board Office of Enforcement for all CWA §505 notices received 2023–2026. The Board is <b>statutorily copied on every one of them.</b> That single letter converts the largest unknown in this entire program into fact — and it <em>is</em> the dataset. If it returns 600 notices, you have the market size and the training corpus in one motion.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="rank">
+      <div class="rank-head">
+        <span class="rank-n">5</span>
+        <div class="rank-t"><h3>Broker-side wildfire risk score appeals</h3><p class="who">Retail personal-lines agencies in wildfire ZIPs &nbsp;<span class="chip c-warn">Driver confirmed, details unverified</span></p></div>
+        <div class="rank-score"><span class="v">7.20</span><span class="l">weighted</span></div>
+      </div>
+      <div class="rank-body"><dl>
+        <dt>The gap</dt><dd>California created a statutory right to see your wildfire risk score and appeal it. <b>Every vendor built the carrier side</b> — ZestyAI, Delos, Faura. The insurer holds the model; the homeowner holds the photos; nobody built the bridge.</dd>
+        <dt>The buyer</dt><dd>The agency principal who loses commission on every non-renewal they cannot re-place. <b>Not the homeowner</b> — that's a one-time purchase under duress with terrible retention.</dd>
+        <dt>First 90 days</dt><dd>Interview 20 retail agents, then <b>hand-run 10 real appeals manually before writing any product code.</b> If manual appeals don't move scores, the product is dead and you know in six weeks for free.</dd>
+        <dt>Verify first</dt><dd>That an appeal actually changes a score in practice. Every FAIR Plan figure in circulation came from insurance-marketing sites.</dd>
+      </dl></div>
+    </div>
+
+    <div class="rank">
+      <div class="rank-head">
+        <span class="rank-n">6</span>
+        <div class="rank-t"><h3>Distribution-level interconnection normalisation</h3><p class="who">Commercial solar + storage developers &nbsp;<span class="chip c-dep">Unverified</span></p></div>
+        <div class="rank-score"><span class="v">7.20</span><span class="l">weighted</span></div>
+      </div>
+      <div class="rank-body"><dl>
+        <dt>The gap</dt><dd>Everyone chases the transmission queue because LBNL publishes clean data free. <b>Nobody has normalised distribution interconnection rules, screens, forms and hosting-capacity maps across ~3,000 US utilities</b> — because it is grinding janitorial integration work.</dd>
+        <dt>Why it scores</dt><dd>The moat is accumulated data labour rather than model IP — precisely the moat a solo founder can build and a VC-backed team won't fund. Tied for highest whitespace in the top eight.</dd>
+        <dt>Kill risk</dt><dd>Coverage <em>is</em> the product. Three states isn't useful to a national developer, and reaching thirty may outlast the runway. Lowest MVP feasibility in the top eight for exactly this reason.</dd>
+      </dl></div>
+    </div>
+
+    <div class="rank">
+      <div class="rank-head">
+        <span class="rank-n">7</span>
+        <div class="rank-t"><h3>Small-utility &amp; co-op wildfire vegetation long tail</h3><p class="who">Municipal utilities and rural electric co-ops &nbsp;<span class="chip c-bad">Hard data blocker</span></p></div>
+        <div class="rank-score"><span class="v">6.85</span><span class="l">weighted</span></div>
+      </div>
+      <div class="rank-body"><dl>
+        <dt>The gap</dt><dd>Sits downstream of the category with the most proven buyers anywhere in the corpus — Pano AI $89M total across 15 utilities, Overstory $43M serving 6 of the 10 largest in the Americas, AiDash $160.5M and <b>an announced $350M acquisition by Schneider Electric</b>. The incumbents' own marketing confirms the ~3,000-utility long tail is unserved.</dd>
+        <dt>Why only seventh</dt><dd><b>Line geometry is confidential. There is no data access without a utility contract.</b> That is a chicken-and-egg a founder with no enterprise relationships cannot break — it drags data availability to 3 and MVP feasibility to 4.</dd>
+        <dt>First 90 days</dt><dd><b>Do not build.</b> Get one co-op to share circuit geometry under NDA in exchange for free work. If nobody will, the idea is closed and you lost three weeks, not a year.</dd>
+      </dl></div>
+    </div>
+
+    <div class="rank verified">
+      <div class="rank-head">
+        <span class="rank-n">8</span>
+        <div class="rank-t"><h3>Phase I ESA historical-records automation</h3><p class="who">Regional environmental consulting firms &nbsp;<span class="chip c-ok">Fully verified · reinforced</span></p></div>
+        <div class="rank-score"><span class="v">6.55</span><span class="l">weighted</span></div>
+      </div>
+      <div class="bars">
+        <div><div class="bar-l"><span>Environmental</span><b>5</b></div><div class="bar-t"><i class="lo" style="width:50%"></i></div></div>
+        <div><div class="bar-l"><span>Severity</span><b>6</b></div><div class="bar-t"><i class="lo" style="width:60%"></i></div></div>
+        <div><div class="bar-l"><span>Pays</span><b>9</b></div><div class="bar-t"><i class="hi" style="width:90%"></i></div></div>
+        <div><div class="bar-l"><span>Whitespace</span><b>4</b></div><div class="bar-t"><i class="lo" style="width:40%"></i></div></div>
+        <div><div class="bar-l"><span>AI edge</span><b>8</b></div><div class="bar-t"><i style="width:80%"></i></div></div>
+        <div><div class="bar-l"><span>Data</span><b>8</b></div><div class="bar-t"><i style="width:80%"></i></div></div>
+        <div><div class="bar-l"><span>MVP</span><b>7</b></div><div class="bar-t"><i style="width:70%"></i></div></div>
+        <div><div class="bar-l"><span>Fit</span><b>8</b></div><div class="bar-t"><i style="width:80%"></i></div></div>
+      </div>
+      <div class="rank-body">
+        <div class="alert okbox" style="margin-top:0">
+          <h3>The only top-8 item that emerged from fact-check stronger</h3>
+          <p>Every supporting claim verified — including the <b>D.C. Circuit's unanimous 18 Aug 2026 affirmance of EPA's CERCLA PFOA/PFOS designation</b>, applying <em>Loper Bright</em>. The liability driving demand is <em>expanding</em> while federal environmental review contracts around it.</p>
+        </div>
+        <dl>
+          <dt>The gap</dt><dd>Highest willingness-to-pay score in the top eight, lowest whitespace. Consultants <em>already pay</em> EDR/LightBox for this, per report, on a $2,200–4,000 report price — an incumbent reselling free public data: the Library of Congress's ~35,000 Sanborn maps, USGS topoView, NAIP and EarthExplorer aerials.</dd>
+          <dt>Why demand holds</dt><dd>Driven by CERCLA §101(35)(B), untouched by the NEPA rescission and the WOTUS rollback. A Phase I meeting ASTM E1527-21 is the <b>only</b> route to the innocent-landowner liability defence, and lenders require it.</dd>
+          <dt>The narrowing that matters</dt><dd>Of the four named competitors, <b>V7 Go and Nomic are horizontal document-AI platforms, CaseMark is legal-document AI, and only Quire is environmental software.</b> That contests the <em>report-drafting</em> layer — not the <b>historical-records layer</b>: georeferencing Sanborn maps, reading aerials for fill and tank shadows, OCR-ing city directories for former dry cleaners. That's a vision-and-geospatial problem, and it's where the incumbent extracts most margin.</dd>
+          <dt>The real gate</dt><dd>Not competitors — <b>liability</b>. The industry has documented anxiety about AI-generated Phase I content, and a Phase I exists to confer a legal defence. If a firm's E&amp;O carrier says no, the sale dies regardless of quality.</dd>
+          <dt>Positioning</dt><dd>Self-serve, $1k–$25k/yr, sold as <em>win more bids at the same headcount</em> — never <em>reduce your hours</em>. Firms run ~80% utilisation targets.</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap col">
+    <span class="snum">06 — Testing the rubric against itself</span>
+    <h2>If money mattered more</h2>
+    <p class="lede">Your rubric weights environmental impact (20%) above willingness to pay (15%), so it can rank a high-impact unfundable idea above a fundable one. Here is the same eight re-scored at WTP 25% and impact 10%.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th class="num">New</th><th>Opportunity</th><th class="num">Refit</th><th class="num">As scored</th><th>Move</th></tr></thead>
+        <tbody>
+          <tr><td class="num">1</td><td>Zone 0 defensible space</td><td class="num"><b>7.90</b></td><td class="num">7.70</td><td>▲ 2</td></tr>
+          <tr><td class="num">2</td><td>Industrial stormwater</td><td class="num"><b>7.75</b></td><td class="num">7.55</td><td>▲ 2</td></tr>
+          <tr><td class="num">3</td><td>Small-water-system copilot</td><td class="num">7.60</td><td class="num">7.90</td><td>▼ 2</td></tr>
+          <tr><td class="num">4</td><td>Phantom-load intelligence</td><td class="num">7.55</td><td class="num">7.75</td><td>▼ 2</td></tr>
+          <tr><td class="num">5</td><td>Broker-side wildfire appeals</td><td class="num">7.20</td><td class="num">7.20</td><td>—</td></tr>
+          <tr><td class="num">6</td><td>Distribution interconnection</td><td class="num">7.10</td><td class="num">7.20</td><td>—</td></tr>
+          <tr><td class="num">7</td><td>Phase I ESA records</td><td class="num">6.95</td><td class="num">6.55</td><td>▲ 1</td></tr>
+          <tr><td class="num">8</td><td>Small-utility wildfire VM</td><td class="num">6.75</td><td class="num">6.85</td><td>▼ 1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The two picks with documented payment in-category take the top slots; the two with the highest impact scores both drop. But <strong>membership of the top four does not change under either weighting</strong> — and that is the useful signal. Treat the top four as the real shortlist and the ordering within it as a judgement call, not a calculation.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap col">
+    <span class="snum">07 — What died and why</span>
+    <h2>Rejected</h2>
+    <p class="lede">The negative findings are worth as much as the positive ones. Each of these was seriously considered and killed by specific evidence.</p>
+    <div class="kill">
+      <div>
+        <h4>Temperate reef &amp; kelp forest CV</h4>
+        <p><b>The most painful cut.</b> Founder fit 10/10 — SBC LTER, PISCO, Channel Islands KFM, Reef Check, CINMS and NCEAS all within miles of UCSB, 40+ years of overlapping public data, four incompatible protocols nobody has crosswalked. It dies on one factor: the leading platforms in this space are given away free by their own builders. <em>Build it on weekends for the marine credential; don't make it the company.</em></p>
+      </div>
+      <div>
+        <h4>CEQA / CEQAnet tooling</h4>
+        <p>AB 130/SB 131 creates a new hand-done exemption test <em>by removing the much larger task it substitutes for</em>. Projects clearing the screen generate no EIR, no scope, and no mitigation monitoring. <b>A new compliance task created by a deregulatory statute is not a market</b> — the statute's purpose is to reduce total work.</p>
+      </div>
+      <div>
+        <h4>Landfill methane discrepancy ranking</h4>
+        <p>Superb data story — the mandated method achieves 67% rate coverage at closed sites but <b>17% at open sites</b>. But the methane fee was repealed by CRA in March 2025, the Waste Emissions Charge is barred until 2034, and MethaneSAT went dark. <em>A ranking of who is under-reporting is a press release, not a product.</em></p>
+      </div>
+      <div>
+        <h4>Consumer "safe to buy from" app</h4>
+        <p>GoodGuide built exactly this — 175,000 products, all three dimensions — and was dismantled and killed in 2020. The labour data does not exist at barcode resolution. And the closer: <b>ByHeart.</b> A clean-ingredient scorer would have ranked the challenger brand above Abbott right up to its recall. <em>The core promise is unfulfillable in your own motivating example.</em></p>
+      </div>
+      <div>
+        <h4>Hazard mitigation plan generation</h4>
+        <p>A rare, free, exact go-to-market list — FEMA publishes every jurisdiction's plan expiry date, with ~22% of the US population uncovered. Dead on money: BRIC was terminated, litigated, reinstated and is now targeted for reduction — <b>and FEMA is actively reducing application burden, so the regulator is eating the market.</b></p>
+      </div>
+      <div>
+        <h4>Carbon markets &amp; offset MRV</h4>
+        <p>Total 2024 VCM transaction value <b>$535M</b> — smaller than a single Series C — with volume down 25%. Nori dead. Running Tide dead with Microsoft, Shopify and Stripe as customers. Biodiversity credits: 1,285 retired ever.</p>
+      </div>
+      <div>
+        <h4>Carbon-aware scheduling</h4>
+        <p>The clearest do-not-build in the corpus. Electricity Maps <b>discontinued its own marginal-emissions product in 2025</b> on veracity grounds, and US and EU legislation now prohibits its use in reporting. Regulation moved against the value case.</p>
+      </div>
+      <div>
+        <h4>EPR &amp; California textile SB 707</h4>
+        <p>Good problem, wrong sales motion — enterprise procurement with no references — and the regulations don't bite until <b>1 July 2028</b>, past the runway. <em>Revisit in 18 months.</em></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap col">
+    <span class="snum">08 — Where round two left it</span>
+    <h2>Three demotions and one letter</h2>
+    <p class="lede">Three further verification agents were sent at the top three candidates. All three targets were demoted. That is the most useful outcome this program could have produced — it means the ranking was testable, and it was tested.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Candidate</th><th>What round two found</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><b>#1 Water-system copilot</b></td><td>Deadline confirmed and litigation risk overstated — but 120Water already ships the product, RWAs endorse software rather than buy it, and EPA published the free how-to guide in June 2026</td><td><span class="chip c-bad">Demoted</span></td></tr>
+          <tr><td><b>#3 Zone 0 inspection</b></td><td>Still not at OAL; real deadlines are ~2029 and ~2031; contracts are $11.7k–$30k/yr; in the largest deployment a foundation bought it for the agencies; OSFM ships a free alternative</td><td><span class="chip c-bad">Demoted</span></td></tr>
+          <tr><td><b>#4 Industrial stormwater</b></td><td>The count isn't published anywhere — but filers are active and expanding, the economics support a subscription, and the data is genuinely bulk-downloadable</td><td><span class="chip c-warn">Survives, unproven</span></td></tr>
+          <tr><td><b>#8 Phase I ESA</b></td><td>Untouched. Every supporting claim verified in the first pass, including a liability driver that is expanding</td><td><span class="chip c-ok">Intact</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert okbox">
+      <h3>The one action worth taking this week</h3>
+      <p><b>File a California Public Records Act request with the State Water Board Office of Enforcement for all Clean Water Act §505 60-day notices received 2023–2026.</b></p>
+      <p>The Board is statutorily copied on every notice, so it holds them all even though it publishes none. The request costs a letter. It resolves the single largest unknown in this entire program — and the response <em>is</em> the training corpus for the product it would justify. No other check on this page has that property: it converts a research question and a business asset with one action.</p>
+    </div>
+
+    <p>A note on how the corrections compounded. The fact-checker caught the Zone 0 deadline error and reported Berkeley's Fire Aside contract at $85,000/year. The third-round agent then found that figure was <b>mis-attributed — it belonged to Tablet Command</b>, a different product, and the real contract was $60,000 over two years. Each pass caught the previous one's errors. That is what the layered design was for, and it is the reason to trust the shape of these conclusions more than any individual number in them.</p>
+
+    <h3>What would overturn the whole analysis</h3>
+    <p>One assumption is doing more work than any other: that nobody in conservation pays for software. It killed kelp forests, passive acoustics, coral ground-truth and bioacoustic validation in a single stroke — including the one opportunity where the founder has a genuinely non-transferable advantage.</p>
+    <blockquote>If any conservation NGO, sanctuary program or LTER site is documented paying a real subscription to an early-stage software company, the Santa Barbara kelp and temperate-reef opportunity goes back into serious contention.<cite>Scoring agent, "What would change my mind"</cite></blockquote>
+  </div>
+</section>
+
+<section>
+  <div class="wrap col">
+    <span class="snum">09 — The side question</span>
+    <h2>An app for companies safe to buy from</h2>
+    <p class="lede">Asked separately: does anything combine environmental responsibility, labour practices and genuine product health in one place? No — and the reason is instructive.</p>
+    <p><b>GoodGuide built exactly this product</b> — 175,000 products, 5,000 companies, rated on health, environment and social. UL bought it in 2012, stripped the social and environmental dimensions in 2016, and shut it down on 1 June 2020. Buycott, purpose-built for brand→parent mapping, has been dormant since 2016. Free2Work, Ethical Barcode and RESET are all defunct.</p>
+    <p>The survivors all narrowed to stay alive. Yuka does health only. Good On You does people and planet but only in fashion and beauty. Ethical Consumer does both across categories but is UK-only, paywalled, and has no scanner.</p>
+    <p><strong>The structural blocker:</strong> the labour data does not exist at product resolution. KnowTheChain — the most credible public forced-labour benchmark — covers ~145 companies on a two-year refresh. Sourcemap has real traceability but it is proprietary enterprise data, locked per customer. Any app claiming a per-barcode labour score is inferring, not knowing.</p>
+    <div class="alert warnbox">
+      <h3>The argument that ends it</h3>
+      <p><b>ByHeart.</b> The clean-ingredient challenger brand recalled all product in November 2025 in an infant botulism outbreak. An ingredient-list scorer would have ranked it <em>above</em> Abbott right until the recall. If the core promise is "we know which is safer," and the honest answer in your own motivating example is <em>nobody could have known</em>, the promise is unfulfillable at inception.</p>
+    </div>
+    <p>The one defensible fragment: <strong>a corporate-accountability layer no scanner has.</strong> Yuka reads ingredients; nothing reads litigation, recalls, enforcement actions and parent-company ownership. FDA recalls, class-action settlements, CPSC notices and UFLPA entity listings are public, structured, dated and change weekly. That is entity resolution over messy public filings — not "an LLM reads sustainability reports," which just launders marketing into scores.</p>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap col">
+    <p><b>Method.</b> Ten agents across three waves: six discovery agents (problem scout, green-AI footprint, ocean &amp; diving, land &amp; terrestrial, research-gap hunter, ethical products), two market agents (funding &amp; graveyard, regulation &amp; procurement), an adversarial fact-checker, and a scoring agent. Every agent was required to cite source URLs, flag unverified claims explicitly, and end with a self-critique naming its own weakest findings.</p>
+    <p><b>The constraint that shaped everything.</b> The network egress proxy blocked direct document fetches for every agent. No primary PDF was opened by anyone. Quotes are search-index renderings of real URLs — nothing was fabricated, and every agent disclosed this unprompted — but the fact-check pass exists precisely because search summaries are not sources.</p>
+    <p><b>The scoring agent finished before the fact-check reached it.</b> Its original recommendation was Zone 0. The demotion on this page applies the agent's own stated decision rule — <em>"Board of Forestry confirms Zone 0 is still a draft → downgrade from 'start Monday' to 'one of four'"</em> — to the fact-checker's finding. It is not a second opinion; it is the agent's own logic completed.</p>
+    <p style="margin-top:24px; padding-top:20px; border-top:1px solid var(--rule); font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.05em; color:var(--ink-3)">Full agent transcripts, per-domain findings and the complete verdict table: <code>research/environmental-ai/</code> — 8 documents, committed to the repository.</p>
+  </div>
+</footer>
