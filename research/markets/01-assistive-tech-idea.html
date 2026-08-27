@@ -1,53 +1,56 @@
-<title>Seven For Seven</title>
+<title>Every Piece But The Assembly</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Vollkorn:ital,wght@0,400;0,600;1,400&family=Cousine:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Roboto+Mono:wght@400;600&display=swap">
 
 <style>
 :root{
-  --ink:#15171A; --ink-2:#3F454C; --muted:#6B727B;
-  --paper:#EAECEE; --card:#FAFBFC; --band:#DFE2E5;
-  --rule:#C2C7CD; --rule-soft:#D7DBE0;
-  --kill:#B23A2B; --kill-ink:#8E2C1F; --kill-wash:#F3DFDB;
-  --live:#1F6152; --live-wash:#DAEAE5;
+  --ink:#14181C; --ink-2:#3D454E; --muted:#69727C;
+  --paper:#E9ECEE; --card:#FAFBFC; --band:#DEE2E6;
+  --rule:#C0C6CC; --rule-soft:#D6DBE0;
+  --acc:#C07A00; --acc-ink:#9A6200; --acc-wash:#F3E7CC;
+  --dead:#9E3A2E; --dead-wash:#F0DFDC;
+  --live:#1D6350; --live-wash:#D9E9E3;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ink:#E9EBEE; --ink-2:#B2B8BF; --muted:#7E858D;
-    --paper:#111315; --card:#1B1E21; --band:#16191C;
-    --rule:#32373C; --rule-soft:#25292D;
-    --kill:#E4867A; --kill-ink:#EE9E93; --kill-wash:#361C17;
-    --live:#6BB6A0; --live-wash:#122C26;
+    --ink:#E8ECEF; --ink-2:#B0B8C0; --muted:#7C848D;
+    --paper:#101316; --card:#1A1E22; --band:#15181B;
+    --rule:#30373D; --rule-soft:#24292E;
+    --acc:#E9AE40; --acc-ink:#F2C065; --acc-wash:#332711;
+    --dead:#E0847A; --dead-wash:#341B18;
+    --live:#69B79A; --live-wash:#122E26;
   }
 }
 :root[data-theme="dark"]{
-  --ink:#E9EBEE; --ink-2:#B2B8BF; --muted:#7E858D;
-  --paper:#111315; --card:#1B1E21; --band:#16191C;
-  --rule:#32373C; --rule-soft:#25292D;
-  --kill:#E4867A; --kill-ink:#EE9E93; --kill-wash:#361C17;
-  --live:#6BB6A0; --live-wash:#122C26;
+  --ink:#E8ECEF; --ink-2:#B0B8C0; --muted:#7C848D;
+  --paper:#101316; --card:#1A1E22; --band:#15181B;
+  --rule:#30373D; --rule-soft:#24292E;
+  --acc:#E9AE40; --acc-ink:#F2C065; --acc-wash:#332711;
+  --dead:#E0847A; --dead-wash:#341B18;
+  --live:#69B79A; --live-wash:#122E26;
 }
 
 *{box-sizing:border-box}
 body{margin:0; background:var(--paper); color:var(--ink);
-  font-family:Vollkorn,Georgia,serif; font-size:17px; line-height:1.62;
+  font-family:Literata,Georgia,serif; font-size:16.5px; line-height:1.62;
   -webkit-font-smoothing:antialiased}
-.wrap{max-width:920px; margin:0 auto; padding:0 22px 90px}
+.wrap{max-width:930px; margin:0 auto; padding:0 22px 90px}
 
-h1,h2,h3,h4,.fg{font-family:"Familjen Grotesk","Helvetica Neue",Arial,sans-serif; font-weight:700; text-wrap:balance; letter-spacing:-.028em}
-h1{font-size:clamp(2.6rem,7.4vw,4.8rem); line-height:1.0; margin:0}
+h1,h2,h3,h4,.hk{font-family:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif; font-weight:800; text-wrap:balance; letter-spacing:-.03em}
+h1{font-size:clamp(2.4rem,6.6vw,4.3rem); line-height:1.02; margin:0}
 h2{font-size:clamp(1.7rem,3.7vw,2.35rem); line-height:1.1; margin:0}
-h3{font-size:1.28rem; line-height:1.2; margin:0 0 6px}
+h3{font-size:1.28rem; line-height:1.2; margin:0 0 6px; font-weight:700}
 p{margin:0 0 14px; max-width:68ch}
-a{color:var(--kill-ink)}
-.mono,.lab,td.n,th.n{font-family:Cousine,ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
-.lab{font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--kill); font-weight:700}
-.lab.l{color:var(--live)} .lab.q{color:var(--muted)}
+a{color:var(--acc-ink)}
+.mono,.lab,td.n,th.n{font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.lab{font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--acc-ink); font-weight:600}
+.lab.d{color:var(--dead)} .lab.l{color:var(--live)} .lab.q{color:var(--muted)}
 
 header.mast{padding:50px 0 0}
 .topline{display:flex; flex-wrap:wrap; gap:8px 20px; align-items:baseline; border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:26px}
-.topline .who{font-family:Cousine,monospace; font-size:12px; letter-spacing:.07em; text-transform:uppercase}
-.topline .meta{margin-left:auto; font-family:Cousine,monospace; font-size:12px; color:var(--muted)}
+.topline .who{font-family:"Roboto Mono",monospace; font-size:11px; letter-spacing:.09em; text-transform:uppercase}
+.topline .meta{margin-left:auto; font-family:"Roboto Mono",monospace; font-size:11px; color:var(--muted)}
 .dek{margin:22px 0 0; font-size:1.18rem; line-height:1.48; color:var(--ink-2); max-width:60ch}
 
 section{margin:54px 0 0}
@@ -57,32 +60,36 @@ section{margin:54px 0 0}
 
 .card{background:var(--card); border:1px solid var(--rule-soft); padding:22px 24px; margin:22px 0}
 .card>*:last-child{margin-bottom:0}
-.card.kill{border-color:var(--kill); border-left-width:3px}
+.card.acc{border-color:var(--acc); border-left-width:3px}
 .card.live{border-color:var(--live); border-left-width:3px}
+.card.dead{border-color:var(--dead); border-left-width:3px}
 
-.pull{border-left:3px solid var(--kill); padding:3px 0 3px 20px; margin:26px 0; max-width:62ch}
-.pull p{font-family:"Familjen Grotesk",Arial,sans-serif; font-weight:700; font-size:1.3rem; line-height:1.3; margin:0; letter-spacing:-.028em}
-.pull .sub{font-family:Vollkorn,serif; font-weight:400; font-size:.98rem; color:var(--muted); line-height:1.55; margin-top:9px; letter-spacing:0}
+.pull{border-left:3px solid var(--acc); padding:3px 0 3px 20px; margin:26px 0; max-width:62ch}
+.pull p{font-family:"Hanken Grotesk",Arial,sans-serif; font-weight:800; font-size:1.3rem; line-height:1.3; margin:0; letter-spacing:-.03em}
+.pull .sub{font-family:Literata,serif; font-weight:400; font-size:.96rem; color:var(--muted); line-height:1.55; margin-top:9px; letter-spacing:0}
 .pull.l{border-left-color:var(--live)}
 
 ul.list{margin:0 0 16px; padding:0; list-style:none}
 ul.list li{position:relative; padding-left:20px; margin-bottom:9px; max-width:68ch}
-ul.list li::before{content:""; position:absolute; left:2px; top:.72em; width:8px; height:1px; background:var(--kill)}
+ul.list li::before{content:""; position:absolute; left:2px; top:.72em; width:8px; height:1px; background:var(--acc)}
 .card.live ul.list li::before{background:var(--live)}
+.card.dead ul.list li::before{background:var(--dead)}
 
 .scroll{overflow-x:auto; margin:22px 0; border:1px solid var(--rule-soft); background:var(--card)}
-table{border-collapse:collapse; width:100%; min-width:540px; font-size:.93rem}
+table{border-collapse:collapse; width:100%; min-width:560px; font-size:.93rem}
 th,td{text-align:left; padding:11px 15px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
-thead th{font-family:Cousine,monospace; font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); font-weight:700; border-bottom:1px solid var(--rule); white-space:nowrap}
+thead th{font-family:"Roboto Mono",monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:600; border-bottom:1px solid var(--rule); white-space:nowrap}
 tbody tr:last-child td{border-bottom:none}
-tr.dead td{background:var(--kill-wash)}
-tr.alive td{background:var(--live-wash)}
-td.n,th.n{text-align:right; white-space:nowrap; font-family:Cousine,monospace}
-caption{caption-side:bottom; text-align:left; padding:10px 15px; font-size:12.5px; color:var(--muted); line-height:1.45}
+tr.has td{background:var(--dead-wash)}
+tr.gap td{background:var(--acc-wash)}
+td.n,th.n{text-align:right; white-space:nowrap; font-family:"Roboto Mono",monospace}
+caption{caption-side:bottom; text-align:left; padding:10px 15px; font-size:12px; color:var(--muted); line-height:1.45}
+.v{font-family:"Roboto Mono",monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; font-weight:600}
+.v.y{color:var(--dead)} .v.n{color:var(--acc-ink)}
 
-footer{margin:62px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.88rem; line-height:1.6}
+footer{margin:62px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.87rem; line-height:1.6}
 footer p{max-width:78ch}
-a:focus-visible{outline:2px solid var(--kill); outline-offset:2px}
+a:focus-visible{outline:2px solid var(--acc); outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
 </style>
 
@@ -90,121 +97,125 @@ a:focus-visible{outline:2px solid var(--kill); outline-offset:2px}
 
 <header class="mast">
   <div class="topline">
-    <span class="who">Kill log · replaces the allergen pitch</span>
+    <span class="who">Existence check · learn-and-present app</span>
     <span class="meta">Aug 2026</span>
   </div>
-  <h1>Seven<br>For Seven</h1>
-  <p class="dek">You were right to call that out. I found the competitors, flagged them as unchecked, and pitched anyway — <strong>the exact mistake I'd spent two documents telling you to avoid.</strong> So I ran the check. It's dead, and the way it died is the most useful thing in this file.</p>
+  <h1>Every Piece<br>But The<br>Assembly</h1>
+  <p class="dek">Three components, all shipping. <strong>The combination you described is the first thing in this entire programme that I could not find as one product</strong> — and that changes what the interesting question is.</p>
 </header>
 
 <!-- ===== THE CHECK ===== -->
 <section id="check">
   <div class="shead">
-    <span class="lab">The check I should have run first</span>
-    <h2>Institutional allergen software, every segment</h2>
+    <span class="lab d">What exists</span>
+    <h2>Your idea, taken apart</h2>
   </div>
 
   <div class="scroll">
     <table>
-      <caption>Four segments, four sets of incumbents, all shipping allergen handling today.</caption>
-      <thead><tr><th>Segment</th><th>Who's already there</th></tr></thead>
+      <caption>Three searches. Every individual mechanic is built, and most of them more than once.</caption>
+      <thead><tr><th>Component</th><th class="n">Exists</th><th>Who, and what they actually do</th></tr></thead>
       <tbody>
-        <tr class="dead"><td><strong>K-12 schools</strong></td><td><strong>Nutrislice</strong> — personalised allergen filtering on family-facing menus · <strong>PrimeroEdge</strong> — integrated nutrition database with allergen tracking and standardised labels · <strong>LINQ</strong> — foodservice tied to student information systems</td></tr>
-        <tr class="dead"><td><strong>Senior living &amp; long-term care</strong></td><td><strong>MealSuite</strong> — "People Profiles" tracking allergens, textures and diet orders, plus 9,000+ dietitian-curated therapeutic recipes · <strong>CBORD</strong> — diet-specific menu planning with combination diet orders across textures, consistencies and allergies · <strong>PointClickCare</strong> — <em>auto-flagging of allergens to prevent errors</em>, tied to the resident record · MealTracker · DiningRD · MatrixCare</td></tr>
-        <tr class="dead"><td><strong>Food manufacturing</strong></td><td><strong>Miratag</strong> — HACCP, allergen management programs, supplier verification; <strong>500+ businesses</strong> · Alleratech</td></tr>
-        <tr class="dead"><td>Restaurants</td><td>Covered in the earlier research — Toast, MarketMan, Square, Restaurant365</td></tr>
+        <tr class="has"><td><strong>Assigned niche topic, curated, on a daily cadence</strong></td><td class="n"><span class="v y">Yes ×4</span></td><td><strong>Nerdish</strong> — bite-sized daily articles across history, art, science, people · <strong>NerdSip</strong> — AI-generated courses on any topic, free daily lessons · <strong>Learny</strong> — daily micro-lessons and a fact-of-the-day widget · <strong>Diagram</strong> — curated concepts across 10+ categories with random quizzes. <strong>All consumption-only. You read, you swipe, you leave.</strong></td></tr>
+        <tr class="has"><td><strong>Explain it back, graded on understanding</strong></td><td class="n"><span class="v y">Yes ×3+</span></td><td><strong>Feynman AI</strong> (iOS and Android) — record or write your explanation, get a <em>clarity score</em>, graded across <strong>factual accuracy, conceptual clarity, logical structure and illustrative examples</strong>, with line-by-line guidance and gap identification. Plus <strong>Revaldo</strong> and <strong>SuperKnowva</strong>. <strong>All bring-your-own-topic — you upload your notes.</strong></td></tr>
+        <tr class="has"><td><strong>Assigned topic → timer → speak → graded</strong></td><td class="n"><span class="v y">Yes, partly</span></td><td><strong>Yoodli's impromptu drills literally "throw a random topic at you and give you two minutes to speak on it,"</strong> then score pacing, filler words, clarity, structure and presence. <strong>But it grades delivery, not whether what you said was true</strong> — and there's no study window. It's improvisation practice, not learning.</td></tr>
+        <tr class="gap"><td><strong>All of it, in one loop</strong><br><span style="color:var(--muted)">assigned niche topic → real study window → you present → graded on <em>content</em> and delivery → it answers your questions</span></td><td class="n"><span class="v n">Not found</span></td><td><strong>Nobody joins them.</strong> The discovery apps never ask you to produce anything. The Feynman apps never choose your topic. Yoodli chooses your topic but doesn't care if you're right.</td></tr>
       </tbody>
     </table>
   </div>
 
   <div class="pull">
-    <p>PointClickCare ships "auto-flagging of allergens to prevent errors," wired to the resident's medical record. That is the thing I described as your unclaimed advantage.</p>
-    <span class="sub">And it isn't a coincidence that they got there. <strong>Allergen matching requires two datasets: the recipe and the person. Whoever already owns both owns the feature by default</strong> — which is why every incumbent in every segment has it, and why an outsider arriving with only the logic has nothing to attach it to.</span>
-  </div>
-
-  <div class="card kill">
-    <h3>Which means the "moat" wasn't one</h3>
-    <p style="margin-bottom:0">PantryChef's deterministic safety layer is genuinely good engineering, and I was right that consumer recipe apps don't have it. <strong>I was wrong about why.</strong> Not because nobody thought of it — because in every market where it matters, it's a feature of the system that already holds the menu and the diner's record. <strong>The logic was never the scarce part.</strong></p>
+    <p>This is the first idea in eight attempts where the exact product wasn't already shipping. That's genuinely notable — and it's also weaker evidence than it feels like.</p>
+    <span class="sub">The previous seven died because someone had built precisely the thing. This one survives because <strong>nobody has assembled parts that all exist</strong>. Combinations are cheap, and the first question is always the same: <strong>is it unassembled because it's an opportunity, or because it doesn't work?</strong></span>
   </div>
 </section>
 
-<!-- ===== THE TALLY ===== -->
-<section id="tally">
+<!-- ===== WHY NOT ===== -->
+<section id="why">
   <div class="shead">
-    <span class="lab">The record</span>
-    <h2>Seven ideas, seven kills, one method</h2>
+    <span class="lab">Three reasons nobody built it</span>
+    <h2>And one of them is the interesting one</h2>
+    <p>⚠️ <strong>These are my reasoning, not research findings.</strong> No source told me why the gap exists. Treat them as hypotheses to test, not conclusions.</p>
   </div>
 
-  <div class="scroll">
-    <table>
-      <thead><tr><th>Idea</th><th>Killed by</th></tr></thead>
-      <tbody>
-        <tr class="dead"><td>Restaurant food costing</td><td>Square shipped it with MarketMan at $99/mo, inside the POS</td></tr>
-        <tr class="dead"><td>Spearfishing regulations</td><td>Fish Rules — free, whole US coastline</td></tr>
-        <tr class="dead"><td>Dive visibility forecasting</td><td>Five products, all recent</td></tr>
-        <tr class="dead"><td>Outdoor conditions apps <span style="color:var(--muted)">(20 markets)</span></td><td>Three to six per activity. Weather API plus a weekend.</td></tr>
-        <tr class="dead"><td>Construction estimating</td><td>McCormick, 45 years of trade databases, plus four AI entrants</td></tr>
-        <tr class="dead"><td>Veterinary cost data</td><td>No payer who isn't broke</td></tr>
-        <tr class="dead"><td>Institutional allergen compliance</td><td>Every segment, every incumbent, today</td></tr>
-      </tbody>
-    </table>
+  <div class="card dead">
+    <h3>1. Assigned topics fight motivation</h3>
+    <p style="margin-bottom:0">Every Feynman app is bring-your-own-topic, and that's probably not an oversight — people study what they already need to know. <strong>Being told what to learn on a schedule is what school does, and a lot of people are paying to escape it.</strong> The discovery apps get away with it because reading a 3-minute article costs nothing. Asking someone to <em>prepare and present</em> on a topic they didn't choose is a very different demand.</p>
   </div>
 
-  <div class="pull">
-    <p>Any idea that can be described in one sentence from public information has been built by someone who had the same public information.</p>
-    <span class="sub">That was true before AI coding tools and it's brutally true now, because the build cost went to near zero. <strong>Seven attempts with the same method produced seven kills, and the method is the problem — not the ideas, not the markets, and not the effort.</strong> An eighth from the same source would die the same way.</span>
+  <div class="card dead">
+    <h3>2. The retention maths are brutal</h3>
+    <p style="margin-bottom:0">Frictionless consumption apps already struggle to hold daily users. <strong>Adding "now speak for five minutes about it" is one of the largest asks in consumer software</strong> — it needs privacy, a quiet room, and a willingness to hear you were wrong. Daily is almost certainly the wrong cadence.</p>
+  </div>
+
+  <div class="card acc">
+    <h3>⭐ 3. Grading content mastery on an arbitrary topic is genuinely hard</h3>
+    <p><strong>This is the real one.</strong> Notice how the Feynman apps dodge it: they grade your explanation <em>against source material you supplied.</em> The ground truth walks in the door with you.</p>
+    <p style="margin-bottom:0"><strong>If the app assigns the topic, the app has to own the ground truth</strong> — and it has to be right about a different obscure subject every time, accurate enough to tell a student they're wrong. Yoodli sidesteps this entirely by grading only <em>how</em> you spoke. <strong>Nobody has taken on "was what you said about this niche topic actually correct," because that's the part that's hard.</strong></p>
   </div>
 </section>
 
-<!-- ===== WHAT SURVIVED ===== -->
-<section id="alive">
+<!-- ===== THE FIX ===== -->
+<section id="fix">
   <div class="shead">
-    <span class="lab l">What did survive</span>
-    <h2>Two things, and neither is an idea</h2>
-  </div>
-
-  <div class="scroll">
-    <table>
-      <caption>These are the only two items from the entire programme that no search could kill.</caption>
-      <thead><tr><th>What</th><th>Why it survived</th></tr></thead>
-      <tbody>
-        <tr class="alive"><td><strong>The sonar project</strong><br><span style="color:var(--muted)">DVL-free perception from a swimming diver</span></td><td><strong>Because it's hard.</strong> Harvey Mudd built the array but imaged a static target in a tank. The SLAM literature solved motion distortion but kept the DVL. Open Echo made the electronics cheap but single-channel. ARIS does real-time tracking but only from a tripod. <strong>Nobody joined them, and the difficulty is exactly why the space is empty.</strong> Phase 0 costs $0.</td></tr>
-        <tr class="alive"><td><strong>The interviews</strong><br><span style="color:var(--muted)">38 questions, scoring, kill criteria — written, never used</span></td><td><strong>Because they generate information that isn't public.</strong> Every kill in the table above came from a search anyone could run. Nothing a search can reach will ever be an advantage.</td></tr>
-      </tbody>
-    </table>
+    <span class="lab l">Your addition changes this</span>
+    <h2>Supplying the sources solves objection three</h2>
+    <p>"It gives you credible sources to read or learn from" isn't a feature — <strong>it's the structural answer to the only hard objection.</strong></p>
   </div>
 
   <div class="card live">
-    <h3>The pattern, stated once</h3>
-    <p>Look at what the winners in this research actually owned. <strong>onX: county parcel records nobody would compile. Fishbrain: seven million logged catches. Strava: a social graph. AllTrails: a decade of reviews.</strong></p>
-    <p style="margin-bottom:0"><strong>Not one of those was an idea.</strong> Each was the residue of someone doing something unglamorous for years, or being inside a thing long enough to see what outsiders couldn't. <strong>There is no search query that returns those.</strong></p>
+    <p>If the app hands you the reading, <strong>the app owns the ground truth by construction</strong> — the same trick the Feynman apps use, just moved one step earlier. You're no longer graded against the open internet on an obscure subject. You're graded against <em>the five things it told you to read</em>, which is a closed, checkable set.</p>
+    <p style="margin-bottom:0">That also makes the feedback honest in a way a general model can't be. <strong>"You said X. Source 2 says Y — here's the passage"</strong> is verifiable, and it's a completely different product from an LLM freestyling an opinion about your answer.</p>
   </div>
 
   <div class="pull l">
-    <p>The two survivors have the same property: they cost time rather than cleverness, and that is precisely why they're still standing.</p>
-    <span class="sub">Everything cheap to attempt has been attempted. <strong>The filter isn't "is this a good idea" any more — it's "would a normal person give up before finishing this."</strong> A diver-worn sonar that needs a year of pool testing, and fifteen conversations that need you to walk into fifteen businesses, both pass. Nothing else in seven attempts did.</span>
+    <p>And it relocates the moat to somewhere useful: the source sets become the asset.</p>
+    <span class="sub">A vetted, curated collection of "here are the five best things to read about this specific niche topic," accumulated across hundreds of topics, is the closest thing in this whole programme to the onX shape — <strong>unglamorous, slow to build, and hard for a competitor to copy in a weekend.</strong> The app is the wrapper. The library is the company.</span>
+  </div>
+
+  <div class="card dead">
+    <h3>But it moves the difficulty rather than removing it</h3>
+    <ul class="list">
+      <li><strong>"Credible" is doing enormous work.</strong> An LLM choosing sources will confidently pick bad ones, and on a niche topic you won't know. <strong>Whoever or whatever vets those sources is the actual product</strong>, and it's the part that can't be automated away without becoming the thing you were trying to avoid.</li>
+      <li><strong>It edges toward NerdSip</strong>, which already AI-generates courses on any topic. The distance between "generated course" and "curated sources" is exactly the credibility work — <strong>so that's the thing to be genuinely better at, and the only thing.</strong></li>
+      <li><strong>Rights and linking.</strong> Pointing at good sources is fine; reproducing them isn't. That's the same index-the-facts, link-for-the-prose line the recipe research landed on.</li>
+    </ul>
+    <p style="margin-bottom:0">⚠️ <strong>None of this is researched</strong> — no source addressed source-curation quality. It's the next thing to check.</p>
   </div>
 </section>
 
-<!-- ===== NEXT ===== -->
-<section id="next">
+<!-- ===== TEST ===== -->
+<section id="test">
   <div class="shead">
-    <span class="lab l">If you want one more from me</span>
-    <h2>Change what I'm searching for</h2>
+    <span class="lab l">Why this one is different for you</span>
+    <h2>You can test it on yourself this weekend</h2>
   </div>
 
-  <div class="card">
-    <p>I can keep generating ideas and they will keep dying — that's now measured, not predicted. <strong>What I can do differently is stop searching for products and start searching for datasets:</strong> records that exist, are legally accessible, are fragmented across hundreds of sources, and that somebody needs in order to make a decision with money attached. The onX shape.</p>
-    <p style="margin-bottom:0">That's a genuinely different search, it has not been run once in this whole programme, and <strong>it's the only desk-research move left that hasn't already failed seven times.</strong> Say the word and I'll run it properly — checking each candidate before presenting it, this time.</p>
+  <div class="card live">
+    <p>Every other idea in this programme needed someone else — restaurant owners, dive shops, school districts, veterinarians, contractors. <strong>This one needs one user, and you already have him.</strong></p>
+    <ul class="list">
+      <li><strong>Build the crude version in an afternoon.</strong> A script that picks a niche topic, gathers five credible sources, sets a deadline, takes your recorded explanation, and grades it <em>against those five sources</em> with the passage quoted back. No app, no UI, no account.</li>
+      <li><strong>Use it for two weeks.</strong> Not "would I use this" — <em>did you.</em></li>
+      <li><strong>The signal is whether you keep doing it after the novelty dies</strong>, roughly day four. If you don't, you have your answer for the price of one afternoon, and it's the same answer everyone else got.</li>
+      <li><strong>If you do keep going, you've found the first thing all session that survived both the existence check and contact with a real user.</strong></li>
+    </ul>
+    <p style="margin-bottom:0">And the two things to measure are visible from day one: <strong>how often the grader is wrong about the topic it chose, and how often the sources it picked were actually any good.</strong> Those two error rates <em>are</em> the product. Low, and you have something nobody has assembled. High, and you've learned exactly why nobody assembled it.</p>
+  </div>
+
+  <div class="pull l">
+    <p>Eight ideas in, this is the only one where the fastest way to the truth is building it rather than researching it.</p>
+    <span class="sub">That's not because it's the best idea — it's because <strong>the user is you, the build is an afternoon, and the failure mode is measurable.</strong> Everything else in this programme required permission from someone else before you could learn anything.</span>
   </div>
 </section>
 
 <footer>
-  <span class="lab q">Source quality</span>
-  <p style="margin-top:10px"><strong>External fetching was blocked throughout.</strong> Every figure is a search-index summary; no product page was opened directly.</p>
-  <p><strong>High confidence:</strong> Nutrislice's personalised allergen filtering · PrimeroEdge's allergen tracking and integrated nutrition database · LINQ's student-information-system integration · MealSuite's People Profiles and 9,000+ therapeutic recipes · CBORD's combination diet orders across textures, consistencies and allergies · PointClickCare's auto-flagging of allergens · Miratag's HACCP and allergen management across 500+ businesses.</p>
-  <p><strong>Still not verified:</strong> pricing for any of them, and whether their allergen handling is deterministic or advisory. <strong>Neither changes the conclusion</strong> — the incumbents hold the recipe data and the person's record, which is the part that can't be replicated from outside.</p>
-  <p style="margin-top:16px; color:var(--ink-2)">Kill log · seven ideas, and the two things left standing · August 2026</p>
+  <span class="lab q">Source quality &amp; confidence</span>
+  <p style="margin-top:10px"><strong>External fetching was blocked throughout.</strong> Every figure is a search-index summary; no app store listing or product page was opened directly.</p>
+  <p><strong>High confidence:</strong> Feynman AI's grading dimensions (factual accuracy, conceptual clarity, logical structure, illustrative examples), clarity score, and record-or-write explanation flow · that Feynman-style apps work from user-supplied material · Nerdish, NerdSip, Learny and Diagram as daily-topic consumption apps · Yoodli's impromptu drill that assigns a random topic with a two-minute timer and grades pacing, filler words, clarity, structure and presence.</p>
+  <p><strong>⚠️ The load-bearing negative:</strong> <strong>"Not found" is not "does not exist."</strong> Three searches surfaced no product combining assigned topics with content-graded presentation, but the combination could exist under a name I didn't guess. <strong>Check the app stores directly before believing me</strong> — that is exactly the step that killed the previous seven ideas, and searching for a product that <em>doesn't</em> exist is far less reliable than searching for one that does.</p>
+  <p><strong>⚠️ My reasoning, not findings:</strong> all three explanations for why the gap exists. No source addressed the question.</p>
+  <p><strong>Not researched:</strong> whether any of these apps make money, what they charge, or how long users stay. <strong>Given that the whole category is free-with-in-app-purchase, the monetisation question is unanswered and it's the one that killed the vet idea.</strong></p>
+  <p style="margin-top:16px; color:var(--ink-2)">Existence check · assigned-topic learning with graded presentation · August 2026</p>
 </footer>
 
 </div>
