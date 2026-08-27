@@ -1,0 +1,314 @@
+<title>Eight Elements Isn't Enough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Inconsolata:wght@400;600&display=swap">
+
+<style>
+:root{
+  --ink:#191712; --ink-2:#443F35; --muted:#77705F;
+  --paper:#EEEAE0; --card:#FBF9F4; --band:#E3DED1;
+  --rule:#CAC3B2; --rule-soft:#DBD5C6;
+  --pine:#1E5138; --pine-ink:#173F2B; --pine-wash:#DCE7DF;
+  --cu:#A85A2E; --cu-wash:#F0E2D6;
+  --stop:#A32E24;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#EDE9DF; --ink-2:#BDB6A6; --muted:#8C8474;
+    --paper:#12110D; --card:#1C1A15; --band:#17150F;
+    --rule:#36322A; --rule-soft:#28251F;
+    --pine:#69B98C; --pine-ink:#84CBA1; --pine-wash:#152D22;
+    --cu:#DE9560; --cu-wash:#33210F;
+    --stop:#E07A6E;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#EDE9DF; --ink-2:#BDB6A6; --muted:#8C8474;
+  --paper:#12110D; --card:#1C1A15; --band:#17150F;
+  --rule:#36322A; --rule-soft:#28251F;
+  --pine:#69B98C; --pine-ink:#84CBA1; --pine-wash:#152D22;
+  --cu:#DE9560; --cu-wash:#33210F;
+  --stop:#E07A6E;
+}
+
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Atkinson Hyperlegible","Helvetica Neue",Arial,sans-serif; font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:980px; margin:0 auto; padding:0 22px 90px}
+
+h1,h2,h3,h4,.fig{font-family:Figtree,"Helvetica Neue",Arial,sans-serif; font-weight:800; text-wrap:balance; letter-spacing:-.03em}
+h1{font-size:clamp(2.6rem,7vw,4.5rem); line-height:.99; margin:0}
+h2{font-size:clamp(1.8rem,3.9vw,2.5rem); line-height:1.06; margin:0}
+h3{font-size:1.32rem; line-height:1.2; margin:0 0 6px; font-weight:700}
+h4{font-size:1.04rem; margin:0 0 4px; font-weight:700}
+p{margin:0 0 14px; max-width:68ch}
+a{color:var(--pine-ink)}
+.mono,.lab,td.n,th.n{font-family:Inconsolata,ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.lab{font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--pine); font-weight:600}
+.lab.c{color:var(--cu)} .lab.q{color:var(--muted)}
+
+header.mast{padding:50px 0 0}
+.topline{display:flex; flex-wrap:wrap; gap:8px 20px; align-items:baseline; border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:26px}
+.topline .who{font-family:Inconsolata,monospace; font-size:12px; letter-spacing:.09em; text-transform:uppercase}
+.topline .meta{margin-left:auto; font-family:Inconsolata,monospace; font-size:12px; color:var(--muted)}
+.dek{margin:22px 0 0; font-size:1.18rem; line-height:1.5; color:var(--ink-2); max-width:60ch}
+
+section{margin:60px 0 0; scroll-margin-top:14px}
+.shead{border-top:2px solid var(--ink); padding-top:12px; margin-bottom:22px}
+.shead .lab{display:block; margin-bottom:6px}
+.shead p{margin:10px 0 0; color:var(--ink-2); max-width:66ch}
+
+.card{background:var(--card); border:1px solid var(--rule-soft); padding:22px 24px; margin:22px 0}
+.card>*:last-child{margin-bottom:0}
+.card.pine{border-color:var(--pine); border-left-width:3px}
+.card.cu{border-color:var(--cu); border-left-width:3px}
+
+.pull{border-left:3px solid var(--pine); padding:3px 0 3px 20px; margin:26px 0; max-width:62ch}
+.pull p{font-family:Figtree,Arial,sans-serif; font-weight:800; font-size:1.34rem; line-height:1.28; margin:0; letter-spacing:-.028em}
+.pull .sub{font-family:"Atkinson Hyperlegible",sans-serif; font-weight:400; font-size:.95rem; color:var(--muted); line-height:1.55; margin-top:9px; letter-spacing:0}
+.pull.c{border-left-color:var(--cu)}
+
+ul.list{margin:0 0 16px; padding:0; list-style:none}
+ul.list li{position:relative; padding-left:20px; margin-bottom:9px; max-width:68ch}
+ul.list li::before{content:""; position:absolute; left:2px; top:.74em; width:8px; height:1px; background:var(--pine)}
+ul.list.c li::before{background:var(--cu)}
+
+.scroll{overflow-x:auto; margin:22px 0; border:1px solid var(--rule-soft); background:var(--card)}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:.94rem}
+th,td{text-align:left; padding:11px 15px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
+thead th{font-family:Inconsolata,monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:600; border-bottom:1px solid var(--rule); white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+tr.hi td{background:var(--pine-wash)}
+tr.warn td{background:var(--cu-wash)}
+td.n,th.n{text-align:right; white-space:nowrap; font-family:Inconsolata,monospace}
+caption{caption-side:bottom; text-align:left; padding:10px 15px; font-size:12px; color:var(--muted); line-height:1.45}
+
+.calc{background:var(--band); border:1px solid var(--rule-soft); padding:18px 22px; margin:22px 0;
+  font-family:Inconsolata,monospace; font-size:.96rem; line-height:1.95; overflow-x:auto}
+.calc .k{color:var(--muted)}
+.calc .o{color:var(--pine-ink); font-weight:600}
+.calc hr{border:none; border-top:1px solid var(--rule); margin:8px 0}
+
+.verdict{display:grid; grid-template-columns:88px 1fr; gap:0 18px; border-top:1px solid var(--rule); padding:18px 0}
+.verdict .m{font-family:Inconsolata,monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; font-weight:600; padding-top:4px}
+.verdict.y .m{color:var(--pine)} .verdict.n .m{color:var(--stop)} .verdict.w .m{color:var(--cu)}
+.verdict h4{margin-bottom:5px}
+.verdict p{margin:0; color:var(--ink-2); font-size:.95rem; max-width:70ch}
+
+footer{margin:68px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.88rem; line-height:1.6}
+footer p{max-width:78ch}
+a:focus-visible{outline:2px solid var(--pine); outline-offset:2px}
+@media (max-width:620px){ .verdict{grid-template-columns:1fr; gap:4px} }
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="topline">
+    <span class="who">PantryChef · Research File 09</span>
+    <span class="meta">Aug 2026 · Build plan review</span>
+  </div>
+  <h1>Eight Elements<br>Isn't Enough</h1>
+  <p class="dek">This plan is a real step up, and most of it is right. Two pieces of prior art settle it: <strong>Open Echo makes your single-channel sonar genuinely cheap</strong>, and <strong>a team of undergraduates already built your array — for $1,710.</strong></p>
+</header>
+
+<!-- ===== WHAT'S RIGHT ===== -->
+<section id="right">
+  <div class="shead">
+    <span class="lab">First, the part I should say plainly</span>
+    <h2>Most of this plan is correct</h2>
+    <p>Not diplomatically — actually correct, in ways the earlier versions weren't.</p>
+  </div>
+
+  <div class="verdict y"><span class="m">Right</span><div>
+    <h4>Phase 0 at $0</h4>
+    <p><strong>Just do this. There is no counter-argument.</strong> Public datasets exist, the drivers are MIT-licensed, and the load-bearing question — can scan matching estimate motion without a DVL — is answerable on a laptop this week. Everything else is downstream of that one result.</p>
+  </div></div>
+  <div class="verdict y"><span class="m">Right</span><div>
+    <h4>Killing the mechanical scanner</h4>
+    <p>Electronic steering has no motor, so it beats an 8-second sweep by construction. <strong>Your Experiment 4 is already answered — yes.</strong> The real question isn't speed, it's how much angular resolution you can buy, which is the section below.</p>
+  </div></div>
+  <div class="verdict y"><span class="m">Right</span><div>
+    <h4>Narrow FOV, short range, coarse angular resolution</h4>
+    <p>All three are correct and genuinely under-exploited. Shorter range does mean shorter listening time per ping. A diver looking forward doesn't need 360°. And <strong>higher frequency shrinks the array</strong> — see the math.</p>
+  </div></div>
+  <div class="verdict y"><span class="m">Right</span><div>
+    <h4>Adaptive scanning and track-instead-of-rescan</h4>
+    <p>Both are established techniques in radar and sonar tracking, not inventions you'd have to prove. Cheap to implement in software once the sensing works.</p>
+  </div></div>
+  <div class="verdict y"><span class="m">Right</span><div>
+    <h4>Tether first, no GPU underwater, buy nothing until you must</h4>
+    <p>All correct instincts. The tether one especially — it removes an entire category of problem from the first prototype for free.</p>
+  </div></div>
+</section>
+
+<!-- ===== OPEN ECHO ===== -->
+<section id="openecho">
+  <div class="shead">
+    <span class="lab">Prior art #1 · Better news than you had</span>
+    <h2>Open Echo is real, and it drives fish-finder transducers</h2>
+  </div>
+
+  <div class="card pine">
+    <h3>Neumi/open_echo — Jan Neumann</h3>
+    <p>An Arduino-compatible open-source echo sounder. The <strong>TUSS4470 shield stacks directly on an Arduino Uno</strong>, with RAW-data firmware covering <strong>40 kHz to 1 MHz</strong>, in air or water. A Python backend visualises the return signal, changes settings, and streams NMEA.</p>
+    <p>Two details that matter more than the rest:</p>
+    <ul class="list">
+      <li>⭐ <strong>It has been tested on a wide range of transducers and is compatible with all of them — from car parking sensors to Lowrance TripleShot side-scan heads.</strong> You do not have to fabricate a transducer. You can drive a commercial fish-finder head.</li>
+      <li><strong>The project began by reverse-engineering a cheap commercial fish finder</strong>, which is exactly the shortcut you were looking for and someone has already taken it.</li>
+    </ul>
+    <p style="margin-bottom:0"><strong>So your $100–500 target for a single-channel echo sounder is plausible, and the path is documented.</strong> That part of the plan survives intact.</p>
+  </div>
+</section>
+
+<!-- ===== HMC ===== -->
+<section id="hmc">
+  <div class="shead">
+    <span class="lab c">Prior art #2 · The one that recalibrates the budget</span>
+    <h2>Undergraduates already built your array</h2>
+    <p><strong>"Low-Cost, Underwater, Ultrasonic Phased Array Research Platform"</strong> — Tejus Rao, Alec Vercruysse, Rhea Zaverchand and Matthew Spencer, Engineering Department, <strong>Harvey Mudd College</strong>. Published at IEEE IUS.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Open source and explicitly designed to be easy to modify, for marine biological ultrasound imaging research.</caption>
+      <thead><tr><th>What they achieved</th><th class="n">Result</th></tr></thead>
+      <tbody>
+        <tr class="warn"><td><strong>Total cost</strong></td><td class="n"><strong>$1,710</strong></td></tr>
+        <tr><td>How they got it that low</td><td class="n" style="text-align:left"><strong>Off-the-shelf piezo transducers</strong> plus transmit and receive analog front ends built from <strong>low-cost microcontrollers and analog pulse-shaping circuits</strong></td></tr>
+        <tr><td>Transmit beam steering resolution</td><td class="n">1.8°</td></tr>
+        <tr><td>Receive beam steering resolution</td><td class="n">0.5°</td></tr>
+        <tr class="warn"><td><strong>Demonstrated imaging</strong></td><td class="n"><strong>A static object at 1.2 m</strong><br><span style="color:var(--muted)">in a test tank</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull c">
+    <p>This is simultaneously the best and the most sobering news in the file.</p>
+    <span class="sub"><strong>Best:</strong> undergraduates did it, it's open source, and you can start from their design instead of a blank page. Their front-end trick — microcontrollers and analog pulse-shaping instead of a proper multichannel ADC — is exactly the cost-reduction you were looking for, already invented.<br><br><strong>Sobering:</strong> <strong>$1,710, not $100–500.</strong> And the demonstrated result is a <em>static</em> object at <strong>1.2 metres, in a tank</strong> — against your target of 2–15 m in open water on a swimming human.</p>
+  </div>
+
+  <div class="card">
+    <p style="margin-bottom:0">One bookkeeping note: you list the Ping360 at <strong>$2,750</strong>; the figure I found was <strong>$1,975</strong>. Worth checking which configuration you're pricing — because at $1,975 versus Harvey Mudd's $1,710, <strong>building your own array saves roughly 13%, not 90%.</strong> The cost advantage of DIY here is real but small; the advantage that matters is <strong>architectural control</strong>, not price.</p>
+  </div>
+</section>
+
+<!-- ===== THE MATH ===== -->
+<section id="math">
+  <div class="shead">
+    <span class="lab c">The constraint that decides your design</span>
+    <h2>Four to eight transducers can't give you 2–5°</h2>
+    <p>Your plan asks for <strong>4–8 transducers</strong> in one place and <strong>2–5° angular resolution</strong> in another. Those two numbers are inconsistent, and the relationship between them is fixed by physics, not by engineering effort.</p>
+  </div>
+
+  <div class="calc">
+    <span class="k">// Element spacing is set by sidelobe suppression</span><br>
+    spacing d ≈ <span class="o">0.7 λ</span> <span class="k">— tighter wastes elements, wider creates grating lobes</span><br><br>
+    <span class="k">// Half-power beamwidth of a uniform linear array, broadside</span><br>
+    θ ≈ 0.886 · λ / (N · d)<br>
+    <span class="k">substituting d = 0.7λ, the wavelength cancels:</span><br>
+    θ ≈ 0.886 / (0.7 · N) radians ≈ <span class="o">72 / N degrees</span>
+    <hr>
+    <span class="k">N = 8  →</span> <span class="o">~9°</span><br>
+    <span class="k">N = 16 →</span> <span class="o">~4.5°</span><br>
+    <span class="k">N = 32 →</span> <span class="o">~2.3°</span>
+  </div>
+
+  <p>⚠️ <strong>That derivation is mine, from the 0.7λ spacing rule plus standard uniform-linear-array theory — not lifted from a source.</strong> Check it before you build to it. But the shape of the answer is not in doubt: <strong>angular resolution is set by element count, and eight elements buys you about nine degrees.</strong></p>
+
+  <div class="card pine">
+    <h3>And here's the part that helps you</h3>
+    <p><strong>Because the wavelength cancels, frequency doesn't change your angular resolution at all — it only changes how physically big the array is.</strong> Which means going high-frequency is close to free for your use case:</p>
+    <div class="scroll" style="margin:14px 0; border:none">
+      <table style="min-width:420px">
+        <thead><tr><th>Frequency</th><th class="n">λ in water</th><th class="n">16-element aperture</th></tr></thead>
+        <tbody>
+          <tr><td>200 kHz</td><td class="n">7.5 mm</td><td class="n">~84 mm</td></tr>
+          <tr class="hi"><td><strong>450 kHz</strong></td><td class="n">3.3 mm</td><td class="n"><strong>~37 mm</strong></td></tr>
+          <tr><td>700 kHz</td><td class="n">2.1 mm</td><td class="n">~24 mm</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-bottom:0">Higher frequency normally costs you range through absorption — <strong>but your range target is 2–15 m, where that barely matters.</strong> So the short-range decision you already made buys you a physically tiny array for free. <strong>A 16-element, ~4.5° array at 450 kHz is under four centimetres wide.</strong> That is wearable, and it's a genuinely good consequence of your own architecture choice.</p>
+  </div>
+
+  <div class="card cu">
+    <h3>Where the money actually goes — and it isn't transducers</h3>
+    <p>The TUSS4470 is a <strong>single-channel</strong> driver. Beamforming needs <strong>N receive channels sampled phase-coherently</strong> — every element digitised simultaneously, with known relative timing. That is the difference between an echo sounder and an imaging array, and it's where Harvey Mudd's $1,710 went.</p>
+    <p style="margin-bottom:0">It's also why the hobbyist literature keeps pointing at <strong>DSP or FPGA-class hardware</strong> for real imaging. <strong>Steal Harvey Mudd's answer</strong> — low-cost microcontrollers plus analog pulse-shaping front ends — rather than rediscovering why a 16-channel coherent ADC is expensive.</p>
+  </div>
+</section>
+
+<!-- ===== CORRECTED PLAN ===== -->
+<section id="corrected">
+  <div class="shead">
+    <span class="lab">What I'd change</span>
+    <h2>The plan, adjusted</h2>
+  </div>
+
+  <div class="verdict y"><span class="m">Keep</span><div>
+    <h4>Phase 0, unchanged, starting now</h4>
+    <p>Public datasets, open drivers, laptop. Answer the DVL-replacement question before anything else exists. <strong>This is still the single highest-value thing you can do and it remains free.</strong></p>
+  </div></div>
+  <div class="verdict w"><span class="m">Adjust</span><div>
+    <h4>Phase 1 — single channel, not an array</h4>
+    <p>Open Echo plus a commercial fish-finder transducer, tethered to a laptop. <strong>$100–500 is realistic here.</strong> The goal is one honest question: does cheap acoustic hardware return geometry you can actually match between scans? Don't build an array until single-channel data has proven the algorithm.</p>
+  </div></div>
+  <div class="verdict w"><span class="m">Adjust</span><div>
+    <h4>Phase 2 — budget $1,700, not $500, and start from HMC's design</h4>
+    <p>Their platform is open and built to be modified. <strong>Forking a published, characterised array beats designing one</strong>, and it converts your hardest phase into an integration problem. Target 16 elements at 450 kHz for ~4.5° in a 37 mm aperture.</p>
+  </div></div>
+  <div class="verdict n"><span class="m">Fix</span><div>
+    <h4>The resolution target</h4>
+    <p><strong>Pick one: 8 elements at ~9°, or 2–5° at 16–32 elements.</strong> You can't have both. And 9° may genuinely be fine for obstacle awareness — decide what the application needs before deciding the element count.</p>
+  </div></div>
+  <div class="verdict n"><span class="m">Fix</span><div>
+    <h4>The range expectation</h4>
+    <p>Harvey Mudd demonstrated <strong>1.2 m on a static target in a tank.</strong> Your target is 2–15 m in open water on a moving diver. That gap is the real experiment, and it's driven by transmit power and receiver sensitivity, not by cleverness. <strong>Treat 2 m as the first milestone, not 15.</strong></p>
+  </div></div>
+  <div class="verdict w"><span class="m">Add</span><div>
+    <h4>An Experiment 0.5 nobody has run</h4>
+    <p>Your list is good but skips the thing most likely to kill it late: <strong>bubbles.</strong> A diver exhales a plume of near-perfect acoustic reflectors directly beside the sensor, every few seconds. No source I found measures this for a diver-worn array. <strong>You could test it in a pool with Open Echo and a snorkel for under $200</strong> — and if it's fatal, you'd want to know before Phase 2, not after.</p>
+  </div></div>
+</section>
+
+<!-- ===== VERDICT ===== -->
+<section id="verdict">
+  <div class="shead">
+    <span class="lab">The honest answer to "can I build the damn thing myself"</span>
+    <h2>Yes. It'll cost about $2,000 and it's a research project.</h2>
+  </div>
+
+  <div class="pull">
+    <p>Your central thesis is intact, and it's a good one.</p>
+    <span class="sub"><em>"Can a small forward-looking acoustic array plus a cheap IMU plus sonar scan matching replace the mechanical scanner and DVL for a moving human?"</em> — <strong>Nothing I found answers that question.</strong> Harvey Mudd built the array but imaged a static object in a tank. The SLAM literature solved motion distortion but leaned on a DVL. Open Echo made the electronics cheap but single-channel. <strong>The gap between those three is real, and it is exactly where you're pointing.</strong></p>
+  </div>
+
+  <div class="card">
+    <p><strong>What changes from my earlier read:</strong> I said this was a funded lab or nothing. That was too strong. With Open Echo and the Harvey Mudd platform both open and published, <strong>the entry cost is roughly $2,000 and a lot of pool time</strong> — not a grant.</p>
+    <p style="margin-bottom:0"><strong>What doesn't change:</strong> it's still a research project, not a startup. The market analysis hasn't moved. But a research project that produces a working DVL-free diver-worn mapping demo is <strong>a paper, a lab position, and the most technically credible thing anyone will bring to the New Venture Competition.</strong> That's a real outcome, and it's reachable from a dorm room.</p>
+  </div>
+
+  <div class="card pine">
+    <h3>Three emails worth more than three months of building</h3>
+    <ul class="list">
+      <li><strong>Matthew Spencer at Harvey Mudd</strong> — faculty on the array paper, 40 minutes away, and their platform is the thing you'd fork. Ask what they'd do differently and whether the array works beyond a tank.</li>
+      <li><strong>Jan Neumann / Open Echo</strong> — ask which transducers gave the cleanest returns in water, and whether anyone has tried multi-element with the TUSS4470.</li>
+      <li><strong>Vimicx</strong> — 2026 NVC finalist doing 2D sonar to 3D underwater AR, in your own competition.</li>
+    </ul>
+    <p style="margin-bottom:0">All three are reachable, none is a competitor, and every one of them has already spent the year you're about to spend.</p>
+  </div>
+</section>
+
+<footer>
+  <span class="lab q">Source quality &amp; confidence</span>
+  <p style="margin-top:10px"><strong>External fetching was blocked for this research.</strong> Every figure is a search-index summary; no paper, repository or datasheet was opened directly.</p>
+  <p><strong>High confidence:</strong> Open Echo's architecture, frequency range, transducer compatibility and origin story · the Harvey Mudd array's $1,710 cost, 1.8°/0.5° steering resolutions, 1.2 m tank demonstration and cost-reduction method · the 0.7λ element spacing rule and the DSP/FPGA processing requirement for hobbyist arrays.</p>
+  <p><strong>⚠️ My own derivation, not a source:</strong> the θ ≈ 72/N beamwidth relation and the aperture table that follows from it. Standard array theory, but <strong>check it before designing to it.</strong> Note also that Harvey Mudd's quoted 1.8°/0.5° are <em>steering</em> resolutions — how finely the beam can be pointed — which is a different and easier metric than beamwidth; don't read them as their achieved angular resolution.</p>
+  <p><strong>Could not obtain:</strong> Open Echo's actual BOM cost · whether anyone has driven a multi-element array from TUSS4470s · any measurement of exhaust-bubble interference on a diver-worn acoustic sensor · Harvey Mudd's open-water results, if any exist.</p>
+  <p style="margin-top:16px; color:var(--ink-2)">PantryChef research file 09 · review of the DIY sonar cost-reduction plan · August 2026</p>
+</footer>
+
+</div>
