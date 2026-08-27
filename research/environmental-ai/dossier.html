@@ -131,6 +131,23 @@ section p{margin-top:14px}
 .rank-body dt{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-3); white-space:nowrap}
 .rank-body dd{margin:0; font-size:.94rem}
 
+/* plain-language block */
+.plain{padding:24px 26px; border-bottom:1px solid var(--rule-soft); background:var(--panel)}
+.plain .row{display:grid; grid-template-columns:minmax(120px,150px) 1fr; gap:8px 22px; align-items:baseline}
+.plain .row + .row{margin-top:20px; padding-top:20px; border-top:1px dashed var(--rule-soft)}
+.plain .tag{
+  font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--accent); font-weight:600; padding-top:3px;
+}
+.plain .txt{font-size:1rem; line-height:1.6}
+.plain .txt.big{font-family:Spectral,serif; font-size:1.16rem; line-height:1.5}
+.plain .txt p + p{margin-top:12px}
+.plain ol{margin:0; padding-left:19px; font-size:.95rem}
+.plain ol li{margin-top:8px; padding-left:3px}
+.plain ol li::marker{font-family:"IBM Plex Mono",monospace; font-size:.8em; color:var(--accent)}
+.plain code{font-family:"IBM Plex Mono",monospace; font-size:.86em; background:var(--panel-2); padding:1px 5px; border:1px solid var(--rule-soft)}
+@media (max-width:640px){ .plain .row{grid-template-columns:1fr; gap:6px} }
+
 /* score bars */
 .bars{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px 22px; padding:20px 26px; background:var(--panel-2); border-bottom:1px solid var(--rule-soft)}
 .bar-l{display:flex; justify-content:space-between; font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2)}
@@ -346,6 +363,7 @@ ul.tight li::marker{color:var(--accent)}
       <h2>The ranked eight</h2>
       <p class="lede">Environmental impact 20% · Severity 15% · Willingness to pay 15% · Competitive whitespace 15% · AI advantage 10% · Data availability 10% · MVP feasibility 10% · Founder fit 5%.</p>
       <p>Two scoring rules were applied throughout: whitespace measures <em>commercial</em> whitespace, not technical novelty; and willingness-to-pay is scored on evidence of payment in that specific category, never on plausibility.</p>
+      <p>Each entry below opens with the same three things in plain language — <b>what the idea is</b>, <b>what is actually broken</b>, and <b>how you would build it</b> — before any scoring or verification detail.</p>
     </div>
 
     <div class="rank demoted">
@@ -367,12 +385,23 @@ ul.tight li::marker{color:var(--accent)}
         <div><div class="bar-l"><span>MVP</span><b>8</b></div><div class="bar-t"><i style="width:80%"></i></div></div>
         <div><div class="bar-l"><span>Fit</span><b>8</b></div><div class="bar-t"><i style="width:80%"></i></div></div>
       </div>
+      <div class="plain">
+        <div class="row"><span class="tag">The idea</span><div class="txt big">A tool that tells a small-town water utility exactly which schools and daycares it supplies — so it can test their drinking water for lead.</div></div>
+        <div class="row"><span class="tag">The problem</span><div class="txt">
+          <p>A federal rule now requires <b>every community water system in America</b> to hand its state a list of every school and licensed childcare facility it serves by <b>1 November 2027</b>, then start testing their taps for lead — five samples per school, two per daycare, at least 20% of them every year.</p>
+          <p><b>The catch: no utility has that list.</b> Schools live in a federal education directory. Daycares live in fifty separate state licensing registries. The map of which buildings each utility actually supplies water to lives in a third place entirely. Nobody has ever joined the three. A water clerk in a town of 4,000 is now supposed to produce this by hand.</p>
+        </div></div>
+        <div class="row"><span class="tag">How you'd build it</span><div class="txt"><ol>
+          <li>Download EPA's water-system service-area boundary maps — free, covers 44,000+ systems, released Sept 2025.</li>
+          <li>Download each state's licensed-childcare registry and the federal school directory. Geocode every facility address.</li>
+          <li>Run a point-in-polygon match: which facilities fall inside which utility's territory.</li>
+          <li>Output a submission-ready roster, plus an audit log tracking the two outreach attempts the rule requires before a facility can be marked non-responsive.</li>
+        </ol></div></div>
+      </div>
       <div class="rank-body">
         <dl>
-          <dt>The gap</dt><dd>By 1 Nov 2027 every community water system must submit a list of all schools and licensed childcare facilities it serves. <b>No utility holds that roster.</b> The three inputs live in three unrelated places — state childcare licensing registries, NCES school directories, and water-system service-area boundaries — and nobody has joined them. All three are free and public; EPA released service-area boundaries v2 in Sept 2025, and the EPIC/SimpleLab dataset covers 45,973 systems under MIT licence. Pure geospatial entity resolution.</dd>
-          <dt>The buyer</dt><dd><b>Not the utility.</b> The state Rural Water Association circuit-rider program manager. NRWA took $9.1M of EPA's $30.7M small-system award (July 2026) plus a five-year USDA Circuit Rider contract. One sale covers hundreds of systems.</dd>
-          <dt>First 90 days</dt><dd>Build the roster join for one state end to end, produce the actual deliverable file for 20 real water systems, and take it to that state's Rural Water Association. <b>Do not build a portal first.</b></dd>
-          <dt>Kill risk</dt><dd>The regulatory substrate moved twice in 24 months. <em>AWWA v. EPA</em> was briefed through April 2026 with <b>no decision found</b>, and EPA has proposed pushing PFAS compliance 2029→2031 and rescinding four MCLs.</dd>
+          <dt>Buyer</dt><dd><b>Not the utility.</b> The state Rural Water Association circuit-rider manager — one sale covers hundreds of systems.</dd>
+          <dt>Kill risk</dt><dd>The regulatory substrate moved twice in 24 months, and the buyer may not purchase software at all.</dd>
         </dl>
         <div class="alert" style="margin-bottom:0">
           <h3>Round-two verification: the deadline held, the market didn't</h3>
@@ -405,13 +434,25 @@ ul.tight li::marker{color:var(--accent)}
         <div><div class="bar-l"><span>MVP</span><b>6</b></div><div class="bar-t"><i class="lo" style="width:60%"></i></div></div>
         <div><div class="bar-l"><span>Fit</span><b>6</b></div><div class="bar-t"><i class="lo" style="width:60%"></i></div></div>
       </div>
+      <div class="plain">
+        <div class="row"><span class="tag">The idea</span><div class="txt big">A tool that tells power companies which of the giant AI data centres asking to plug into their grid are actually real — and which are the same project shopping itself around.</div></div>
+        <div class="row"><span class="tag">The problem</span><div class="txt">
+          <p>AI data centres need enormous amounts of electricity, so developers apply to utilities to connect. But a developer will file the <b>same project with five different utilities at once</b> to see who can power it fastest, and there is no rule requiring them to say so.</p>
+          <p>So utilities see a mountain of demand that is largely one project counted five times — and they plan real power plants and real transmission lines against it, then charge customers for them. <b>Wood Mackenzie estimates only 28% of the 1,066 GW requested will ever be built.</b> ERCOT's queue went from ~63 GW to ~226 GW in a single year. Building generation for data centres that never exist is both a huge waste of money and a large amount of unnecessary carbon.</p>
+        </div></div>
+        <div class="row"><span class="tag">How you'd build it</span><div class="txt"><ol>
+          <li>Scrape the public paper trail a real project leaves: county zoning agendas, air permits, LLC registrations, land and deed records, utility filings, construction job postings.</li>
+          <li>Use an LLM to pull structured project details out of those messy documents — location, size, developer, dates.</li>
+          <li>Entity-resolve: work out which of those mentions are the <em>same</em> project under different shell-company names.</li>
+          <li>Score each project by how many real-world commitments it has actually made. A project that bought land and pulled an air permit is real; one that only sent a letter is not.</li>
+          <li>Sell the ranked list to utilities and to infrastructure funds deciding whether to finance these things.</li>
+        </ol></div></div>
+      </div>
       <div class="rank-body">
         <dl>
-          <dt>The gap</dt><dd>Unlike generator requests, load interconnection requests carry <b>no standardised transparency requirement</b>. The same project gets shopped to multiple utilities in multiple states, and utilities build capital plans and rate cases on the inflated total. Wood Mackenzie projects only <b>28% of 1,066 GW</b> of US requests will be honoured; ERCOT went from ~63 GW to ~226 GW of large-load requests in twelve months.</dd>
-          <dt>Why it scores</dt><dd>Best agentic-extraction-plus-entity-resolution fit in the corpus: dedupe projects from county zoning agendas, air permits, LLC and land records, utility filings and job postings into entities with a probability-of-build score. Avoided generation overbuild is plausibly the largest climate lever here — and it is a <em>byproduct</em>. You sell market intelligence.</dd>
-          <dt>The buyer</dt><dd>The diligence lead at an infrastructure fund underwriting data-centre or gas-peaker projects. Prioritise the fund; utilities are 12–24 month cycles with SOC 2 and prudency review.</dd>
-          <dt>First 90 days</dt><dd>Pick ERCOT. Build the county-level project entity graph for 10–15 Texas counties, publish a free ranked tracker of which announced projects have actually pulled air permits and filed plats, and let inbound identify the buyer.</dd>
-          <dt>Kill risk</dt><dd>The buyer with the pain (the utility) is the one you can't reach; the one you can reach (a fund) buys one-off diligence, not ARR — the Running Tide failure mode.</dd>
+          <dt>Buyer</dt><dd>Start with the diligence lead at an infrastructure fund — utilities are 12–24 month sales cycles with SOC 2 review.</dd>
+          <dt>First 90 days</dt><dd>Pick ERCOT. Build the entity graph for 10–15 Texas counties, publish a free tracker of which announced projects have actually pulled permits, let inbound find the buyer.</dd>
+          <dt>Kill risk</dt><dd>The buyer with the pain (utility) is unreachable; the reachable one (a fund) buys one-off diligence, not subscriptions.</dd>
         </dl>
       </div>
     </div>
@@ -424,6 +465,19 @@ ul.tight li::marker{color:var(--accent)}
           <p class="who">California local fire agencies &nbsp;<span class="chip c-bad">2 pillars refuted</span></p>
         </div>
         <div class="rank-score"><span class="v">7.70</span><span class="l">as scored</span></div>
+      </div>
+      <div class="plain">
+        <div class="row"><span class="tag">The idea</span><div class="txt big">A phone app for fire inspectors that records whether the first five feet around a house is clear of anything that can catch an ember — and automatically sends the homeowner a report telling them what to fix.</div></div>
+        <div class="row"><span class="tag">The problem</span><div class="txt">
+          <p>Most houses that burn in a wildfire are not set alight by a wall of flame. They are lit by <b>windblown embers</b> landing in a woodpile, a bark-mulch bed, or against a wooden fence touching the wall. California is bringing in a rule — "Zone 0" — requiring roughly <b>2 million homes</b> to keep that first five feet ember-proof.</p>
+          <p>Somebody has to go and check. Today a fire inspector drives out with a clipboard or a spreadsheet, walks the property, and mails a letter. There is no easy way to photograph what's wrong, track whether the homeowner fixed it, or re-inspect next year.</p>
+        </div></div>
+        <div class="row"><span class="tag">How you'd build it</span><div class="txt"><ol>
+          <li>Mobile inspection form the inspector fills in on a phone, offline-capable, with photo and GPS capture per finding.</li>
+          <li>Auto-generate a plain-language homeowner report: here's your photo, here's what to move, here's the deadline.</li>
+          <li>Track re-inspections and compliance rates so the department can show the state and its insurers what it has covered.</li>
+          <li>Free public data does the targeting: state fire-hazard maps, county parcel records, aerial imagery, and lidar that measures vegetation height within five feet of a structure footprint.</li>
+        </ol></div></div>
       </div>
       <div class="rank-body">
         <dl>
@@ -462,12 +516,25 @@ ul.tight li::marker{color:var(--accent)}
         <div><div class="bar-l"><span>MVP</span><b>9</b></div><div class="bar-t"><i class="hi" style="width:90%"></i></div></div>
         <div><div class="bar-l"><span>Fit</span><b>7</b></div><div class="bar-t"><i style="width:70%"></i></div></div>
       </div>
+      <div class="plain">
+        <div class="row"><span class="tag">The idea</span><div class="txt big">A warning system that tells a factory it is about to be sued over polluted rainwater — months before the lawsuit arrives.</div></div>
+        <div class="row"><span class="tag">The problem</span><div class="txt">
+          <p>When rain falls on an industrial site it washes across scrap metal, oil stains and bare soil, picks up contamination, and runs into a creek. Facilities must sample that runoff and <b>upload the results to a public California database called SMARTS.</b></p>
+          <p>Environmental groups read that database to decide who to sue. And under the Clean Water Act, if your numbers are over the line, <b>you are liable — there is no "we tried our best" defence.</b> The average California settlement is over <b>$79,000</b>; one documented case ran <b>$325,000, of which $225,500 went to the plaintiff group and its lawyers.</b></p>
+          <p>Here is the asymmetry: the facility's own bad numbers are sitting in a public database that the people planning to sue them are reading — and the plant manager usually finds out when a legal notice lands on the desk.</p>
+        </div></div>
+        <div class="row"><span class="tag">How you'd build it</span><div class="txt"><ol>
+          <li>Download California's public stormwater data — a <code>660 MB</code> monitoring file plus violations and enforcement records, free, bulk CSV.</li>
+          <li>Get the history of who has actually been sued: file a Public Records Act request for every legal notice filed 2023–2026.</li>
+          <li>Train a model on what those sued facilities looked like <em>before</em> the notice arrived — which pollutants, how many exceedances, what industry, which watershed, how close to an active plaintiff group.</li>
+          <li>Score all ~14,000 permitted facilities in California and email each one its own risk score, free.</li>
+          <li>Sell ongoing monitoring and alerts to the ones who are scared. The pitch is not compliance software — it is <em>you are on a target list and you don't know it.</em></li>
+        </ol></div></div>
+      </div>
       <div class="rank-body">
         <dl>
-          <dt>The gap</dt><dd>SMARTS is public and is <em>literally the mechanism plaintiffs use to select targets</em> for Clean Water Act citizen suits. A facility with a rolling exceedance pattern is visible to LA Waterkeeper before it is visible to its own plant manager. A small, identifiable set of repeat filers drives most California filings, so filer behaviour is learnable — and §505 requires a 60-day Notice of Intent, a fixed exploitable warning window.</dd>
-          <dt>Why it scores</dt><dd>The purest expression of the graveyard thesis in the corpus: the buyer is compelled by <b>strict liability</b>, and you sell into a litigation-avoidance budget, which is categorically larger than a compliance-software budget. And the target list <em>is</em> the dataset — you can generate a ranked outbound list of at-risk facilities for free, which solves the no-sales-relationships problem better than anything else here.</dd>
-          <dt>The buyer</dt><dd>The EHS or plant manager at a permitted facility with a live exceedance pattern — metal recyclers, scrap yards, ports, logistics, ready-mix. Second buyer: outside environmental counsel at regional defence firms, who will resell it.</dd>
-          <dt>First 90 days</dt><dd>Build the exceedance-pattern and filer-behaviour scoring engine, backtest it against 2023–25 notices already filed, publish the accuracy number, then cold-email the top 100 at-risk facilities with their own free score.</dd>
+          <dt>Buyer</dt><dd>The plant or EHS manager at a facility with a live exceedance pattern — metal recyclers, scrap yards, ports, logistics, ready-mix concrete. You are selling into a <b>litigation-avoidance budget</b>, which is far larger than a compliance-software budget.</dd>
+          <dt>Why it fits you</dt><dd><b>The target list is the dataset.</b> You can generate a ranked outbound list of at-risk facilities for free — which solves the "no sales relationships" problem better than anything else on this page.</dd>
         </dl>
         <div class="alert okbox" style="margin-bottom:0">
           <h3>Round-two verification: the last idea standing — and the count is one letter away</h3>
@@ -487,11 +554,22 @@ ul.tight li::marker{color:var(--accent)}
         <div class="rank-t"><h3>Broker-side wildfire risk score appeals</h3><p class="who">Retail personal-lines agencies in wildfire ZIPs &nbsp;<span class="chip c-warn">Driver confirmed, details unverified</span></p></div>
         <div class="rank-score"><span class="v">7.20</span><span class="l">weighted</span></div>
       </div>
+      <div class="plain">
+        <div class="row"><span class="tag">The idea</span><div class="txt big">A tool that helps an insurance agent fight the secret wildfire risk score that just got their client's home insurance cancelled.</div></div>
+        <div class="row"><span class="tag">The problem</span><div class="txt">
+          <p>Insurers score every California home for wildfire risk using proprietary models, then drop or re-price based on that number. California law gives homeowners the right to <b>see their score and appeal it</b>, and requires insurers to give discounts for documented safety work.</p>
+          <p>But the homeowner has no idea <em>what</em> drove the score, or which of a dozen possible improvements would move it most per dollar spent. <b>The insurer holds the model; the homeowner holds the photos.</b> Every software vendor in this space — ZestyAI, Delos, Faura — built for the insurance company. Nobody built the other side of the bridge.</p>
+        </div></div>
+        <div class="row"><span class="tag">How you'd build it</span><div class="txt"><ol>
+          <li>Take an address. Pull the free public inputs: state fire-hazard severity maps, satellite and aerial imagery, lidar showing vegetation height and distance from the structure, county assessor records for roof material and build year.</li>
+          <li>Estimate which of those factors most likely drove the carrier's score.</li>
+          <li>Rank possible fixes by expected score movement per dollar — replace the roof, clear the five-foot zone, screen the vents.</li>
+          <li>Auto-assemble the appeal packet: geotagged before/after photos mapped to the specific criteria insurers are required to credit.</li>
+        </ol></div></div>
+      </div>
       <div class="rank-body"><dl>
-        <dt>The gap</dt><dd>California created a statutory right to see your wildfire risk score and appeal it. <b>Every vendor built the carrier side</b> — ZestyAI, Delos, Faura. The insurer holds the model; the homeowner holds the photos; nobody built the bridge.</dd>
-        <dt>The buyer</dt><dd>The agency principal who loses commission on every non-renewal they cannot re-place. <b>Not the homeowner</b> — that's a one-time purchase under duress with terrible retention.</dd>
-        <dt>First 90 days</dt><dd>Interview 20 retail agents, then <b>hand-run 10 real appeals manually before writing any product code.</b> If manual appeals don't move scores, the product is dead and you know in six weeks for free.</dd>
-        <dt>Verify first</dt><dd>That an appeal actually changes a score in practice. Every FAIR Plan figure in circulation came from insurance-marketing sites.</dd>
+        <dt>Buyer</dt><dd>The agency principal who loses commission on every cancellation they can't re-place. <b>Not the homeowner</b> — a one-time purchase under duress with terrible retention.</dd>
+        <dt>First 90 days</dt><dd>Interview 20 agents, then <b>hand-run 10 real appeals manually before writing any code.</b> If manual appeals don't move scores, the product is dead and you know in six weeks for free.</dd>
       </dl></div>
     </div>
 
@@ -501,10 +579,22 @@ ul.tight li::marker{color:var(--accent)}
         <div class="rank-t"><h3>Distribution-level interconnection normalisation</h3><p class="who">Commercial solar + storage developers &nbsp;<span class="chip c-dep">Unverified</span></p></div>
         <div class="rank-score"><span class="v">7.20</span><span class="l">weighted</span></div>
       </div>
+      <div class="plain">
+        <div class="row"><span class="tag">The idea</span><div class="txt big">One database that tells a solar developer what each of America's ~3,000 electric utilities requires to let a project connect to the grid.</div></div>
+        <div class="row"><span class="tag">The problem</span><div class="txt">
+          <p>To put solar panels and a battery on a warehouse, you have to apply to the local utility for permission to connect. <b>Every one of roughly 3,000 US utilities has its own forms, its own technical tests, and its own map of where the grid has spare capacity.</b> Some publish it as a modern web map; some publish a PDF.</p>
+          <p>So a developer working across a region burns <b>weeks per site</b> re-learning one utility's rules from scratch. Nobody has assembled this into one place — not because it's technically hard, but because it is grinding, unglamorous data-cleaning work that no venture-backed team wants to fund.</p>
+        </div></div>
+        <div class="row"><span class="tag">How you'd build it</span><div class="txt"><ol>
+          <li>Collect each utility's interconnection tariff, application forms and technical screening rules — scattered across websites and PDFs.</li>
+          <li>Use an LLM to normalise them into one structured schema: what size triggers what review, what the fast-track thresholds are, what documents are needed.</li>
+          <li>Ingest hosting-capacity maps where they exist, in whatever format each utility publishes.</li>
+          <li>Ship one API: <em>given this address and this system size, will it clear fast-track screening, how long will it take, and which forms do I file?</em></li>
+        </ol></div></div>
+      </div>
       <div class="rank-body"><dl>
-        <dt>The gap</dt><dd>Everyone chases the transmission queue because LBNL publishes clean data free. <b>Nobody has normalised distribution interconnection rules, screens, forms and hosting-capacity maps across ~3,000 US utilities</b> — because it is grinding janitorial integration work.</dd>
-        <dt>Why it scores</dt><dd>The moat is accumulated data labour rather than model IP — precisely the moat a solo founder can build and a VC-backed team won't fund. Tied for highest whitespace in the top eight.</dd>
-        <dt>Kill risk</dt><dd>Coverage <em>is</em> the product. Three states isn't useful to a national developer, and reaching thirty may outlast the runway. Lowest MVP feasibility in the top eight for exactly this reason.</dd>
+        <dt>Why it scores</dt><dd><b>The moat is accumulated data labour, not model IP</b> — precisely the moat a solo founder can build and a funded team won't bother with. Tied for highest whitespace in the top eight.</dd>
+        <dt>Kill risk</dt><dd>Coverage <em>is</em> the product. Three states isn't useful to a national developer, and reaching thirty may outlast your runway.</dd>
       </dl></div>
     </div>
 
@@ -514,9 +604,24 @@ ul.tight li::marker{color:var(--accent)}
         <div class="rank-t"><h3>Small-utility &amp; co-op wildfire vegetation long tail</h3><p class="who">Municipal utilities and rural electric co-ops &nbsp;<span class="chip c-bad">Hard data blocker</span></p></div>
         <div class="rank-score"><span class="v">6.85</span><span class="l">weighted</span></div>
       </div>
+      <div class="plain">
+        <div class="row"><span class="tag">The idea</span><div class="txt big">Satellite-based tree-risk monitoring for the small rural power companies that can't afford what the big utilities buy.</div></div>
+        <div class="row"><span class="tag">The problem</span><div class="txt">
+          <p>Power lines that touch trees start wildfires. That is how several of California's most destructive fires began, and it is how a utility goes bankrupt. So big utilities pay millions for satellite services that spot which trees along which circuits need trimming first.</p>
+          <p><b>But roughly 3,000 US electric utilities are small municipal or rural co-ops</b> — a few staff, no budget for an enterprise contract — facing exactly the same liability. The vendors' own marketing gives it away: they advertise serving "6 of the 10 largest utilities." The long tail is unserved.</p>
+        </div></div>
+        <div class="row"><span class="tag">How you'd build it</span><div class="txt"><ol>
+          <li>Take the utility's circuit map — where its power lines physically run.</li>
+          <li>Pull free satellite and lidar data over that corridor to measure tree height, species and distance from the conductor.</li>
+          <li>Model which trees could reach the line if they fell or grew another season.</li>
+          <li>Output a ranked trim list: which spans to send a crew to first, with the evidence attached for the regulator.</li>
+        </ol></div></div>
+        <div class="alert" style="margin:20px 0 0">
+          <h3>The blocker that drops this to seventh</h3>
+          <p><b>Step one is impossible without a customer.</b> Where a utility's power lines physically run is confidential infrastructure data. You cannot get it without a signed contract, and you cannot win a contract without demonstrating the product. That is a chicken-and-egg a founder with no utility relationships cannot break.</p>
+        </div>
+      </div>
       <div class="rank-body"><dl>
-        <dt>The gap</dt><dd>Sits downstream of the category with the most proven buyers anywhere in the corpus — Pano AI $89M total across 15 utilities, Overstory $43M serving 6 of the 10 largest in the Americas, AiDash $160.5M and <b>an announced $350M acquisition by Schneider Electric</b>. The incumbents' own marketing confirms the ~3,000-utility long tail is unserved.</dd>
-        <dt>Why only seventh</dt><dd><b>Line geometry is confidential. There is no data access without a utility contract.</b> That is a chicken-and-egg a founder with no enterprise relationships cannot break — it drags data availability to 3 and MVP feasibility to 4.</dd>
         <dt>First 90 days</dt><dd><b>Do not build.</b> Get one co-op to share circuit geometry under NDA in exchange for free work. If nobody will, the idea is closed and you lost three weeks, not a year.</dd>
       </dl></div>
     </div>
@@ -543,8 +648,12 @@ ul.tight li::marker{color:var(--accent)}
           <p>Every supporting claim verified — including the <b>D.C. Circuit's unanimous 18 Aug 2026 affirmance of EPA's CERCLA PFOA/PFOS designation</b>, applying <em>Loper Bright</em>. The liability driving demand is <em>expanding</em> while federal environmental review contracts around it.</p>
         </div>
         <dl>
-          <dt>The gap</dt><dd>Highest willingness-to-pay score in the top eight, lowest whitespace. Consultants <em>already pay</em> EDR/LightBox for this, per report, on a $2,200–4,000 report price — an incumbent reselling free public data: the Library of Congress's ~35,000 Sanborn maps, USGS topoView, NAIP and EarthExplorer aerials.</dd>
-          <dt>Why demand holds</dt><dd>Driven by CERCLA §101(35)(B), untouched by the NEPA rescission and the WOTUS rollback. A Phase I meeting ASTM E1527-21 is the <b>only</b> route to the innocent-landowner liability defence, and lenders require it.</dd>
+          <dt>Plain version</dt><dd><b>A tool that reads century-old maps and aerial photos to work out whether a property used to be a gas station, a dry cleaner or a machine shop.</b><br><br>
+          Before anyone buys a commercial property or lends against it, US law requires an environmental investigation — because if the land turns out to be contaminated, <b>the new owner inherits the clean-up liability.</b> Doing that investigation properly is the only way to keep the legal defence.<br><br>
+          A large chunk of that work is a junior scientist manually reading <b>Sanborn fire-insurance maps, historical aerial photographs, old topographic sheets and city directories</b> going back to when the land was first built on, hunting for the businesses that leave contamination behind. It takes two to three weeks. The report sells for $2,200–4,000.<br><br>
+          The source documents are <b>free and public</b> — the Library of Congress alone has ~35,000 digitised Sanborn maps. A company called EDR/LightBox packages them up and sells them back to consultants as an expensive report, once per property.</dd>
+          <dt>How you'd build it</dt><dd><b>1.</b> Georeference the historical maps to the actual parcel boundary. <b>2.</b> Run computer vision over the aerial photo time-series looking for tanks, staining, fill and demolished structures. <b>3.</b> OCR the city directories to list what businesses operated at that address, by year. <b>4.</b> Have an LLM assemble a historical-use chronology flagging candidate concerns. <b>5.</b> The licensed professional reviews and signs — you never remove the human, which is also what keeps it legally saleable.</dd>
+          <dt>Why demand holds</dt><dd>The liability driver is untouched by the NEPA rescission and the WOTUS rollback — and it just <em>expanded</em>. Lenders require the report; there is no substitute.</dd>
           <dt>The narrowing that matters</dt><dd>Of the four named competitors, <b>V7 Go and Nomic are horizontal document-AI platforms, CaseMark is legal-document AI, and only Quire is environmental software.</b> That contests the <em>report-drafting</em> layer — not the <b>historical-records layer</b>: georeferencing Sanborn maps, reading aerials for fill and tank shadows, OCR-ing city directories for former dry cleaners. That's a vision-and-geospatial problem, and it's where the incumbent extracts most margin.</dd>
           <dt>The real gate</dt><dd>Not competitors — <b>liability</b>. The industry has documented anxiety about AI-generated Phase I content, and a Phase I exists to confer a legal defence. If a firm's E&amp;O carrier says no, the sale dies regardless of quality.</dd>
           <dt>Positioning</dt><dd>Self-serve, $1k–$25k/yr, sold as <em>win more bids at the same headcount</em> — never <em>reduce your hours</em>. Firms run ~80% utilisation targets.</dd>
@@ -670,7 +779,8 @@ ul.tight li::marker{color:var(--accent)}
 <footer class="foot">
   <div class="wrap col">
     <p><b>Method.</b> Ten agents across three waves: six discovery agents (problem scout, green-AI footprint, ocean &amp; diving, land &amp; terrestrial, research-gap hunter, ethical products), two market agents (funding &amp; graveyard, regulation &amp; procurement), an adversarial fact-checker, and a scoring agent. Every agent was required to cite source URLs, flag unverified claims explicitly, and end with a self-critique naming its own weakest findings.</p>
-    <p><b>The constraint that shaped everything.</b> The network egress proxy blocked direct document fetches for every agent. No primary PDF was opened by anyone. Quotes are search-index renderings of real URLs — nothing was fabricated, and every agent disclosed this unprompted — but the fact-check pass exists precisely because search summaries are not sources.</p>
+    <p><b>The constraint that shaped everything, and how to remove it.</b> Every agent reported the same thing: it could search the web but could not open a document. That was verified directly — <code>epa.gov</code>, <code>federalregister.gov</code>, <code>arxiv.org</code> and <code>wikipedia.org</code> all return <code>403</code> at the gateway, logged as <em>"policy denial"</em>. This is the session environment's <b>network egress policy</b>, not a bug: web search runs through a different path, which is why the research got as far as it did while every PDF stayed shut.</p>
+    <p>The consequence is that <b>no primary document was read by anyone in this program.</b> Every quote is a search engine's rendering of a real URL. Nothing was fabricated and every agent disclosed the limitation unprompted — but this is exactly why three verification passes ran, and why they found what they found. <b>Allowing those domains in the environment's network policy would let a re-run read the actual rule texts, dockets and papers</b> — which would resolve most of the remaining uncertainty on this page in a single afternoon.</p>
     <p><b>The scoring agent finished before the fact-check reached it.</b> Its original recommendation was Zone 0. The demotion on this page applies the agent's own stated decision rule — <em>"Board of Forestry confirms Zone 0 is still a draft → downgrade from 'start Monday' to 'one of four'"</em> — to the fact-checker's finding. It is not a second opinion; it is the agent's own logic completed.</p>
     <p style="margin-top:24px; padding-top:20px; border-top:1px solid var(--rule); font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.05em; color:var(--ink-3)">Full agent transcripts, per-domain findings and the complete verdict table: <code>research/environmental-ai/</code> — 8 documents, committed to the repository.</p>
   </div>
