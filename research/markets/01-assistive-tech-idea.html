@@ -1,92 +1,88 @@
-<title>You Already Built The Hard Part</title>
+<title>Seven For Seven</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Ubuntu+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Vollkorn:ital,wght@0,400;0,600;1,400&family=Cousine:wght@400;700&display=swap">
 
 <style>
 :root{
-  --ink:#17150F; --ink-2:#443F33; --muted:#726B5B;
-  --paper:#EEEBE3; --card:#FBF9F3; --band:#E3DFD3;
-  --rule:#C8C2B2; --rule-soft:#DBD6C8;
-  --gold:#B08400; --gold-ink:#8C6800; --gold-wash:#F2E8C9;
-  --kill:#A33526; --kill-wash:#F1DFDB;
-  --go:#256150; --go-wash:#DBE9E4;
+  --ink:#15171A; --ink-2:#3F454C; --muted:#6B727B;
+  --paper:#EAECEE; --card:#FAFBFC; --band:#DFE2E5;
+  --rule:#C2C7CD; --rule-soft:#D7DBE0;
+  --kill:#B23A2B; --kill-ink:#8E2C1F; --kill-wash:#F3DFDB;
+  --live:#1F6152; --live-wash:#DAEAE5;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ink:#EDE9DE; --ink-2:#BDB6A5; --muted:#8C8474;
-    --paper:#131109; --card:#1D1A11; --band:#18150E;
-    --rule:#383324; --rule-soft:#29251A;
-    --gold:#E0B93C; --gold-ink:#EDC95A; --gold-wash:#332A0B;
-    --kill:#E1857A; --kill-wash:#341C17;
-    --go:#6CB89D; --go-wash:#123028;
+    --ink:#E9EBEE; --ink-2:#B2B8BF; --muted:#7E858D;
+    --paper:#111315; --card:#1B1E21; --band:#16191C;
+    --rule:#32373C; --rule-soft:#25292D;
+    --kill:#E4867A; --kill-ink:#EE9E93; --kill-wash:#361C17;
+    --live:#6BB6A0; --live-wash:#122C26;
   }
 }
 :root[data-theme="dark"]{
-  --ink:#EDE9DE; --ink-2:#BDB6A5; --muted:#8C8474;
-  --paper:#131109; --card:#1D1A11; --band:#18150E;
-  --rule:#383324; --rule-soft:#29251A;
-  --gold:#E0B93C; --gold-ink:#EDC95A; --gold-wash:#332A0B;
-  --kill:#E1857A; --kill-wash:#341C17;
-  --go:#6CB89D; --go-wash:#123028;
+  --ink:#E9EBEE; --ink-2:#B2B8BF; --muted:#7E858D;
+  --paper:#111315; --card:#1B1E21; --band:#16191C;
+  --rule:#32373C; --rule-soft:#25292D;
+  --kill:#E4867A; --kill-ink:#EE9E93; --kill-wash:#361C17;
+  --live:#6BB6A0; --live-wash:#122C26;
 }
 
 *{box-sizing:border-box}
 body{margin:0; background:var(--paper); color:var(--ink);
-  font-family:"IBM Plex Serif",Georgia,serif; font-size:16.5px; line-height:1.63;
+  font-family:Vollkorn,Georgia,serif; font-size:17px; line-height:1.62;
   -webkit-font-smoothing:antialiased}
-.wrap{max-width:950px; margin:0 auto; padding:0 22px 90px}
+.wrap{max-width:920px; margin:0 auto; padding:0 22px 90px}
 
-h1,h2,h3,h4,.sy{font-family:Syne,"Helvetica Neue",Arial,sans-serif; font-weight:800; text-wrap:balance; letter-spacing:-.025em}
-h1{font-size:clamp(2.4rem,6.4vw,4.2rem); line-height:1.02; margin:0}
+h1,h2,h3,h4,.fg{font-family:"Familjen Grotesk","Helvetica Neue",Arial,sans-serif; font-weight:700; text-wrap:balance; letter-spacing:-.028em}
+h1{font-size:clamp(2.6rem,7.4vw,4.8rem); line-height:1.0; margin:0}
 h2{font-size:clamp(1.7rem,3.7vw,2.35rem); line-height:1.1; margin:0}
-h3{font-size:1.28rem; line-height:1.2; margin:0 0 6px; font-weight:700}
-h4{font-size:1.02rem; margin:0 0 4px; font-weight:700}
+h3{font-size:1.28rem; line-height:1.2; margin:0 0 6px}
 p{margin:0 0 14px; max-width:68ch}
-a{color:var(--gold-ink)}
-.mono,.lab,td.n,th.n{font-family:"Ubuntu Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
-.lab{font-size:12px; letter-spacing:.15em; text-transform:uppercase; color:var(--gold-ink); font-weight:700}
-.lab.k{color:var(--kill)} .lab.g{color:var(--go)} .lab.q{color:var(--muted)}
+a{color:var(--kill-ink)}
+.mono,.lab,td.n,th.n{font-family:Cousine,ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.lab{font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--kill); font-weight:700}
+.lab.l{color:var(--live)} .lab.q{color:var(--muted)}
 
 header.mast{padding:50px 0 0}
 .topline{display:flex; flex-wrap:wrap; gap:8px 20px; align-items:baseline; border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:26px}
-.topline .who{font-family:"Ubuntu Mono",monospace; font-size:13px; letter-spacing:.06em; text-transform:uppercase}
-.topline .meta{margin-left:auto; font-family:"Ubuntu Mono",monospace; font-size:13px; color:var(--muted)}
-.dek{margin:22px 0 0; font-size:1.18rem; line-height:1.5; color:var(--ink-2); max-width:60ch}
+.topline .who{font-family:Cousine,monospace; font-size:12px; letter-spacing:.07em; text-transform:uppercase}
+.topline .meta{margin-left:auto; font-family:Cousine,monospace; font-size:12px; color:var(--muted)}
+.dek{margin:22px 0 0; font-size:1.18rem; line-height:1.48; color:var(--ink-2); max-width:60ch}
 
-section{margin:56px 0 0; scroll-margin-top:14px}
+section{margin:54px 0 0}
 .shead{border-top:2px solid var(--ink); padding-top:12px; margin-bottom:22px}
 .shead .lab{display:block; margin-bottom:6px}
 .shead p{margin:10px 0 0; color:var(--ink-2); max-width:66ch}
 
 .card{background:var(--card); border:1px solid var(--rule-soft); padding:22px 24px; margin:22px 0}
 .card>*:last-child{margin-bottom:0}
-.card.gold{border-color:var(--gold); border-left-width:3px}
 .card.kill{border-color:var(--kill); border-left-width:3px}
-.card.go{border-color:var(--go); border-left-width:3px}
+.card.live{border-color:var(--live); border-left-width:3px}
 
-.pull{border-left:3px solid var(--gold); padding:3px 0 3px 20px; margin:26px 0; max-width:62ch}
-.pull p{font-family:Syne,Arial,sans-serif; font-weight:800; font-size:1.3rem; line-height:1.3; margin:0; letter-spacing:-.025em}
-.pull .sub{font-family:"IBM Plex Serif",serif; font-weight:400; font-size:.96rem; color:var(--muted); line-height:1.55; margin-top:9px; letter-spacing:0}
-.pull.k{border-left-color:var(--kill)}
+.pull{border-left:3px solid var(--kill); padding:3px 0 3px 20px; margin:26px 0; max-width:62ch}
+.pull p{font-family:"Familjen Grotesk",Arial,sans-serif; font-weight:700; font-size:1.3rem; line-height:1.3; margin:0; letter-spacing:-.028em}
+.pull .sub{font-family:Vollkorn,serif; font-weight:400; font-size:.98rem; color:var(--muted); line-height:1.55; margin-top:9px; letter-spacing:0}
+.pull.l{border-left-color:var(--live)}
 
 ul.list{margin:0 0 16px; padding:0; list-style:none}
 ul.list li{position:relative; padding-left:20px; margin-bottom:9px; max-width:68ch}
-ul.list li::before{content:""; position:absolute; left:2px; top:.74em; width:8px; height:1px; background:var(--gold)}
+ul.list li::before{content:""; position:absolute; left:2px; top:.72em; width:8px; height:1px; background:var(--kill)}
+.card.live ul.list li::before{background:var(--live)}
 
 .scroll{overflow-x:auto; margin:22px 0; border:1px solid var(--rule-soft); background:var(--card)}
-table{border-collapse:collapse; width:100%; min-width:520px; font-size:.93rem}
+table{border-collapse:collapse; width:100%; min-width:540px; font-size:.93rem}
 th,td{text-align:left; padding:11px 15px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
-thead th{font-family:"Ubuntu Mono",monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; border-bottom:1px solid var(--rule); white-space:nowrap}
+thead th{font-family:Cousine,monospace; font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); font-weight:700; border-bottom:1px solid var(--rule); white-space:nowrap}
 tbody tr:last-child td{border-bottom:none}
 tr.dead td{background:var(--kill-wash)}
-tr.hi td{background:var(--gold-wash)}
-td.n,th.n{text-align:right; white-space:nowrap; font-family:"Ubuntu Mono",monospace}
+tr.alive td{background:var(--live-wash)}
+td.n,th.n{text-align:right; white-space:nowrap; font-family:Cousine,monospace}
 caption{caption-side:bottom; text-align:left; padding:10px 15px; font-size:12.5px; color:var(--muted); line-height:1.45}
 
-footer{margin:64px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.88rem; line-height:1.6}
+footer{margin:62px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.88rem; line-height:1.6}
 footer p{max-width:78ch}
-a:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
+a:focus-visible{outline:2px solid var(--kill); outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
 </style>
 
@@ -94,149 +90,121 @@ a:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
 
 <header class="mast">
   <div class="topline">
-    <span class="who">Idea file · replaces the vet idea</span>
+    <span class="who">Kill log · replaces the allergen pitch</span>
     <span class="meta">Aug 2026</span>
   </div>
-  <h1>You Already<br>Built The<br>Hard Part</h1>
-  <p class="dek">You're right about the vet idea — the payer was hypothetical and that's disqualifying. But six markets have now died the same way, and <strong>the reason isn't the ideas.</strong></p>
+  <h1>Seven<br>For Seven</h1>
+  <p class="dek">You were right to call that out. I found the competitors, flagged them as unchecked, and pitched anyway — <strong>the exact mistake I'd spent two documents telling you to avoid.</strong> So I ran the check. It's dead, and the way it died is the most useful thing in this file.</p>
 </header>
 
-<!-- ===== THE PATTERN ===== -->
-<section id="pattern">
+<!-- ===== THE CHECK ===== -->
+<section id="check">
   <div class="shead">
-    <span class="lab k">Say the obvious thing first</span>
-    <h2>Six for six, and it's structural</h2>
+    <span class="lab">The check I should have run first</span>
+    <h2>Institutional allergen software, every segment</h2>
   </div>
 
   <div class="scroll">
     <table>
-      <caption>Every one of these was researched properly. Every one died within one or two searches.</caption>
-      <thead><tr><th>Idea</th><th>How it died</th></tr></thead>
+      <caption>Four segments, four sets of incumbents, all shipping allergen handling today.</caption>
+      <thead><tr><th>Segment</th><th>Who's already there</th></tr></thead>
       <tbody>
-        <tr class="dead"><td>Restaurant food costing</td><td>Square shipped it with MarketMan at $99/mo, inside the POS</td></tr>
-        <tr class="dead"><td>Spearfishing regulations</td><td>Fish Rules, free, whole US coastline</td></tr>
-        <tr class="dead"><td>Dive visibility forecasting</td><td>Five products, all recent</td></tr>
-        <tr class="dead"><td>Outdoor conditions apps <span style="color:var(--muted)">(20 markets)</span></td><td>Five per activity. Weather API plus a weekend.</td></tr>
-        <tr class="dead"><td>Construction estimating <span style="color:var(--muted)">(checked today)</span></td><td>Real money — <strong>$72–152k/yr per contractor in estimator labour</strong> — and McCormick has owned the trade databases for 45 years, with Beam, CountBricks, Trimble and Buildxact on top</td></tr>
-        <tr class="dead"><td>Veterinary cost data</td><td>No payer who isn't broke</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="pull k">
-    <p>Every idea generated from public information loses to the hundreds of people with the same public information.</p>
-    <span class="sub">That's not pessimism, it's arithmetic. A weather API, a market report and an afternoon of searching are available to everyone, and everyone has already used them. <strong>Handing you a seventh idea from the same source would waste your time and mine.</strong></span>
-  </div>
-</section>
-
-<!-- ===== THE ASSET ===== -->
-<section id="asset">
-  <div class="shead">
-    <span class="lab">What you've been walking past</span>
-    <h2>You have an asset. You've been hunting for ideas instead of a buyer for it.</h2>
-  </div>
-
-  <div class="card gold">
-    <h3>PantryChef's safety architecture</h3>
-    <p>Three layers — Hard Executioner, Intolerance Auditor, Gemini Safety Jury — built on an invariant you articulated yourself: <strong>the model may narrow the safe set, never widen it. An LLM can never move an ingredient from unsafe to safe.</strong></p>
-    <p style="margin-bottom:0">Across all this research, <strong>no competitor had that.</strong> Eatvora has the inventory loop but no deterministic allergen handling. MarketMan ships AI recipe generation from a photographed ingredient list and nothing about safety. The six AI fish-ID apps, the five gardening apps, Fishbrain — none of them are load-bearing for anyone's life, so none of them needed it. <strong>You solved a problem the consumer market didn't have.</strong></p>
-  </div>
-
-  <p><strong>That's why the consumer framing kept failing.</strong> Recipe app users won't pay for guaranteed allergen safety because the downside of getting it wrong is mild. You built a seatbelt and tried to sell it to people going for a walk.</p>
-</section>
-
-<!-- ===== THE PAYER ===== -->
-<section id="payer">
-  <div class="shead">
-    <span class="lab g">Lead with the money this time</span>
-    <h2>Someone does have that downside, and they're regulated</h2>
-    <p>Institutional food service — schools, care homes, hospitals, contract caterers, food manufacturers. Here the failure mode is a dead child and a lawsuit, and the environment is tightening right now.</p>
-  </div>
-
-  <div class="scroll">
-    <table>
-      <caption>These are the conditions that were <em>missing</em> from restaurant food waste — where the fine was $50–200 with a 60-day cure window and nothing compelled the spend.</caption>
-      <thead><tr><th>Signal</th><th class="n">Detail</th></tr></thead>
-      <tbody>
-        <tr class="hi"><td><strong>Lawsuits surged in 2026</strong></td><td class="n" style="text-align:left">as more states adopt <strong>mandatory allergen disclosure laws</strong></td></tr>
-        <tr><td>Typical payout</td><td class="n" style="text-align:left"><strong>$150,000–$300,000</strong>; over <strong>$5M</strong> for wrongful death</td></tr>
-        <tr class="hi"><td><strong>FDA enforcement</strong></td><td class="n" style="text-align:left">increased in 2025 and 2026, described as a <strong>friendlier environment for plaintiffs</strong></td></tr>
-        <tr><td>FSMA documentation duty</td><td class="n" style="text-align:left">written allergen hazard analysis, preventive controls, monitoring, corrective actions and verification — <strong>records kept two years, available for FDA inspection</strong></td></tr>
-        <tr><td>Schools</td><td class="n" style="text-align:left">expected to hold a <strong>Food Allergy Management and Prevention Plan</strong></td></tr>
+        <tr class="dead"><td><strong>K-12 schools</strong></td><td><strong>Nutrislice</strong> — personalised allergen filtering on family-facing menus · <strong>PrimeroEdge</strong> — integrated nutrition database with allergen tracking and standardised labels · <strong>LINQ</strong> — foodservice tied to student information systems</td></tr>
+        <tr class="dead"><td><strong>Senior living &amp; long-term care</strong></td><td><strong>MealSuite</strong> — "People Profiles" tracking allergens, textures and diet orders, plus 9,000+ dietitian-curated therapeutic recipes · <strong>CBORD</strong> — diet-specific menu planning with combination diet orders across textures, consistencies and allergies · <strong>PointClickCare</strong> — <em>auto-flagging of allergens to prevent errors</em>, tied to the resident record · MealTracker · DiningRD · MatrixCare</td></tr>
+        <tr class="dead"><td><strong>Food manufacturing</strong></td><td><strong>Miratag</strong> — HACCP, allergen management programs, supplier verification; <strong>500+ businesses</strong> · Alleratech</td></tr>
+        <tr class="dead"><td>Restaurants</td><td>Covered in the earlier research — Toast, MarketMan, Square, Restaurant365</td></tr>
       </tbody>
     </table>
   </div>
 
   <div class="pull">
-    <p>A mandated document, a two-year retention duty, a tightening enforcement posture, and a $150k–$5M downside. That's a budget line that already exists.</p>
-    <span class="sub">Compare it with everything that died: the restaurant waste mandate carried a $100 fine with a cure period, the vet idea had no payer at all, and the outdoor apps had no downside to getting it wrong. <strong>This is the first market in the whole programme where somebody is legally obliged to do the thing you already built.</strong></span>
-  </div>
-
-  <div class="card">
-    <h3>And it reuses what exists, rather than starting over</h3>
-    <ul class="list">
-      <li>The <strong>ingredient ontology with canonical IDs and alias tables</strong> — the thing that makes allergen decisions a database lookup rather than a guess</li>
-      <li>The <strong>deterministic engine</strong> and its never-widen invariant, which is exactly the audit story a regulator wants</li>
-      <li>The <strong>schema.org recipe parsing</strong> work, repointed at supplier spec sheets and product labels instead of food blogs</li>
-      <li>Every decision is <strong>already logged and explainable</strong> — which is the FSMA documentation requirement, produced as a by-product</li>
-    </ul>
-    <p style="margin-bottom:0"><strong>You would be changing the buyer, not the codebase.</strong></p>
-  </div>
-</section>
-
-<!-- ===== CHECK ===== -->
-<section id="check">
-  <div class="shead">
-    <span class="lab k">Before you get excited</span>
-    <h2>What I did not check — and it's the same check that killed the other six</h2>
+    <p>PointClickCare ships "auto-flagging of allergens to prevent errors," wired to the resident's medical record. That is the thing I described as your unclaimed advantage.</p>
+    <span class="sub">And it isn't a coincidence that they got there. <strong>Allergen matching requires two datasets: the recipe and the person. Whoever already owns both owns the feature by default</strong> — which is why every incumbent in every segment has it, and why an outsider arriving with only the logic has nothing to attach it to.</span>
   </div>
 
   <div class="card kill">
-    <ul class="list">
-      <li><strong>Allergen management software already exists.</strong> I saw Miratag and Alleratech in the results and did not investigate either. <strong>Run the full check before anything else</strong> — and specifically on the <em>institutional and school</em> segment, not restaurants.</li>
-      <li><strong>Is the mandated document actually a pain?</strong> Schools may already have a compliant binder that nobody wants to replace. A legal duty is not the same as a felt problem.</li>
-      <li><strong>Who signs?</strong> School district food service directors, not principals. Procurement is slow and budget cycles are annual.</li>
-      <li><strong>Does the liability argument sell, or scare?</strong> "Your current process could kill a child" is true and is also a terrible sales pitch.</li>
-      <li><strong>The claimed metrics</strong> in your README — 98.7% dietary safety accuracy — <strong>would need real validation</strong> if anyone's liability rests on them. That's a different standard of evidence than a class project.</li>
-    </ul>
-    <p style="margin-bottom:0">⚠️ <strong>I am flagging this as a lead, not a verdict.</strong> Six ideas died on exactly this step and this one has not been through it.</p>
+    <h3>Which means the "moat" wasn't one</h3>
+    <p style="margin-bottom:0">PantryChef's deterministic safety layer is genuinely good engineering, and I was right that consumer recipe apps don't have it. <strong>I was wrong about why.</strong> Not because nobody thought of it — because in every market where it matters, it's a feature of the system that already holds the menu and the diner's record. <strong>The logic was never the scarce part.</strong></p>
   </div>
 </section>
 
-<!-- ===== THE REAL THING ===== -->
-<section id="real">
+<!-- ===== THE TALLY ===== -->
+<section id="tally">
   <div class="shead">
-    <span class="lab">The part you won't want to hear</span>
-    <h2>You have never run the interviews</h2>
+    <span class="lab">The record</span>
+    <h2>Seven ideas, seven kills, one method</h2>
   </div>
 
-  <p>There is a 38-question instrument sitting in this repository with scoring rules and pre-committed kill criteria. It was written for restaurants but the method transfers to any market in an afternoon. <strong>It has never been used.</strong></p>
-
-  <p>Every idea you have rejected, you rejected from a desk — including the good instinct that killed the vet idea. That's efficient, and it has a ceiling: <strong>desk research can only ever tell you what is already public, which is why it keeps returning "someone built this."</strong></p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Idea</th><th>Killed by</th></tr></thead>
+      <tbody>
+        <tr class="dead"><td>Restaurant food costing</td><td>Square shipped it with MarketMan at $99/mo, inside the POS</td></tr>
+        <tr class="dead"><td>Spearfishing regulations</td><td>Fish Rules — free, whole US coastline</td></tr>
+        <tr class="dead"><td>Dive visibility forecasting</td><td>Five products, all recent</td></tr>
+        <tr class="dead"><td>Outdoor conditions apps <span style="color:var(--muted)">(20 markets)</span></td><td>Three to six per activity. Weather API plus a weekend.</td></tr>
+        <tr class="dead"><td>Construction estimating</td><td>McCormick, 45 years of trade databases, plus four AI entrants</td></tr>
+        <tr class="dead"><td>Veterinary cost data</td><td>No payer who isn't broke</td></tr>
+        <tr class="dead"><td>Institutional allergen compliance</td><td>Every segment, every incumbent, today</td></tr>
+      </tbody>
+    </table>
+  </div>
 
   <div class="pull">
-    <p>Fishbrain's seven million logged catches, onX's county parcel records, Strava's social graph — none of those were ideas anyone had at a desk. They were consequences of being inside something.</p>
-    <span class="sub">The interviews are the cheapest way to get information other people don't have. <strong>Fifteen conversations, about sixty dollars, one week.</strong> Against six months of generating ideas that die in one search.</span>
+    <p>Any idea that can be described in one sentence from public information has been built by someone who had the same public information.</p>
+    <span class="sub">That was true before AI coding tools and it's brutally true now, because the build cost went to near zero. <strong>Seven attempts with the same method produced seven kills, and the method is the problem — not the ideas, not the markets, and not the effort.</strong> An eighth from the same source would die the same way.</span>
+  </div>
+</section>
+
+<!-- ===== WHAT SURVIVED ===== -->
+<section id="alive">
+  <div class="shead">
+    <span class="lab l">What did survive</span>
+    <h2>Two things, and neither is an idea</h2>
   </div>
 
-  <div class="card go">
-    <h3>What I'd actually do, in order</h3>
-    <ul class="list">
-      <li><strong>Run the existence check on institutional allergen software.</strong> One afternoon. If it's taken, you've lost an afternoon.</li>
-      <li><strong>If it survives, call five school district food service directors.</strong> Ask what they did the last time a parent disclosed a new allergy mid-year. Not whether they'd buy anything.</li>
-      <li><strong>If it dies, that's fine — but stop generating ideas from search results.</strong> The next one will die too, for the same reason as these six.</li>
-    </ul>
-    <p style="margin-bottom:0">And the honest framing for the New Venture Competition, since October is six weeks out: <strong>"I built a deterministic food-safety engine, then spent six months proving that the consumer market for it doesn't exist, and here is the regulated buyer who does"</strong> is a far stronger story than any of the twenty ideas. <strong>The rejections are the work. LegalTime AI won on eighty conversations, not on an idea.</strong></p>
+  <div class="scroll">
+    <table>
+      <caption>These are the only two items from the entire programme that no search could kill.</caption>
+      <thead><tr><th>What</th><th>Why it survived</th></tr></thead>
+      <tbody>
+        <tr class="alive"><td><strong>The sonar project</strong><br><span style="color:var(--muted)">DVL-free perception from a swimming diver</span></td><td><strong>Because it's hard.</strong> Harvey Mudd built the array but imaged a static target in a tank. The SLAM literature solved motion distortion but kept the DVL. Open Echo made the electronics cheap but single-channel. ARIS does real-time tracking but only from a tripod. <strong>Nobody joined them, and the difficulty is exactly why the space is empty.</strong> Phase 0 costs $0.</td></tr>
+        <tr class="alive"><td><strong>The interviews</strong><br><span style="color:var(--muted)">38 questions, scoring, kill criteria — written, never used</span></td><td><strong>Because they generate information that isn't public.</strong> Every kill in the table above came from a search anyone could run. Nothing a search can reach will ever be an advantage.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card live">
+    <h3>The pattern, stated once</h3>
+    <p>Look at what the winners in this research actually owned. <strong>onX: county parcel records nobody would compile. Fishbrain: seven million logged catches. Strava: a social graph. AllTrails: a decade of reviews.</strong></p>
+    <p style="margin-bottom:0"><strong>Not one of those was an idea.</strong> Each was the residue of someone doing something unglamorous for years, or being inside a thing long enough to see what outsiders couldn't. <strong>There is no search query that returns those.</strong></p>
+  </div>
+
+  <div class="pull l">
+    <p>The two survivors have the same property: they cost time rather than cleverness, and that is precisely why they're still standing.</p>
+    <span class="sub">Everything cheap to attempt has been attempted. <strong>The filter isn't "is this a good idea" any more — it's "would a normal person give up before finishing this."</strong> A diver-worn sonar that needs a year of pool testing, and fifteen conversations that need you to walk into fifteen businesses, both pass. Nothing else in seven attempts did.</span>
+  </div>
+</section>
+
+<!-- ===== NEXT ===== -->
+<section id="next">
+  <div class="shead">
+    <span class="lab l">If you want one more from me</span>
+    <h2>Change what I'm searching for</h2>
+  </div>
+
+  <div class="card">
+    <p>I can keep generating ideas and they will keep dying — that's now measured, not predicted. <strong>What I can do differently is stop searching for products and start searching for datasets:</strong> records that exist, are legally accessible, are fragmented across hundreds of sources, and that somebody needs in order to make a decision with money attached. The onX shape.</p>
+    <p style="margin-bottom:0">That's a genuinely different search, it has not been run once in this whole programme, and <strong>it's the only desk-research move left that hasn't already failed seven times.</strong> Say the word and I'll run it properly — checking each candidate before presenting it, this time.</p>
   </div>
 </section>
 
 <footer>
-  <span class="lab q">Source quality &amp; confidence</span>
-  <p style="margin-top:10px"><strong>External fetching was blocked throughout.</strong> Every figure is a search-index summary; no statute, court record or product page was opened directly. <strong>This file replaces the veterinary idea at the same address, at your request.</strong></p>
-  <p><strong>High confidence:</strong> the food allergy litigation figures and the 2026 surge attributed to mandatory disclosure laws · increased FDA enforcement in 2025–26 · the FSMA allergen documentation and two-year retention requirements · the expectation that schools hold a Food Allergy Management and Prevention Plan · the construction estimating labour figures ($75–95/hour, $900–1,900 per bid, 80 bids a year) and the incumbents in that space.</p>
-  <p><strong>⚠️ Not checked, and load-bearing:</strong> <strong>whether institutional allergen compliance software already exists and is good.</strong> Miratag and Alleratech both appeared in results and were not investigated. This is the exact step that killed the previous six ideas, and this idea has not survived it yet — <strong>treat everything above as a lead.</strong></p>
-  <p><strong>Also unverified:</strong> whether school districts experience the compliance duty as a real pain · who holds the budget · whether liability-led selling works in this segment · whether PantryChef's claimed safety metrics would survive independent validation.</p>
-  <p style="margin-top:16px; color:var(--ink-2)">Idea file · the asset you already have, and the regulated buyer for it · August 2026</p>
+  <span class="lab q">Source quality</span>
+  <p style="margin-top:10px"><strong>External fetching was blocked throughout.</strong> Every figure is a search-index summary; no product page was opened directly.</p>
+  <p><strong>High confidence:</strong> Nutrislice's personalised allergen filtering · PrimeroEdge's allergen tracking and integrated nutrition database · LINQ's student-information-system integration · MealSuite's People Profiles and 9,000+ therapeutic recipes · CBORD's combination diet orders across textures, consistencies and allergies · PointClickCare's auto-flagging of allergens · Miratag's HACCP and allergen management across 500+ businesses.</p>
+  <p><strong>Still not verified:</strong> pricing for any of them, and whether their allergen handling is deterministic or advisory. <strong>Neither changes the conclusion</strong> — the incumbents hold the recipe data and the person's record, which is the part that can't be replicated from outside.</p>
+  <p style="margin-top:16px; color:var(--ink-2)">Kill log · seven ideas, and the two things left standing · August 2026</p>
 </footer>
 
 </div>
