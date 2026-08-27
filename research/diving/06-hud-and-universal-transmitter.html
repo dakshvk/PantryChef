@@ -1,0 +1,297 @@
+<title>What The HUD Can Actually Show</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Red+Hat+Mono:wght@400;600&display=swap">
+
+<style>
+:root{
+  --ink:#141A22; --ink-2:#3B4654; --muted:#6C7787;
+  --paper:#E9ECF0; --card:#FAFBFC; --band:#DDE2E9;
+  --rule:#BFC7D2; --rule-soft:#D6DCE4;
+  --navy:#1B3A6B; --navy-ink:#142E57; --navy-wash:#DCE4F0;
+  --sig:#C0431C; --sig-wash:#F5E1D9;
+  --ok:#25634A; --ok-wash:#DCEAE3;
+  --hud:#1B3A6B;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E6EBF1; --ink-2:#B0BAC7; --muted:#7E8998;
+    --paper:#0C1118; --card:#161C25; --band:#111721;
+    --rule:#2A3441; --rule-soft:#1E2732;
+    --navy:#7FA6DC; --navy-ink:#9CBCE9; --navy-wash:#152540;
+    --sig:#E88560; --sig-wash:#38201A;
+    --ok:#6BB394; --ok-wash:#132C22;
+    --hud:#8FB4E8;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E6EBF1; --ink-2:#B0BAC7; --muted:#7E8998;
+  --paper:#0C1118; --card:#161C25; --band:#111721;
+  --rule:#2A3441; --rule-soft:#1E2732;
+  --navy:#7FA6DC; --navy-ink:#9CBCE9; --navy-wash:#152540;
+  --sig:#E88560; --sig-wash:#38201A;
+  --ok:#6BB394; --ok-wash:#132C22;
+  --hud:#8FB4E8;
+}
+
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Crimson Pro",Georgia,serif; font-size:17.5px; line-height:1.58;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:990px; margin:0 auto; padding:0 22px 90px}
+
+h1,h2,h3,h4,.epi{font-family:Epilogue,"Helvetica Neue",Arial,sans-serif; font-weight:700; text-wrap:balance; letter-spacing:-.025em}
+h1{font-size:clamp(2.6rem,7vw,4.6rem); line-height:.99; margin:0; font-weight:800}
+h2{font-size:clamp(1.8rem,3.9vw,2.55rem); line-height:1.06; margin:0}
+h3{font-size:1.35rem; line-height:1.18; margin:0 0 6px}
+h4{font-size:1.05rem; margin:0 0 4px}
+p{margin:0 0 14px; max-width:68ch}
+a{color:var(--navy-ink)}
+.mono,.lab,.chip,td.n,th.n{font-family:"Red Hat Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.lab{font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--navy); font-weight:600}
+.lab.s{color:var(--sig)} .lab.g{color:var(--ok)} .lab.q{color:var(--muted)}
+
+header.mast{padding:50px 0 0}
+.topline{display:flex; flex-wrap:wrap; gap:8px 20px; align-items:baseline; border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:26px}
+.topline .who{font-family:"Red Hat Mono",monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase}
+.topline .meta{margin-left:auto; font-family:"Red Hat Mono",monospace; font-size:10.5px; color:var(--muted)}
+.dek{margin:22px 0 0; font-size:1.2rem; line-height:1.5; color:var(--ink-2); max-width:60ch}
+
+section{margin:62px 0 0; scroll-margin-top:14px}
+.shead{border-top:2px solid var(--ink); padding-top:12px; margin-bottom:22px}
+.shead .lab{display:block; margin-bottom:6px}
+.shead p{margin:10px 0 0; color:var(--ink-2); max-width:66ch}
+
+.card{background:var(--card); border:1px solid var(--rule-soft); padding:22px 24px; margin:22px 0}
+.card>*:last-child{margin-bottom:0}
+.card.sig{border-color:var(--sig); border-left-width:3px}
+.card.ok{border-color:var(--ok); border-left-width:3px}
+
+.pull{border-left:3px solid var(--navy); padding:3px 0 3px 20px; margin:26px 0; max-width:62ch}
+.pull p{font-family:Epilogue,Arial,sans-serif; font-weight:700; font-size:1.32rem; line-height:1.28; margin:0; letter-spacing:-.022em}
+.pull .sub{font-family:"Crimson Pro",serif; font-weight:400; font-size:1rem; color:var(--muted); line-height:1.5; margin-top:9px; letter-spacing:0}
+.pull.s{border-left-color:var(--sig)}
+
+ul.list{margin:0 0 16px; padding:0; list-style:none}
+ul.list li{position:relative; padding-left:20px; margin-bottom:9px; max-width:68ch}
+ul.list li::before{content:""; position:absolute; left:2px; top:.7em; width:8px; height:1px; background:var(--navy)}
+
+/* the HUD mock */
+.hudwrap{display:grid; grid-template-columns:minmax(230px,290px) 1fr; gap:0; border:1px solid var(--rule-soft); background:var(--card); margin:24px 0}
+.hudbox{background:var(--band); border-right:1px solid var(--rule-soft); padding:26px 24px; display:flex; flex-direction:column; justify-content:center}
+.hudbox .ret{font-family:"Red Hat Mono",monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-bottom:14px}
+.hudline{font-family:"Red Hat Mono",monospace; color:var(--hud); font-weight:600; line-height:1.85; font-size:1.02rem}
+.hudline .big{display:block; font-family:Epilogue,Arial,sans-serif; font-size:2rem; letter-spacing:-.03em; line-height:1.1; margin-bottom:4px}
+.hudnote{padding:22px 24px}
+.hudnote>*:last-child{margin-bottom:0}
+
+.scroll{overflow-x:auto; margin:22px 0; border:1px solid var(--rule-soft); background:var(--card)}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:1rem}
+th,td{text-align:left; padding:11px 15px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
+thead th{font-family:"Red Hat Mono",monospace; font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:600; border-bottom:1px solid var(--rule); white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+tr.yes td{background:var(--ok-wash)}
+tr.no td{background:var(--sig-wash)}
+td.n,th.n{text-align:right; white-space:nowrap; font-family:"Red Hat Mono",monospace}
+caption{caption-side:bottom; text-align:left; padding:10px 15px; font-size:12.5px; color:var(--muted); line-height:1.45}
+.v{font-family:"Red Hat Mono",monospace; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; font-weight:600; white-space:nowrap}
+.v.y{color:var(--ok)} .v.n{color:var(--sig)} .v.m{color:var(--muted)}
+
+.warn{border:1px solid var(--sig); border-left-width:3px; background:var(--card); padding:18px 20px; margin:24px 0}
+.warn>*:last-child{margin-bottom:0}
+
+footer{margin:70px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.92rem; line-height:1.6}
+footer p{max-width:78ch}
+a:focus-visible{outline:2px solid var(--navy); outline-offset:2px}
+@media (max-width:680px){
+  .hudwrap{grid-template-columns:1fr}
+  .hudbox{border-right:none; border-bottom:1px solid var(--rule-soft)}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="topline">
+    <span class="who">PantryChef · Research File 08</span>
+    <span class="meta">Aug 2026 · Two new ideas</span>
+  </div>
+  <h1>What The HUD<br>Can Actually<br>Show</h1>
+  <p class="dek">Your universal-transmitter question answers itself — <strong>the cheap open hardware already exists and produced nothing.</strong> The AR fish-tracking HUD is the strongest idea yet, and it has a regulatory time bomb you haven't seen.</p>
+</header>
+
+<!-- ===== IDEA 1 ===== -->
+<section id="transmitter">
+  <div class="shead">
+    <span class="lab">Idea #1 · You asked exactly the right question</span>
+    <h2>It's neither a new protocol nor cheaper hardware. Both exist.</h2>
+    <p>Your own framing — <em>"is the opportunity a new protocol, or inexpensive hardware plus software that makes existing standards interoperable?"</em> — is the correct question. The answer is that <strong>somebody already did the second one, published it, and gave it away.</strong></p>
+  </div>
+
+  <div class="card ok">
+    <span class="lab g">The open cheap modem exists · TU Hamburg</span>
+    <h3 style="margin-top:8px">ahoi — open-source acoustic modem, ~€600 a unit</h3>
+    <div class="scroll" style="margin:14px 0; border:none">
+      <table style="min-width:400px">
+        <tbody>
+          <tr><td>Unit cost</td><td class="n"><strong>~€600</strong> — €200 PCBs and components, €400 hydrophone</td></tr>
+          <tr><td>Size</td><td class="n">50 × 50 × 25 mm, three stacked PCBs</td></tr>
+          <tr><td>Range</td><td class="n">150 m and more</td></tr>
+          <tr><td>Bitrate</td><td class="n">260 bit/s max (Hamming encoded)</td></tr>
+          <tr><td>Band</td><td class="n">FSK, 25 kHz bandwidth centred at 62.5 kHz</td></tr>
+          <tr class="yes"><td><strong>Ranging</strong></td><td class="n"><strong>Built in — no extra hardware</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Its authors state the motivation in one line: <em>"Commercial underwater acoustic devices are prohibitively expensive and typically closed-source, hampering their application in affordable products and research."</em> <strong>That is your thesis, written by researchers who then built the thing.</strong></p>
+    <p style="margin-bottom:0">And it isn't alone — <strong>Coralcon</strong> is an open-source low-cost modem for underwater IoT, and <strong>Project Sabine</strong> is a DIY modem built from commercial off-the-shelf components.</p>
+  </div>
+
+  <div class="pull s">
+    <p>An open protocol, an open 50-millimetre modem at €600, and open ranging — all published, all free to use. No product came out of any of it.</p>
+    <span class="sub">JANUS has been a NATO standard since 2017. ahoi has been published since 2020. If cheap open hardware plus an open standard were the missing pieces, <strong>the universal underwater transmitter would already exist.</strong> The bottleneck was never the protocol and was never the component cost.</span>
+  </div>
+
+  <div class="card sig">
+    <h3>What the bottleneck actually is</h3>
+    <p><strong>A universal transceiver is worth exactly as much as the number of devices willing to speak to it — and the devices that matter won't.</strong></p>
+    <ul class="list">
+      <li>Dive computers won't, because the pairing lives in the receiver chip and the accessory lock-in <em>is</em> the business model.</li>
+      <li>Garmin calls SubWave proprietary and is extending it, not opening it — the Descent S1 Buoy shipped this cycle.</li>
+      <li>So you'd ship a universal device whose only conversation partner is another copy of itself.</li>
+    </ul>
+    <p style="margin-bottom:0">And note the price comparison that keeps recurring: <strong>ahoi costs ~€600 open and research-grade; Garmin's T2 costs $200–350 closed and consumer-grade.</strong> The open version is <em>more</em> expensive. Volume beats openness on price, every time.</p>
+  </div>
+
+  <div class="card">
+    <h3>Where the idea does survive — and it isn't divers</h3>
+    <p style="margin-bottom:0">Your device list quietly contains the answer. <strong>ROVs, AUVs, scientific sensors, environmental sensors and surface buoys are already open</strong> — they run ROS, they publish interfaces, nobody is defending an accessory margin. That's the marine-robotics and research market, where interoperability is a genuine want. <strong>It is also exactly the market ahoi and EvoLogics already serve, and it is small.</strong> Real, but not a consumer business.</p>
+  </div>
+</section>
+
+<!-- ===== IDEA 2 ===== -->
+<section id="hud">
+  <div class="shead">
+    <span class="lab">Idea #2 · The strongest idea in this programme so far</span>
+    <h2>The AR fish-tracking HUD</h2>
+    <p>This is the first idea where the answer isn't "someone already built it." It's also the first with a <strong>regulatory risk that could remove the market during development.</strong> Three findings, in order of how much they matter.</p>
+  </div>
+
+  <div class="warn">
+    <span class="lab s">Finding 1 · The biggest risk, and it is happening right now</span>
+    <h3 style="margin-top:9px">Forward-facing sonar is being banned across fishing</h3>
+    <ul class="list">
+      <li><strong>Two major bass fishing circuits have banned or restricted live sonar.</strong></li>
+      <li><strong>Twelve states are moving to ban or restrict it</strong> on state fisheries.</li>
+      <li>Wisconsin's DNR took a proposed ban on <strong>forward-facing and 360-degree imaging</strong> to its spring hearings.</li>
+      <li>A major industry figure has argued it should be illegal <strong>recreationally</strong>, not just in tournaments.</li>
+    </ul>
+    <p>The stated reasoning is precisely what your product would trigger: the technology <em>"has increased the pressure on fish populations by making anglers more efficient in locating and catching fish,"</em> and it <em>"blurs the hard-to-define boundary between fair chase and exploitation."</em></p>
+    <p style="margin-bottom:0"><strong>And spearfishing's fair-chase norms are stricter than angling's, not looser.</strong> Hawaii already bans scuba for spearfishing explicitly to promote fair chase. Florida bans powerheads, bangsticks and rebreathers for harvest. <strong>You would be building the most regulated-against technology in fishing, for the sport with the strongest fair-chase culture.</strong></p>
+  </div>
+
+  <div class="pull">
+    <p>Your instinct to position it as "underwater situational awareness" rather than a spearfishing HUD isn't just better marketing. It may be survival.</p>
+    <span class="sub">Search and rescue, public-safety diving, commercial inspection, scientific diving, cave and wreck diving, low-visibility operations — <strong>none of those buyers can have the product legislated away from them.</strong> A spearfishing-first product can be, in your own state, while you're still building it.</span>
+  </div>
+
+  <h3 style="margin-top:40px; font-size:1.5rem">Finding 2 · Sonar gives you five of your nine fields</h3>
+  <p>Fisheries acoustics is a mature science and split-beam echosounders do exactly this job — so the question isn't whether sonar can see fish. It's <strong>which of the readouts in your mock-up survive contact with the physics.</strong></p>
+
+  <div class="hudwrap">
+    <div class="hudbox">
+      <div class="ret">Your mock readout</div>
+      <div class="hudline">
+        <span class="big">FISH</span>
+        7.2 m<br>
+        18° left<br>
+        0.8 m below<br>
+        Moving right
+      </div>
+    </div>
+    <div class="hudnote">
+      <p><strong>Everything in this box is achievable.</strong> Range, bearing, relative depth and direction of travel are geometry — they fall out of the echo's timing and the beam's angle, and they're what a split-beam system is built to measure.</p>
+      <p style="margin-bottom:0"><strong>The four fields that aren't in the box are the hard ones</strong> — and they're the ones that would make the product feel magic: species, approximate size, confidence, and predicted trajectory.</p>
+    </div>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Fish size from acoustics uses <strong>TS = 20 log(L) + b20</strong>, where <strong>b20 is species-specific</strong>. You need the species to get the size — and size is one of your cues for species.</caption>
+      <thead><tr><th>Field in your HUD</th><th class="n">Verdict</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr class="yes"><td>Fish detected</td><td class="n"><span class="v y">Yes</span></td><td>Core function of every echosounder</td></tr>
+        <tr class="yes"><td>Distance</td><td class="n"><span class="v y">Yes</span></td><td>Echo timing. The easiest measurement in acoustics.</td></tr>
+        <tr class="yes"><td>Bearing / angle</td><td class="n"><span class="v y">Yes</span></td><td>What the "split" in split-beam is for</td></tr>
+        <tr class="yes"><td>Relative depth</td><td class="n"><span class="v y">Yes</span></td><td>Geometry from bearing plus your own depth sensor</td></tr>
+        <tr class="yes"><td>Direction of movement</td><td class="n"><span class="v y">Yes</span></td><td>Track a target across successive pings</td></tr>
+        <tr class="no"><td><strong>Species</strong></td><td class="n"><span class="v n">No</span></td><td><strong>Fisheries science lists "difficulty in fish species identification" among its own unsolved problems.</strong> Not a resolution issue — an information-theoretic one.</td></tr>
+        <tr class="no"><td><strong>Approximate size</strong></td><td class="n"><span class="v n">Unreliable</span></td><td>Needs the species-specific constant <em>and</em> the fish's tilt angle. <strong>Target strength varies strongly with orientation</strong> — the same fish reads very differently as it turns.</td></tr>
+        <tr><td>Confidence</td><td class="n"><span class="v m">Only as good as the above</span></td><td>A confidence score on an unreliable species estimate is a confident-looking guess</td></tr>
+        <tr><td>Predicted trajectory</td><td class="n"><span class="v m">Hard</span></td><td>Fish don't move ballistically. Short-horizon extrapolation, at best.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card ok">
+    <span class="lab g">And your architecture instinct is right</span>
+    <p style="margin-top:8px"><strong>Camera in clear water, sonar in murk, AI fusing them</strong> — that is the correct design, and it plays to each sensor's actual strength. Real-time fish detection and species classification from imagery is well-established and improving fast; it's the sonar half that can't do species. <strong>So the fusion isn't a nice-to-have, it's the only way to fill the species field at all.</strong></p>
+    <p style="margin-bottom:0">One catch worth knowing: split-beam sizing needs <strong>compound transducer array geometry with accurate calibration.</strong> That is not a $1,975 Ping360 — it's a purpose-built array, and it's the part of the bill of materials you can't shop for off a shelf.</p>
+  </div>
+
+  <h3 style="margin-top:40px; font-size:1.5rem">Finding 3 · A student team is building the display right now</h3>
+
+  <div class="card">
+    <h3 style="color:var(--navy-ink)">AREX AR dive mask — 2026 James Dyson Award</h3>
+    <p>An AR dive mask with a built-in HUD and dive computer, projecting hands-free life-support data into the diver's vision, with an RGB LED for buddy identification. <strong>Prototypes tested to 45 metres.</strong></p>
+    <p><strong>Their documented problems are the ones you would inherit</strong>, and reading them is worth more than any market report:</p>
+    <ul class="list">
+      <li>Early prototypes <strong>struggled with glare and narrow viewing angles</strong> — the core optical challenge is delivering high-contrast data without obstructing the natural view</li>
+      <li><strong>Months in the lab</strong> on lens positioning and field-of-view calibration just to stabilise the optical engine</li>
+      <li>⭐ <strong>Touchscreens fail underwater</strong>, so they prototyped mechanical dials that can be operated blind, in thick technical gloves</li>
+      <li>Pressure and waterproofing across depth on top of all of it</li>
+    </ul>
+    <p style="margin-bottom:0">The US Navy also fields an AR diving helmet, and the existing commercial HUDs — <strong>Shearwater NERD 2 at $1,650</strong>, Scubapro Galileo HUD, Halcyon Symbios — remain stuck with technical and rebreather divers on price and on the fogging problem.</p>
+  </div>
+
+  <div class="pull">
+    <p>The display half is being solved by people you could email this week.</p>
+    <span class="sub">AREX is a student project. So is <strong>Vimicx</strong> — the 2026 New Venture Competition finalist turning 2D sonar into real-time 3D underwater AR, in your own competition. <strong>Between them they are building both halves of your idea, and neither is a competitor the way Garmin is.</strong> They are the two most valuable conversations available to you, and they cost nothing.</span>
+  </div>
+</section>
+
+<!-- ===== VERDICT ===== -->
+<section id="verdict">
+  <div class="shead">
+    <span class="lab">Where this leaves you</span>
+    <h2>One idea closes, one opens</h2>
+  </div>
+
+  <div class="card sig">
+    <h3>Idea #1 — closed, and instructively so</h3>
+    <p style="margin-bottom:0">The "USB-C for underwater" instinct was right, and that is precisely why it already exists twice: <strong>an open NATO protocol since 2017 and an open €600 modem since 2020.</strong> Neither produced a product, because the barrier is that <strong>the devices worth talking to are commercially unwilling to talk.</strong> Worth understanding before building anything else in this space — it's the same wall the transmitter-interoperability idea hit.</p>
+  </div>
+
+  <div class="card ok">
+    <h3>Idea #2 — the first one that survives</h3>
+    <p>The hard part genuinely isn't "someone already built it." What it needs is:</p>
+    <ul class="list">
+      <li><strong>Position it as situational awareness from day one</strong>, not a spearfishing product — for regulatory survival, not marketing polish</li>
+      <li><strong>Design the HUD around the five fields sonar can deliver</strong>, and let the camera carry species when the water allows. Don't promise a species field that fails in the exact conditions sonar exists to handle.</li>
+      <li><strong>Talk to AREX and Vimicx before writing a line of code</strong></li>
+      <li><strong>Ask spearos the fair-chase question directly.</strong> Not "would you use this" — <em>"should this be legal?"</em> If the sport's own culture rejects it, you'll learn that from fifteen conversations rather than from a state legislature three years in.</li>
+    </ul>
+    <p style="margin-bottom:0">That last one is the whole interview method pointed at the single question that decides the market — <strong>and it's a question only spearfishers can answer.</strong></p>
+  </div>
+</section>
+
+<footer>
+  <span class="lab q">Source quality &amp; confidence</span>
+  <p style="margin-top:10px"><strong>External fetching was blocked for this research.</strong> Every figure is a search-index summary; no paper, patent or product page was opened directly.</p>
+  <p><strong>High confidence:</strong> ahoi's cost, size, range, bitrate and built-in ranging, and its authors' stated motivation · the existence of Coralcon and Project Sabine · the forward-facing-sonar bans across two tournament circuits and twelve states, and the Wisconsin DNR hearing · Hawaii's scuba-spearfishing ban on fair-chase grounds and Florida's powerhead/bangstick/rebreather prohibitions · the TS = 20 log(L) + b20 relationship and its species-specific constant · tilt-angle dependence of target strength · species identification as a named open problem in fisheries acoustics · AREX's design challenges and 45 m testing · NERD 2 pricing.</p>
+  <p><strong>⚠️ Unverified:</strong> whether any jurisdiction has yet proposed banning electronic aids for <em>spearfishing</em> specifically — <strong>the bans found are all in angling, and the extension to spearfishing is my inference from the fair-chase precedent, not a documented proposal.</strong> Check it before treating it as certain, and check it in California first · AREX's current status, funding or commercial intent · whether a split-beam array could be built at consumer cost.</p>
+  <p style="margin-top:16px; color:var(--ink-2)">PantryChef research file 08 · universal transmitter and AR fish-tracking HUD · August 2026</p>
+</footer>
+
+</div>
