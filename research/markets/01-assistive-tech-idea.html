@@ -1,104 +1,110 @@
-<title>The Words They're Reaching For</title>
+<title>What It Cost, What They Chose</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700;800&family=Petrona:ital,wght@0,400;0,600;1,400&family=Courier+Prime:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500;600;700;800&family=Alegreya:ital,wght@0,400;0,600;1,400&family=Anonymous+Pro:wght@400;700&display=swap">
 
 <style>
 :root{
-  --ink:#1A1C18; --ink-2:#434739; --muted:#6F7565;
-  --paper:#ECEDE7; --card:#FAFBF6; --band:#E1E3D9;
-  --rule:#C5C8B9; --rule-soft:#D9DBCE;
-  --sage:#41633F; --sage-ink:#334E32; --sage-wash:#DDE7DB;
-  --gold:#8E6408; --gold-wash:#F0E7CF;
-  --stop:#A33A2C; --stop-wash:#F2DFDB;
+  --ink:#1B171A; --ink-2:#464047; --muted:#736C74;
+  --paper:#EFEBEA; --card:#FCFAF9; --band:#E3DDDC;
+  --rule:#C9C1C1; --rule-soft:#DBD4D3;
+  --rose:#A6304E; --rose-ink:#88213C; --rose-wash:#F1DFE3;
+  --slate:#3B5468; --slate-wash:#DEE5EB;
+  --go:#22624A; --go-wash:#DAE8E1;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ink:#EAECE4; --ink-2:#B7BBAA; --muted:#878C79;
-    --paper:#14160F; --card:#1E2118; --band:#191C13;
-    --rule:#363A2B; --rule-soft:#282C20;
-    --sage:#88BC84; --sage-ink:#A0CE9C; --sage-wash:#1D2E1C;
-    --gold:#D3A83E; --gold-wash:#31270D;
-    --stop:#E0857A; --stop-wash:#341C17;
+    --ink:#EDE8E9; --ink-2:#BAB2B5; --muted:#8A8286;
+    --paper:#151113; --card:#1F1A1D; --band:#191416;
+    --rule:#3A3236; --rule-soft:#2B2528;
+    --rose:#E68399; --rose-ink:#F09FB1; --rose-wash:#3A1723;
+    --slate:#8FAEC6; --slate-wash:#17222B;
+    --go:#6FB795; --go-wash:#132D23;
   }
 }
 :root[data-theme="dark"]{
-  --ink:#EAECE4; --ink-2:#B7BBAA; --muted:#878C79;
-  --paper:#14160F; --card:#1E2118; --band:#191C13;
-  --rule:#363A2B; --rule-soft:#282C20;
-  --sage:#88BC84; --sage-ink:#A0CE9C; --sage-wash:#1D2E1C;
-  --gold:#D3A83E; --gold-wash:#31270D;
-  --stop:#E0857A; --stop-wash:#341C17;
+  --ink:#EDE8E9; --ink-2:#BAB2B5; --muted:#8A8286;
+  --paper:#151113; --card:#1F1A1D; --band:#191416;
+  --rule:#3A3236; --rule-soft:#2B2528;
+  --rose:#E68399; --rose-ink:#F09FB1; --rose-wash:#3A1723;
+  --slate:#8FAEC6; --slate-wash:#17222B;
+  --go:#6FB795; --go-wash:#132D23;
 }
 
 *{box-sizing:border-box}
 body{margin:0; background:var(--paper); color:var(--ink);
-  font-family:Petrona,Georgia,serif; font-size:17px; line-height:1.62;
+  font-family:Alegreya,Georgia,serif; font-size:17.5px; line-height:1.6;
   -webkit-font-smoothing:antialiased}
 .wrap{max-width:960px; margin:0 auto; padding:0 22px 90px}
 
-h1,h2,h3,h4,.sg{font-family:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif; font-weight:700; text-wrap:balance; letter-spacing:-.03em}
+h1,h2,h3,h4,.gb{font-family:Gabarito,"Helvetica Neue",Arial,sans-serif; font-weight:700; text-wrap:balance; letter-spacing:-.028em}
 h1{font-size:clamp(2.5rem,6.8vw,4.4rem); line-height:1.0; margin:0; font-weight:800}
 h2{font-size:clamp(1.75rem,3.8vw,2.4rem); line-height:1.08; margin:0}
-h3{font-size:1.3rem; line-height:1.2; margin:0 0 6px}
-h4{font-size:1.03rem; margin:0 0 4px; font-weight:600}
+h3{font-size:1.32rem; line-height:1.2; margin:0 0 6px}
+h4{font-size:1.05rem; margin:0 0 4px; font-weight:600}
 p{margin:0 0 14px; max-width:68ch}
-a{color:var(--sage-ink)}
-.mono,.lab,td.n,th.n{font-family:"Courier Prime",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
-.lab{font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--sage); font-weight:700}
-.lab.g{color:var(--gold)} .lab.s{color:var(--stop)} .lab.q{color:var(--muted)}
+a{color:var(--rose-ink)}
+.mono,.lab,td.n,th.n{font-family:"Anonymous Pro",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.lab{font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--rose); font-weight:700}
+.lab.s{color:var(--slate)} .lab.g{color:var(--go)} .lab.q{color:var(--muted)}
 
 header.mast{padding:50px 0 0}
 .topline{display:flex; flex-wrap:wrap; gap:8px 20px; align-items:baseline; border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:26px}
-.topline .who{font-family:"Courier Prime",monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase}
-.topline .meta{margin-left:auto; font-family:"Courier Prime",monospace; font-size:12px; color:var(--muted)}
-.dek{margin:22px 0 0; font-size:1.2rem; line-height:1.5; color:var(--ink-2); max-width:60ch}
+.topline .who{font-family:"Anonymous Pro",monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase}
+.topline .meta{margin-left:auto; font-family:"Anonymous Pro",monospace; font-size:12px; color:var(--muted)}
+.dek{margin:22px 0 0; font-size:1.2rem; line-height:1.48; color:var(--ink-2); max-width:60ch}
 
-.figs{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:1px; background:var(--rule-soft); border:1px solid var(--rule-soft); margin:34px 0 0}
+.figs{display:grid; grid-template-columns:repeat(auto-fit,minmax(185px,1fr)); gap:1px; background:var(--rule-soft); border:1px solid var(--rule-soft); margin:34px 0 0}
 .figs>div{background:var(--card); padding:20px}
-.figs .big{display:block; font-family:"Schibsted Grotesk",Arial,sans-serif; font-weight:800; font-size:2rem; line-height:1.04; letter-spacing:-.035em; color:var(--sage-ink)}
+.figs .big{display:block; font-family:Gabarito,Arial,sans-serif; font-weight:800; font-size:2rem; line-height:1.04; letter-spacing:-.035em; color:var(--rose-ink)}
 .figs .cap{display:block; margin-top:9px; font-size:.9rem; line-height:1.42; color:var(--ink-2)}
 
-section{margin:60px 0 0; scroll-margin-top:14px}
+section{margin:58px 0 0; scroll-margin-top:14px}
 .shead{border-top:2px solid var(--ink); padding-top:12px; margin-bottom:22px}
 .shead .lab{display:block; margin-bottom:6px}
 .shead p{margin:10px 0 0; color:var(--ink-2); max-width:66ch}
 
 .card{background:var(--card); border:1px solid var(--rule-soft); padding:22px 24px; margin:22px 0}
 .card>*:last-child{margin-bottom:0}
-.card.sage{border-color:var(--sage); border-left-width:3px}
-.card.gold{border-color:var(--gold); border-left-width:3px}
-.card.stop{border-color:var(--stop); border-left-width:3px}
+.card.rose{border-color:var(--rose); border-left-width:3px}
+.card.slate{border-color:var(--slate); border-left-width:3px}
+.card.go{border-color:var(--go); border-left-width:3px}
 
-.pull{border-left:3px solid var(--sage); padding:3px 0 3px 20px; margin:26px 0; max-width:62ch}
-.pull p{font-family:"Schibsted Grotesk",Arial,sans-serif; font-weight:700; font-size:1.32rem; line-height:1.28; margin:0; letter-spacing:-.03em}
-.pull .sub{font-family:Petrona,serif; font-weight:400; font-size:.99rem; color:var(--muted); line-height:1.55; margin-top:9px; letter-spacing:0}
-.pull.s{border-left-color:var(--stop)}
+.pull{border-left:3px solid var(--rose); padding:3px 0 3px 20px; margin:26px 0; max-width:62ch}
+.pull p{font-family:Gabarito,Arial,sans-serif; font-weight:700; font-size:1.34rem; line-height:1.26; margin:0; letter-spacing:-.028em}
+.pull .sub{font-family:Alegreya,serif; font-weight:400; font-size:1.02rem; color:var(--muted); line-height:1.5; margin-top:9px; letter-spacing:0}
+.pull.s{border-left-color:var(--slate)}
 
 ul.list{margin:0 0 16px; padding:0; list-style:none}
 ul.list li{position:relative; padding-left:20px; margin-bottom:9px; max-width:68ch}
-ul.list li::before{content:""; position:absolute; left:2px; top:.72em; width:8px; height:1px; background:var(--sage)}
+ul.list li::before{content:""; position:absolute; left:2px; top:.7em; width:8px; height:1px; background:var(--rose)}
 
 .scroll{overflow-x:auto; margin:22px 0; border:1px solid var(--rule-soft); background:var(--card)}
-table{border-collapse:collapse; width:100%; min-width:520px; font-size:.94rem}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:.95rem}
 th,td{text-align:left; padding:11px 15px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
-thead th{font-family:"Courier Prime",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700; border-bottom:1px solid var(--rule); white-space:nowrap}
+thead th{font-family:"Anonymous Pro",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700; border-bottom:1px solid var(--rule); white-space:nowrap}
 tbody tr:last-child td{border-bottom:none}
-tr.hi td{background:var(--sage-wash)}
-tr.bad td{background:var(--stop-wash)}
-td.n,th.n{text-align:right; white-space:nowrap; font-family:"Courier Prime",monospace}
+tr.hi td{background:var(--rose-wash)}
+tr.ok td{background:var(--go-wash)}
+td.n,th.n{text-align:right; white-space:nowrap; font-family:"Anonymous Pro",monospace}
 caption{caption-side:bottom; text-align:left; padding:10px 15px; font-size:12.5px; color:var(--muted); line-height:1.45}
 
-.flow{display:grid; grid-template-columns:34px 1fr; gap:0 16px; padding:16px 0; border-bottom:1px solid var(--rule-soft)}
-.flow:last-child{border-bottom:none}
-.flow .s{font-family:"Schibsted Grotesk",Arial,sans-serif; font-weight:800; font-size:1.2rem; color:var(--sage); line-height:1.2}
-.flow .t>*:last-child{margin-bottom:0}
-.flow .t p{font-size:.98rem}
+.rec{background:var(--band); border:1px solid var(--rule-soft); padding:18px 20px; margin:22px 0;
+  font-family:"Anonymous Pro",monospace; font-size:.9rem; line-height:1.9; overflow-x:auto}
+.rec .k{color:var(--muted)}
+.rec .o{color:var(--rose-ink); font-weight:700}
+.rec hr{border:none; border-top:1px solid var(--rule); margin:8px 0}
 
-footer{margin:68px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.9rem; line-height:1.6}
+.step{display:grid; grid-template-columns:32px 1fr; gap:0 16px; padding:16px 0; border-bottom:1px solid var(--rule-soft)}
+.step:last-child{border-bottom:none}
+.step .s{font-family:Gabarito,Arial,sans-serif; font-weight:800; font-size:1.2rem; color:var(--rose); line-height:1.25}
+.step .t>*:last-child{margin-bottom:0}
+.step .t p{font-size:1rem}
+
+footer{margin:66px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.9rem; line-height:1.6}
 footer p{max-width:78ch}
-a:focus-visible{outline:2px solid var(--sage); outline-offset:2px}
-@media (max-width:620px){ .flow{grid-template-columns:1fr; gap:4px} }
+a:focus-visible{outline:2px solid var(--rose); outline-offset:2px}
+@media (max-width:620px){ .step{grid-template-columns:1fr; gap:4px} }
 @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
 </style>
 
@@ -106,195 +112,204 @@ a:focus-visible{outline:2px solid var(--sage); outline-offset:2px}
 
 <header class="mast">
   <div class="topline">
-    <span class="who">Idea file · assistive communication</span>
-    <span class="meta">Aug 2026</span>
+    <span class="who">Idea file · veterinary economics</span>
+    <span class="meta">Aug 2026 · replaces the previous idea in this file</span>
   </div>
-  <h1>The Words<br>They're<br>Reaching For</h1>
-  <p class="dek">You pointed at assistive tech for kids. It turns out to be the first market in this whole programme with <strong>a catastrophic failure rate, a perverse funding structure, and no startup occupying the obvious gap.</strong></p>
+  <h1>What It Cost,<br>What They<br>Chose</h1>
+  <p class="dek">Different discipline. Still animals, still science, <strong>nothing to do with kids or speech.</strong> And this time I ran the existence check first — which changed the answer twice before I got to the idea.</p>
 
   <div class="figs">
-    <div><span class="big">30–50%</span><span class="cap"><strong>AAC device abandonment</strong> over time. A third of client cases. On devices costing thousands.</span></div>
-    <div><span class="big">$3–15K</span><span class="cap">A dedicated speech-generating device. The same capability as a <strong>$150–300 tablet app.</strong></span></div>
-    <div><span class="big">6–10 hrs</span><span class="cap">Spent <strong>drafting a single IEP</strong>, plus 3–4 more for the annual review. Paperwork is &gt;10% of a special educator's working time.</span></div>
-    <div><span class="big">0</span><span class="cap">Startups the search surfaced in AI-driven AAC personalisation — <strong>against dense academic research.</strong> First time this has happened all session.</span></div>
+    <div><span class="big">52%</span><span class="cap">of US pet owners have <strong>put off veterinary care because of cost</strong> — Gallup</span></div>
+    <div><span class="big">$2,500</span><span class="cap">is the ceiling <strong>55% won't go past to avoid euthanasia.</strong> Many emergencies cost more than that.</span></div>
+    <div><span class="big">30%</span><span class="cap">know someone whose <strong>pet died because the owner couldn't afford care</strong></span></div>
+    <div><span class="big">$1–2B</span><span class="cap">annual cost of <strong>burnout</strong> to the profession — and the US will train only <strong>76%</strong> of the vets it needs through 2032</span></div>
   </div>
 </header>
 
-<!-- ===== WHY ===== -->
-<section id="why">
+<!-- ===== THE CRISIS ===== -->
+<section id="crisis">
   <div class="shead">
-    <span class="lab">Why this discipline, specifically</span>
-    <h2>The economics are broken in a way that creates room</h2>
+    <span class="lab">Why this discipline</span>
+    <h2>Two crises that turn out to be one crisis</h2>
   </div>
 
-  <div class="scroll">
-    <table>
-      <caption>The perversity: insurance readily covers dedicated speech-generating devices, but tablet AAC apps <strong>typically do not qualify for Medicare or Medicaid coverage.</strong></caption>
-      <thead><tr><th>Option</th><th class="n">Cost</th><th class="n">Insurance</th></tr></thead>
-      <tbody>
-        <tr class="bad"><td><strong>Dedicated speech-generating device</strong></td><td class="n">$3,000–15,000</td><td class="n">✅ Covered</td></tr>
-        <tr class="hi"><td>Tablet + AAC app <span style="color:var(--muted)">(Proloquo2Go, TouchChat, LAMP)</span></td><td class="n">$150–400</td><td class="n">❌ Usually not</td></tr>
-      </tbody>
-    </table>
+  <p>Veterinary prices are rising far faster than everything else — <strong>urban veterinary services rose 5.9% from March 2024 to March 2025 against 2.4% for all consumer goods</strong>, and costs at some practices have climbed as much as <strong>40%</strong>. Meanwhile the workforce is short and burning out.</p>
+
+  <div class="pull">
+    <p>"Telling clients you can't help them because they have no money is one of the leading causes of burnout in the veterinary profession."</p>
+    <span class="sub">That single sentence connects the two. <strong>The affordability crisis and the burnout crisis are the same crisis</strong>, experienced from opposite sides of the exam table — and it has a name in the profession: <em>economic euthanasia.</em></span>
   </div>
 
-  <p><strong>So "make it cheaper with AI" does not work here — and that's the important thing to understand before touching this market.</strong> The expensive device survives because reimbursement rewards it, not because it's better. The family isn't price-sensitive; a third party pays. Undercutting on price fights the funding structure and loses.</p>
-
-  <div class="pull s">
-    <p>But look at what the money buys: a device that gets abandoned in 30 to 50 percent of cases.</p>
-    <span class="sub">That is a staggering failure rate for equipment costing thousands of dollars, approved by clinicians, funded by insurance, and given to a child who cannot speak. <strong>The problem was never the hardware. The hardware works. Something after the hardware is failing.</strong></span>
-  </div>
+  <p>And unlike almost everything else in this research programme, <strong>discovery here is trivial.</strong> There is a veterinary clinic within walking distance of you right now, the people in it will talk about this specific thing at length, and it is the emotional centre of their working life.</p>
 </section>
 
-<!-- ===== THE GAP ===== -->
-<section id="gap">
+<!-- ===== THE CHECK ===== -->
+<section id="check">
   <div class="shead">
-    <span class="lab s">The gap</span>
-    <h2>The research is solving a different problem than the one that fails</h2>
+    <span class="lab s">Existence check, run first this time</span>
+    <h2>Two obvious ideas, both already taken</h2>
+    <p>Applying the lesson properly. Both of these are what you'd think of in the first ten minutes, and both are gone.</p>
   </div>
 
   <div class="scroll">
     <table>
-      <caption>Both columns are real. They just don't meet.</caption>
-      <thead><tr><th>What the AI research works on</th><th>What the literature says causes abandonment</th></tr></thead>
+      <thead><tr><th>Obvious idea</th><th class="n">Status</th><th>What exists</th></tr></thead>
       <tbody>
-        <tr><td>Word completion and prediction — <strong>entry rates up to 30.4 WPM</strong></td><td><strong>Vocabulary that isn't functional, personal or meaningful</strong> to that child</td></tr>
-        <tr><td>Abbreviation expansion (KWickChat: keywords → full utterance)</td><td><strong>Nouns dominate the vocabulary set</strong> — verbs and other parts of speech increase acceptance</td></tr>
-        <tr><td>Sentence and phrase retrieval; domain adaptation (PrAACT, SPICA)</td><td><strong>Carryover across providers</strong> — cited as a significant barrier</td></tr>
-        <tr><td>Personalised language models via transfer learning from BERT/GPT</td><td><strong>Lack of family involvement</strong> — a significant factor in abandonment</td></tr>
-        <tr class="bad"><td colspan="2"><strong>The mismatch:</strong> nearly all of the AI work optimises <em>typing speed for literate users.</em> The abandonment literature is about <em>symbol-based communication for children</em>, and about the adults around them not being coordinated.</td></tr>
+        <tr class="hi"><td><strong>Tiered "here are three treatment options at three prices" estimates</strong></td><td class="n">Taken</td><td>"Spectrum of care" is an established movement with its own professional literature. <strong>AAHA and AVMA published a Spectrum of Care Toolkit in JAVMA in 2025.</strong> Tiered estimate templates already ship inside practice management software — Digitail, IDEXX and others.</td></tr>
+        <tr class="hi"><td><strong>Vet price comparison</strong></td><td class="n">Taken ×3</td><td><strong>FareVet</strong> (price comparison across services, US and Canada) · <strong>PawPrice</strong> (compare listed prices for exams, vaccines, dentals, spays) · <strong>Vet Receipt</strong> (real prices from <em>verified invoices</em>)</td></tr>
       </tbody>
     </table>
   </div>
 
-  <div class="card sage">
-    <p style="margin-bottom:0">And the "does it already exist" check — the one that has killed five ideas this session — <strong>came back clean for the first time.</strong> The search surfaced extensive academic work (arXiv, ACM IUI, Expert Systems with Applications) and market-forecast pages, but <strong>identified no specific startups</strong> in AI-driven AAC personalisation. ⚠️ <em>That is one search pass, not proof. It's the first thing to re-check, and re-check properly.</em></p>
+  <div class="card slate">
+    <span class="lab s">But the check surfaced something better than a kill</span>
+    <p style="margin-top:9px">A 2026 paper in <em>Frontiers in Veterinary Science</em> — <strong>"Lack of online price transparency of small animal veterinary clinics in the United States"</strong> — found that price information on clinic websites is <strong>incomplete or inconsistently presented</strong>, and that <strong>many clinics fail to provide basic pricing for common procedures at all.</strong></p>
+    <p style="margin-bottom:0">US veterinary pricing is <strong>largely self-regulated, with no federal requirement to disclose fees.</strong> Professional guidance asks for transparent communication between vet and client, but never requires a published price list.</p>
+  </div>
+
+  <div class="pull s">
+    <p>So three comparison apps are scraping a surface that mostly doesn't exist. The interface isn't the hard part. The dataset is.</p>
+    <span class="sub">This is precisely the situation onX was in before onX: everyone knew parcel data would be valuable, and nobody had done the unglamorous work of assembling it. <strong>Vet Receipt's approach — verified invoices submitted by owners — is the correct shape, and the fact that someone has started is a signal the shape is right, not that the space is closed.</strong></span>
   </div>
 </section>
 
 <!-- ===== THE IDEA ===== -->
 <section id="idea">
   <div class="shead">
-    <span class="lab g">The idea</span>
-    <h2>Not a device. The layer that makes the device get used.</h2>
-    <p>A child already has a tablet with an AAC app. It logs every button press. <strong>Nobody looks at those logs, and nobody around the child is coordinated.</strong></p>
+    <span class="lab">The idea</span>
+    <h2>Not "what does a spay cost." The 11pm question.</h2>
+  </div>
+
+  <div class="card rose">
+    <p style="font-family:Gabarito,Arial,sans-serif; font-weight:700; font-size:1.26rem; line-height:1.3; letter-spacing:-.028em; margin-bottom:12px">Your dog is vomiting blood at 11pm. The emergency vet hands you an estimate for $4,000. You have $900. Nobody in the world can tell you what happens on each path.</p>
+    <p style="margin-bottom:0">Price comparison is a <em>planned purchase</em> tool — useful for a dental, useless in an emergency, and emergencies are where the $2,500 ceiling gets crossed and pets get euthanised for money. <strong>The decision that destroys people is not "which clinic," it's "which version of care, and what am I giving up."</strong></p>
+  </div>
+
+  <h3 style="margin-top:34px; font-size:1.45rem">What you'd actually build</h3>
+  <p>A dataset of <strong>what real treatments actually cost, what owners actually chose, and what actually happened</strong> — assembled from owner-submitted invoices and follow-ups, normalised into comparable procedures.</p>
+
+  <div class="rec">
+    <span class="k">// what an invoice line actually looks like</span><br>
+    ANES-ISO 15MIN &nbsp; IVC PLCMT 22G &nbsp; RADS 2V ABD &nbsp; CBC/CHEM17 &nbsp; HOSP LVL2 O/N<br><br>
+    <span class="k">// what it has to become</span><br>
+    <span class="o">general anaesthesia · IV catheter · abdominal radiographs, 2 view · bloodwork panel · overnight hospitalisation, level 2</span>
+    <hr>
+    <span class="k">Thousands of practices. Dozens of practice management systems. No standard.</span>
+  </div>
+
+  <p><strong>That normalisation is the whole moat, and it is a genuine language-model job.</strong> Not a wrapper — messy, abbreviated, practice-specific clinical shorthand into a comparable schema, at scale, cheaply. It is the boring, ugly work that nobody wants to do, which is exactly why it's worth doing.</p>
+
+  <div class="card">
+    <div class="step"><span class="s">1</span><div class="t">
+      <h4>Owners submit invoices</h4>
+      <p>They already have them. The incentive to submit is immediate: <strong>"see what other people paid for this."</strong> That is a reason to upload before the dataset is any good — which solves the cold start.</p>
+    </div></div>
+    <div class="step"><span class="s">2</span><div class="t">
+      <h4>The model normalises them</h4>
+      <p>Line items into standard procedures, with prices, geography and clinic type attached.</p>
+    </div></div>
+    <div class="step"><span class="s">3</span><div class="t">
+      <h4>Follow up on outcome</h4>
+      <p>One question, weeks later: <em>what did you choose, and how is your pet?</em> <strong>This is the part nobody has, and it's the part that makes the dataset irreplaceable</strong> — because it converts a price list into a record of consequences.</p>
+    </div></div>
+    <div class="step"><span class="s">4</span><div class="t">
+      <h4>Give it back at the moment of the decision</h4>
+      <p>Not a recommendation. A distribution: <em>for this presentation, 340 owners reported estimates between $2,100 and $5,400. 61% pursued the full workup. Of those who chose the medical-management path instead, here is what they reported.</em></p>
+    </div></div>
+  </div>
+
+  <div class="card rose">
+    <span class="lab">The invariant — same discipline as your allergen engine</span>
+    <p style="margin-top:9px"><strong>It never recommends a course of action. It never mentions euthanasia. It never predicts an outcome for <em>this</em> animal.</strong> It reports what other owners paid, what they chose, and what they said happened — and it says loudly that a veterinarian is the only person who can advise on a specific case.</p>
+    <p style="margin-bottom:0">Cross that line and you are practising veterinary medicine without a licence, in the most emotionally charged decision a pet owner ever makes. <strong>The product is a mirror held up to the population, not an oracle pointed at one animal.</strong></p>
+  </div>
+</section>
+
+<!-- ===== MONEY ===== -->
+<section id="money">
+  <div class="shead">
+    <span class="lab g">Where the money is — and it isn't the pet owner</span>
+    <h2>The honest business model</h2>
   </div>
 
   <div class="card">
-    <div class="flow"><span class="s">1</span><div class="t">
-      <h4>Read the negative space, not the hits</h4>
-      <p>Existing AAC analytics count what a child <em>said</em>. The interesting signal is what they <strong>tried to say and couldn't</strong> — navigating into a category and backing out, hitting the same near-miss button repeatedly, abandoning a sequence halfway. <strong>Those are words the child is reaching for and does not have.</strong></p>
-    </div></div>
-    <div class="flow"><span class="s">2</span><div class="t">
-      <h4>Turn that into a vocabulary recommendation</h4>
-      <p>Not generic core-word lists. <em>This child, this week, is reaching for something in the "feelings" branch and giving up.</em> The literature is explicit that functional, personalised, meaningful vocabulary reduces abandonment — and that noun-heavy sets are part of the failure.</p>
-    </div></div>
-    <div class="flow"><span class="s">3</span><div class="t">
-      <h4>Push the same five words to every adult</h4>
-      <p><strong>This is the actual product.</strong> The SLP models one set, the teacher another, the parent doesn't know what either did — and "carryover across providers" is named as a significant barrier. One shared weekly focus, delivered to all three, with what to model and when.</p>
-    </div></div>
-    <div class="flow"><span class="s">4</span><div class="t">
-      <h4>Let the documentation fall out for free</h4>
-      <p>Special educators spend <strong>6–10 hours drafting a single IEP</strong> and 3–4 more per annual review. If the system already holds structured evidence of attempts, growth and modelled vocabulary, <strong>progress monitoring writes itself</strong> — which is the thing that gets a district to pay.</p>
-    </div></div>
-  </div>
-
-  <div class="pull">
-    <p>The child's device stays exactly as it is. You're not competing with Proloquo2Go or a $12,000 device — you're making the one they already own stop being abandoned.</p>
-    <span class="sub">That's the same shape as the businesses that actually won in the last research file: <strong>onX didn't build a better map, it assembled the parcel data nobody else would.</strong> Here the unassembled dataset is <em>what non-speaking children try to say and fail to</em> — and it compounds, because every child using it makes the recommendations better for the next.</span>
-  </div>
-</section>
-
-<!-- ===== INVARIANT ===== -->
-<section id="invariant">
-  <div class="shead">
-    <span class="lab s">The line you cannot cross</span>
-    <h2>The AI never speaks for the child</h2>
-  </div>
-
-  <div class="card stop">
-    <p>There is a paper titled <strong><em>"The less I type, the better": How AI Language Models can Enhance <u>or Impede</u> Communication for AAC Users.</em></strong> That title is a warning, and it's from the community itself.</p>
-    <p><strong>An LLM generating utterances for a non-speaking person is putting words in the mouth of someone who cannot correct you.</strong> It is the single most damaging thing this product could do, and it is also the most tempting demo.</p>
-    <p style="margin-bottom:0">So take the same invariant that worked for PantryChef's allergen engine and apply it here: <strong>the model may only ever make suggestions to the adults about which vocabulary to make available. It never generates speech, never completes a sentence, never puts a word on the screen that the child did not choose.</strong> Enlarging someone's vocabulary is help. Speaking on their behalf is not.</p>
-  </div>
-</section>
-
-<!-- ===== FIT ===== -->
-<section id="fit">
-  <div class="shead">
-    <span class="lab">Against your own criteria</span>
-    <h2>Why this one fits and the last twenty didn't</h2>
+    <p><strong>The trap to avoid:</strong> pet owners who can't afford veterinary care also can't afford your subscription. That's the same failure as the spearfishing HUD — the people who need it most are the least able to pay. <strong>Do not build a consumer subscription on this.</strong></p>
+    <p style="margin-bottom:0">Consumer-facing stays free. It's how the dataset gets built.</p>
   </div>
 
   <div class="scroll">
     <table>
-      <thead><tr><th>Your requirement</th><th>How it scores</th></tr></thead>
+      <caption>⚠️ Willingness-to-pay figures are my reasoning, not researched. Verify before relying on any of them.</caption>
+      <thead><tr><th>Who pays</th><th>For what</th><th class="n">Confidence</th></tr></thead>
       <tbody>
-        <tr class="hi"><td><strong>No hardware to validate</strong></td><td>✅ <strong>$0.</strong> Software on top of devices families already own.</td></tr>
-        <tr class="hi"><td><strong>Real recurring problem</strong></td><td>✅ Daily, for years, per child — and failing in a third to a half of cases.</td></tr>
-        <tr class="hi"><td><strong>AI creates genuine advantage</strong></td><td>✅ Pattern-finding in sparse, per-child, longitudinal interaction data is exactly what a model is for — and no heuristic replaces it.</td></tr>
-        <tr><td><strong>Easy to find users</strong></td><td>✅ SLPs and special-ed teachers are unusually reachable — active professional communities, conferences, and a documented appetite for anything that cuts paperwork.</td></tr>
-        <tr><td><strong>Somebody pays</strong></td><td>✅ Districts and Medicaid already fund AAC and already buy IEP software. <strong>You'd be selling into an existing budget line, not creating one.</strong></td></tr>
-        <tr><td><strong>Connects to your interests</strong></td><td>⚠️ Not ocean or environment. But it's the same architecture you already argued for in PantryChef: <strong>a deterministic safety invariant with a model on top that can only ever widen options, never override them.</strong></td></tr>
-        <tr class="bad"><td><strong>Fast to validate</strong></td><td>❌ <strong>The weakest score.</strong> School procurement is slow, and children's data is heavily regulated.</td></tr>
+        <tr class="ok"><td><strong>Pet insurers</strong></td><td>Claims benchmarking and regional pricing intelligence. They already hold claims data but not <em>declined-care</em> data — <strong>what owners chose when they didn't claim is invisible to them and visible to you.</strong></td><td class="n">⚠️ est.</td></tr>
+        <tr class="ok"><td><strong>Clinics and groups</strong></td><td>Competitive pricing intelligence in their own market — the thing the Frontiers paper says doesn't exist. Corporate consolidators would want this most.</td><td class="n">⚠️ est.</td></tr>
+        <tr><td>Charitable funders</td><td>Organisations funding emergency care grants need to know where the money goes furthest. Small budgets, high mission alignment.</td><td class="n">⚠️ est.</td></tr>
+        <tr><td>Researchers and press</td><td>The affordability crisis is heavily covered and there is <strong>no public dataset.</strong> Not revenue — but it's how you get distribution for free.</td><td class="n">Likely</td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<!-- ===== CHECKS ===== -->
-<section id="checks">
+<!-- ===== RISKS ===== -->
+<section id="risks">
   <div class="shead">
     <span class="lab s">Before anything else</span>
-    <h2>Four things I did not verify, in order</h2>
-    <p>Applying the lesson properly this time: these come <em>before</em> the market sizing and the build plan, not after.</p>
+    <h2>What I did not verify, in order</h2>
   </div>
 
   <div class="card">
-    <div class="flow"><span class="s">1</span><div class="t">
-      <h4>Do AAC apps actually expose usage logs?</h4>
-      <p><strong>The whole idea rests on this and I did not check it.</strong> Proloquo2Go, TouchChat and LAMP all collect data — but whether a third party can read it, via API or export, is unknown to me. <strong>If the answer is no, the idea is dead in its current form.</strong> One afternoon of reading developer documentation answers it.</p>
+    <div class="step"><span class="s">1</span><div class="t">
+      <h4>Look hard at Vet Receipt</h4>
+      <p><strong>They already do verified invoices.</strong> How many? Do they normalise line items or just store totals? Do they collect outcomes? <strong>If they collect outcomes, this idea is theirs and you should stop.</strong> That is one afternoon of work and it comes before everything else.</p>
     </div></div>
-    <div class="flow"><span class="s">2</span><div class="t">
-      <h4>Re-run the competitor check, properly</h4>
-      <p>One search returned no startups. That is not the same as none existing. Search the AAC vendor sites themselves, the ASHA exhibitor lists, and the special-ed edtech funding announcements. <strong>Five ideas have died on this step; assume this one will too until it doesn't.</strong></p>
+    <div class="step"><span class="s">2</span><div class="t">
+      <h4>Does the outcome question actually get answered?</h4>
+      <p>Price data is easy to collect; outcomes are not. Owners whose pet died may never reply, which biases the whole dataset toward survivors. <strong>This is the hardest unsolved thing in the plan and I have no evidence either way.</strong></p>
     </div></div>
-    <div class="flow"><span class="s">3</span><div class="t">
-      <h4>The regulatory load</h4>
-      <p>Children's data, in schools, about disability. <strong>FERPA, COPPA, and possibly HIPAA all plausibly apply</strong>, and I have researched none of them. This is a genuine cost, not a formality, and it may be the real barrier that explains the empty market.</p>
+    <div class="step"><span class="s">3</span><div class="t">
+      <h4>Cold start maths</h4>
+      <p>How many invoices before a given presentation in a given metro has enough data to say anything? I don't know. It might be thousands. <strong>Estimate it before building.</strong></p>
     </div></div>
-    <div class="flow"><span class="s">4</span><div class="t">
-      <h4>Talk to five SLPs before writing code</h4>
-      <p>Same instrument as the restaurant questionnaire. Ask what they did with the last child who abandoned a device — not whether they'd like your product. <strong>If "carryover" and "vocabulary" don't come up unprompted, the thesis is wrong.</strong></p>
+    <div class="step"><span class="s">4</span><div class="t">
+      <h4>Talk to five vets and five owners</h4>
+      <p>Vets first — ask what they did the last time a client couldn't pay. Then owners who declined care. <strong>If "I had no idea what my options were" isn't what comes back, the thesis is wrong.</strong></p>
     </div></div>
+  </div>
+
+  <div class="card slate">
+    <h3>And the thing that could sink it</h3>
+    <p style="margin-bottom:0"><strong>Veterinarians may hate this.</strong> A public record of what practices charge, cross-referenced against outcomes, is not something the profession has asked for — and the profession is exhausted, underpaid relative to its debt load, and already dealing with client aggression over pricing. <strong>If it reads as an attack on vets, it fails, deservedly.</strong> The framing that survives is the one the data actually supports: <em>the same tool that helps an owner understand their options is the tool that stops a vet having to have the worst conversation in their job unarmed.</em></p>
   </div>
 </section>
 
-<!-- ===== METHOD ===== -->
-<section id="method">
+<!-- ===== FILTER ===== -->
+<section id="filter">
   <div class="shead">
-    <span class="lab g">More important than the idea</span>
-    <h2>Why this discipline surfaced something and twenty outdoor markets didn't</h2>
+    <span class="lab g">The reusable part</span>
+    <h2>Why this one surfaced and twenty outdoor markets didn't</h2>
   </div>
 
-  <div class="card gold">
-    <p>Compare the two searches. Outdoor conditions: free weather APIs, a weekend of work, five competitors per activity, zero regulatory load. Assistive communication: <strong>a 30–50% failure rate that has persisted for years, a third-party payer, a regulated data environment, and academic research that hasn't been productised.</strong></p>
-    <p style="margin-bottom:0"><strong>The friction is the opportunity.</strong> Markets that are easy to enter have already been entered. The ones with an ugly barrier — regulation, procurement, specialist knowledge, a dataset nobody wants to assemble — are the ones where a solo founder who is willing to do the unglamorous part can still get in.</p>
-  </div>
-
-  <div class="pull">
-    <p>The filter that would have saved you five ideas: does this market have something in it that makes normal people give up?</p>
-    <span class="sub">Where the answer is no, five apps already exist. Where the answer is yes — parcel records for onX, seven million logged catches for Fishbrain, children's disability data here — <strong>that difficulty is the only thing standing between you and everyone else with the same idea.</strong> Run that filter across other disciplines and you'll generate better candidates than another list of twenty.</span>
+  <div class="card go">
+    <p>Run the filter: <strong>does this market have something in it that makes normal people give up?</strong></p>
+    <ul class="list">
+      <li><strong>A documented failure rate</strong> — 52% deferring care, pets dying over money</li>
+      <li><strong>Data that is genuinely hard to assemble</strong> — no disclosure requirement, no standard format, thousands of practice management systems</li>
+      <li><strong>An emotionally brutal subject</strong> that most founders would rather not sit with</li>
+      <li><strong>Real liability</strong> if you get the framing wrong</li>
+      <li><strong>But: zero hardware, trivial discovery, and a language model doing exactly what language models are good at</strong></li>
+    </ul>
+    <p style="margin-bottom:0">Compare that with a climbing conditions app: free weather API, a weekend of work, five competitors, no barrier at all. <strong>The friction is the whole opportunity.</strong> Every market this filter rejects is one where the ideas are cheap and so is the competition.</p>
   </div>
 </section>
 
 <footer>
   <span class="lab q">Source quality &amp; confidence</span>
-  <p style="margin-top:10px"><strong>External fetching was blocked throughout.</strong> Every figure is a search-index summary; no paper, policy document or product page was opened directly.</p>
-  <p><strong>High confidence:</strong> the $3,000–15,000 dedicated device range against $150–400 for tablet apps · that tablet AAC apps typically do not qualify for Medicare or Medicaid while dedicated devices do · the 30–50% abandonment figure and its named causes (vocabulary personalisation, noun dominance, carryover across providers, family involvement) · the 6–10 hours per IEP and &gt;10% of working time figures · the existence and focus of KWickChat, PrAACT, SPICA and the AAC abbreviation-expansion literature.</p>
-  <p><strong>⚠️ Unverified and load-bearing:</strong> <strong>whether AAC apps expose usage data to third parties</strong> — the entire idea depends on it · whether startups already occupy this space, based on a single search pass · the applicable regulatory regime · whether districts would buy this as a separate product or expect it bundled into IEP software they already license.</p>
-  <p><strong>Not researched at all:</strong> other disciplines. This is one idea from one market, chosen because the friction filter pointed at it — <strong>not the output of a systematic scan.</strong> The method at the end is worth more than the idea at the start.</p>
-  <p style="margin-top:16px; color:var(--ink-2)">Idea file · AAC vocabulary discovery and carryover · August 2026</p>
+  <p style="margin-top:10px"><strong>External fetching was blocked throughout.</strong> Every figure is a search-index summary; no paper, survey or product page was opened directly. <strong>This file replaces the AAC idea previously published at this address, at your request.</strong> (The filename on disk is legacy — the URL is what stays stable.)</p>
+  <p><strong>High confidence:</strong> the Gallup 52% deferred-care figure · the 55%/$2,500 euthanasia threshold · the 30% who know of a pet lost to cost · urban veterinary price inflation at 5.9% against 2.4% general · the 76%-of-needed-veterinarians projection through 2032 · the $1–2B burnout cost · the existence of FareVet, PawPrice and Vet Receipt · the AAHA/AVMA Spectrum of Care Toolkit (JAVMA 2025) · the <em>Frontiers in Veterinary Science</em> finding on absent online price transparency and the lack of any federal disclosure requirement.</p>
+  <p><strong>⚠️ Unverified and load-bearing:</strong> <strong>what Vet Receipt actually collects</strong> — check this first · whether owners will answer an outcome follow-up at all · how many invoices are needed per metro per presentation · every willingness-to-pay figure in the business-model table · whether insurers would buy declined-care data.</p>
+  <p><strong>Not researched:</strong> state-level veterinary practice acts and where "information" becomes "practising without a licence." <strong>That is a lawyer question and it defines the product's boundaries, not its features.</strong></p>
+  <p style="margin-top:16px; color:var(--ink-2)">Idea file · veterinary cost and outcome data · August 2026</p>
 </footer>
 
 </div>
