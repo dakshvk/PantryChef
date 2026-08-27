@@ -1,0 +1,287 @@
+<title>Every Gap Has Five Apps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Bitter:ital,wght@0,400;0,600;1,400&family=Reddit+Mono:wght@400;600&display=swap">
+
+<style>
+:root{
+  --ink:#1A1719; --ink-2:#453E45; --muted:#736A73;
+  --paper:#EDEAEC; --card:#FBF9FB; --band:#E1DCE2;
+  --rule:#C7C0C9; --rule-soft:#DAD4DC;
+  --vio:#6B3FA0; --vio-ink:#563083; --vio-wash:#E4DCF0;
+  --kill:#C0374C; --kill-wash:#F3DEE2;
+  --live:#1E6B55; --live-wash:#DAEBE4;
+  --gold:#8A6A14; --gold-wash:#F0E9D5;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#EBE6EA; --ink-2:#B8AFB8; --muted:#867B86;
+    --paper:#141216; --card:#1E1B21; --band:#191619;
+    --rule:#38323C; --rule-soft:#2A252E;
+    --vio:#A98BE0; --vio-ink:#BCA3EB; --vio-wash:#261B3B;
+    --kill:#E5818F; --kill-wash:#361A20;
+    --live:#6DB99E; --live-wash:#123028;
+    --gold:#D5B155; --gold-wash:#2F2711;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#EBE6EA; --ink-2:#B8AFB8; --muted:#867B86;
+  --paper:#141216; --card:#1E1B21; --band:#191619;
+  --rule:#38323C; --rule-soft:#2A252E;
+  --vio:#A98BE0; --vio-ink:#BCA3EB; --vio-wash:#261B3B;
+  --kill:#E5818F; --kill-wash:#361A20;
+  --live:#6DB99E; --live-wash:#123028;
+  --gold:#D5B155; --gold-wash:#2F2711;
+}
+
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink);
+  font-family:Bitter,Georgia,serif; font-size:16px; line-height:1.62;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1010px; margin:0 auto; padding:0 22px 90px}
+
+h1,h2,h3,h4,.of{font-family:Outfit,"Helvetica Neue",Arial,sans-serif; font-weight:700; text-wrap:balance; letter-spacing:-.03em}
+h1{font-size:clamp(2.6rem,7.2vw,4.7rem); line-height:.98; margin:0; font-weight:800}
+h2{font-size:clamp(1.75rem,3.8vw,2.45rem); line-height:1.07; margin:0}
+h3{font-size:1.3rem; line-height:1.2; margin:0 0 6px}
+h4{font-size:1.02rem; margin:0 0 4px; font-weight:600}
+p{margin:0 0 14px; max-width:70ch}
+a{color:var(--vio-ink)}
+.mono,.lab,td.n,th.n,.pill{font-family:"Reddit Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.lab{font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--vio); font-weight:600}
+.lab.k{color:var(--kill)} .lab.l{color:var(--live)} .lab.g{color:var(--gold)} .lab.q{color:var(--muted)}
+
+header.mast{padding:50px 0 0}
+.topline{display:flex; flex-wrap:wrap; gap:8px 20px; align-items:baseline; border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:26px}
+.topline .who{font-family:"Reddit Mono",monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase}
+.topline .meta{margin-left:auto; font-family:"Reddit Mono",monospace; font-size:10.5px; color:var(--muted)}
+.dek{margin:22px 0 0; font-size:1.19rem; line-height:1.5; color:var(--ink-2); max-width:62ch}
+
+section{margin:60px 0 0; scroll-margin-top:14px}
+.shead{border-top:2px solid var(--ink); padding-top:12px; margin-bottom:22px}
+.shead .lab{display:block; margin-bottom:6px}
+.shead p{margin:10px 0 0; color:var(--ink-2); max-width:68ch}
+
+.card{background:var(--card); border:1px solid var(--rule-soft); padding:22px 24px; margin:22px 0}
+.card>*:last-child{margin-bottom:0}
+.card.vio{border-color:var(--vio); border-left-width:3px}
+.card.kill{border-color:var(--kill); border-left-width:3px}
+.card.live{border-color:var(--live); border-left-width:3px}
+
+.pull{border-left:3px solid var(--vio); padding:3px 0 3px 20px; margin:26px 0; max-width:63ch}
+.pull p{font-family:Outfit,Arial,sans-serif; font-weight:700; font-size:1.34rem; line-height:1.28; margin:0; letter-spacing:-.03em}
+.pull .sub{font-family:Bitter,serif; font-weight:400; font-size:.95rem; color:var(--muted); line-height:1.55; margin-top:9px; letter-spacing:0}
+.pull.k{border-left-color:var(--kill)}
+
+ul.list{margin:0 0 16px; padding:0; list-style:none}
+ul.list li{position:relative; padding-left:20px; margin-bottom:9px; max-width:70ch}
+ul.list li::before{content:""; position:absolute; left:2px; top:.72em; width:8px; height:1px; background:var(--vio)}
+
+.scroll{overflow-x:auto; margin:22px 0; border:1px solid var(--rule-soft); background:var(--card)}
+table{border-collapse:collapse; width:100%; min-width:560px; font-size:.92rem}
+th,td{text-align:left; padding:11px 15px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
+thead th{font-family:"Reddit Mono",monospace; font-size:9.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); font-weight:600; border-bottom:1px solid var(--rule); white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+tr.killed td{background:var(--kill-wash)}
+tr.hi td{background:var(--vio-wash)}
+tr.ok td{background:var(--live-wash)}
+td.n,th.n{text-align:right; white-space:nowrap; font-family:"Reddit Mono",monospace}
+caption{caption-side:bottom; text-align:left; padding:10px 15px; font-size:12px; color:var(--muted); line-height:1.45}
+.count{font-family:Outfit,Arial,sans-serif; font-weight:800; font-size:1.5rem; letter-spacing:-.03em; color:var(--kill); line-height:1}
+
+.winner{display:grid; grid-template-columns:150px 1fr; gap:0 20px; border-top:1px solid var(--rule); padding:20px 0}
+.winner .n{font-family:Outfit,Arial,sans-serif; font-weight:700; font-size:1.3rem; letter-spacing:-.03em}
+.winner .n span{display:block; font-family:"Reddit Mono",monospace; font-size:11px; color:var(--muted); font-weight:400; margin-top:4px; letter-spacing:0}
+.winner .b>*:last-child{margin-bottom:0}
+.winner .moat{background:var(--vio-wash); border-left:2px solid var(--vio); padding:10px 14px; margin-top:10px; font-size:.94rem}
+.winner .moat strong{font-family:Outfit,Arial,sans-serif}
+
+footer{margin:68px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.87rem; line-height:1.6}
+footer p{max-width:80ch}
+a:focus-visible{outline:2px solid var(--vio); outline-offset:2px}
+@media (max-width:620px){ .winner{grid-template-columns:1fr; gap:6px} }
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="topline">
+    <span class="who">Market map · outdoor &amp; environmental consumer software</span>
+    <span class="meta">Aug 2026</span>
+  </div>
+  <h1>Every Gap<br>Has Five Apps</h1>
+  <p class="dek">I researched five markets off your list of twenty. <strong>All five already have the exact product you described, and most have five or more.</strong> That isn't bad luck — it's the finding, and it changes what you should be looking for.</p>
+</header>
+
+<!-- ===== THE SCOREBOARD ===== -->
+<section id="scoreboard">
+  <div class="shead">
+    <span class="lab k">What I checked, and what I found</span>
+    <h2>The scoreboard</h2>
+    <p>Same method every time: take the exact product described, search for it, count what ships.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Counts are products found in a single search pass — the real numbers are higher.</caption>
+      <thead><tr><th>Your idea</th><th class="n">Ships</th><th>Who</th></tr></thead>
+      <tbody>
+        <tr class="killed"><td><strong>Fishing intelligence</strong><br><span style="color:var(--muted)">catch probability, personal model, trip optimisation</span></td><td class="n"><span class="count">3+</span></td><td><strong>Fishbrain</strong> — 15M+ users, ML catch models built on <strong>7M logged catches</strong>, "BiteTime" bite forecasting, and spot prediction that analyses map structure to find undiscovered water. <strong>$9.99/mo or $74.99/yr.</strong> Plus BassIQ and Bass Forecast.</td></tr>
+        <tr class="killed"><td><strong>Wildlife encounter prediction</strong><br><span style="color:var(--muted)">what can I see right now</span></td><td class="n"><span class="count">1</span></td><td><strong>BirdCast</strong> (Cornell) — 3-day migration forecast for the continental US from weather radar plus 23 years of data, a live nocturnal migration map, and eBird-derived lists of <em>which species you're most likely to see tomorrow.</em> <strong>Free.</strong></td></tr>
+        <tr class="killed"><td><strong>Climbing condition prediction</strong><br><span style="color:var(--muted)">friction, humidity, recommended window</span></td><td class="n"><span class="count">5</span></td><td><strong>ClimbingWeather.com</strong> (300+ areas) · <strong>Gravity Report</strong> (temp, humidity, ground moisture) · <strong>Climbit</strong> (has a "Climbit Score") · <strong>Brzzy</strong> · <strong>Prime Condies</strong> (open source on GitHub)</td></tr>
+        <tr class="killed"><td><strong>Pet outdoor safety</strong><br><span style="color:var(--muted)">pavement temp, breed, walk window</span></td><td class="n"><span class="count">5+</span></td><td><strong>NorthPaw</strong> (index from snout profile, coat, activity; estimates asphalt, concrete, sand and turf hourly) · <strong>PawCast</strong> (0–100 score) · <strong>LifeCast</strong> · <strong>Paw Safety Check</strong> · <strong>PawCalculator</strong> — and <strong>Weather.com launched its own dog-walking heat scale in July 2026</strong></td></tr>
+        <tr class="killed"><td><strong>Gardening "what to do today"</strong><br><span style="color:var(--muted)">daily tasks, weather-aware</span></td><td class="n"><span class="count">5</span></td><td><strong>Planta</strong> — 10M users, 40M plants tracked · <strong>Greg</strong> — schedules from species, climate, light, pot type and soil, across <strong>40,000 verified plant profiles</strong> · PlantIn · Blossom · MyPlantIn</td></tr>
+        <tr class="killed"><td>Dive visibility forecasting <span style="color:var(--muted)">(from earlier research)</span></td><td class="n"><span class="count">5</span></td><td>DiveSight (28,000 sites) · DiveViz · Marla Blue · VizFinder · Viz-app</td></tr>
+        <tr class="killed"><td>AI species identification <span style="color:var(--muted)">(from earlier research)</span></td><td class="n"><span class="count">6</span></td><td>Seabook · FINS · ReefDex · FishID · Fishial.ai · iNaturalist</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull k">
+    <p>"Environmental data → activity-specific score" is the most commoditised product pattern in consumer software right now.</p>
+    <span class="sub">A weather API costs nothing, the heuristic is a weekend, and AI coding tools mean anyone with an idea ships it in days. <strong>Every activity has three to six of these. The ones that look empty will have five within a year.</strong> This is why your gap-hunting keeps returning the same answer — you're hunting in the one category where the barrier to entry is approximately zero.</span>
+  </div>
+</section>
+
+<!-- ===== WHAT ACTUALLY WON ===== -->
+<section id="winners">
+  <div class="shead">
+    <span class="lab l">The constructive half</span>
+    <h2>What actually made money — and what it won on</h2>
+    <p>The category does produce real businesses. <strong>None of them won on conditions prediction.</strong></p>
+  </div>
+
+  <div class="winner">
+    <div class="n">Strava<span>$500M revenue · $2.2B valuation</span></div>
+    <div class="b">
+      <p><strong>76M users, profitable</strong>, and it filed a confidential S-1 with the SEC in February 2026 for a US IPO.</p>
+      <div class="moat"><strong>Won on:</strong> the social graph. Your friends' activity is the product, and it cannot be copied by a competitor with better weather data.</div>
+    </div>
+  </div>
+
+  <div class="winner">
+    <div class="n">onX<span>5M+ paid subscribers</span></div>
+    <div class="b">
+      <p><strong>Grew annual recurring revenue 10× in four years</strong>, raised an $87.4M Series B, and covers hundreds of millions of acres.</p>
+      <div class="moat"><strong>Won on:</strong> ⭐ <strong>private land-ownership parcel data.</strong> Assembled county by county from public records nobody else was willing to compile. A hunter needs to know whose land they're standing on, and there was no other way to find out. <strong>This is the single most instructive business on this page.</strong></div>
+    </div>
+  </div>
+
+  <div class="winner">
+    <div class="n">AllTrails<span>~65M users · est. $130M+ ARR</span></div>
+    <div class="b">
+      <p>Freemium at <strong>$35.99/year</strong>, on roughly <strong>5–7% paid conversion.</strong></p>
+      <div class="moat"><strong>Won on:</strong> accumulated trail content and reviews — a decade of user contributions that a new entrant cannot buy.</div>
+    </div>
+  </div>
+
+  <div class="card kill">
+    <h3>The conversion number is the one to internalise</h3>
+    <p style="margin-bottom:0"><strong>AllTrails converts at 5–7%.</strong> That is the shape of consumer outdoor software: you need enormous top-of-funnel to reach modest revenue. Sixty-five million users produce roughly $130M. <strong>A niche conditions app with 5,000 users and a 5% conversion at $30/year is $7,500 a year.</strong> Not a business — a hobby with a Stripe account.</p>
+  </div>
+
+  <div class="pull">
+    <p>All three winners own a dataset or a network. None of them owns a forecast.</p>
+    <span class="sub">Conditions prediction is a <em>feature</em> — something each winner added after they had distribution, and something dozens of solo developers ship as standalone apps that go nowhere. <strong>onX is the counter-example worth studying: they won by doing the boring, expensive, unglamorous work of assembling parcel records nobody else would touch.</strong></span>
+  </div>
+</section>
+
+<!-- ===== THE REFRAME ===== -->
+<section id="reframe">
+  <div class="shead">
+    <span class="lab">The question to ask instead</span>
+    <h2>Stop hunting activities. Start hunting datasets.</h2>
+  </div>
+
+  <div class="card vio">
+    <p style="font-family:Outfit,Arial,sans-serif; font-weight:700; font-size:1.28rem; line-height:1.3; letter-spacing:-.03em; margin-bottom:12px">Wrong question: "Which outdoor activity doesn't have a conditions app yet?"</p>
+    <p style="font-family:Outfit,Arial,sans-serif; font-weight:700; font-size:1.28rem; line-height:1.3; letter-spacing:-.03em; color:var(--vio-ink); margin-bottom:12px">Right question: "What data could I assemble that nobody else has bothered to, that someone needs to make a decision?"</p>
+    <p style="margin-bottom:0">The first question has been answered exhaustively by hundreds of solo developers with the same weather APIs you'd use. The second is what onX answered, and it's why they have five million paying subscribers while five climbing-condition apps split a few thousand users between them.</p>
+  </div>
+
+  <div class="card">
+    <h3>The tests a dataset has to pass</h3>
+    <ul class="list">
+      <li><strong>Is it hard to assemble?</strong> If it comes from a public API, everyone has it. onX's parcel data required county-by-county acquisition — that <em>difficulty is the moat</em>.</li>
+      <li><strong>Does it get better with use?</strong> Fishbrain's 7 million logged catches make its model better and a new entrant's worse. That's compounding.</li>
+      <li><strong>Does someone make a decision with money attached?</strong> A hunter who trespasses faces real consequences. A climber who picks a humid day is mildly annoyed.</li>
+      <li><strong>Would it still be valuable if the weather API disappeared?</strong> If no, you have a wrapper.</li>
+    </ul>
+    <p style="margin-bottom:0">⚠️ <strong>I have not researched which specific datasets are unassembled.</strong> That's the next research pass, and it's a different search — you look for records that exist but are fragmented, not for apps that are missing.</p>
+  </div>
+</section>
+
+<!-- ===== THE 20 ===== -->
+<section id="rescored">
+  <div class="shead">
+    <span class="lab g">Your twenty, re-scored</span>
+    <h2>Against money, discovery, and feasibility</h2>
+    <p>⚠️ <strong>I researched five of these properly.</strong> The rest inherit the pattern, and inheritance is an assumption, not a finding — verify before acting on any row.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>"Verified taken" means I found the shipping products. "Assumed taken" means the pattern predicts it and I did not check.</caption>
+      <thead><tr><th>Market</th><th class="n">Status</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr class="killed"><td>Fishing intelligence</td><td class="n">Verified taken</td><td>Fishbrain has 15M users and a catch database you cannot replicate</td></tr>
+        <tr class="killed"><td>Wildlife encounter prediction</td><td class="n">Verified taken</td><td>BirdCast, free, from Cornell — hard to charge against</td></tr>
+        <tr class="killed"><td>Climbing conditions</td><td class="n">Verified taken</td><td>Five products, one of them open source</td></tr>
+        <tr class="killed"><td>Pet outdoor safety</td><td class="n">Verified taken</td><td>Five apps plus The Weather Channel, all in 2026</td></tr>
+        <tr class="killed"><td>Gardening daily tasks</td><td class="n">Verified taken</td><td>Planta at 10M users; Greg with 40,000 plant profiles</td></tr>
+        <tr class="killed"><td>Diving conditions / visibility</td><td class="n">Verified taken</td><td>Five, all recent — from the earlier research</td></tr>
+        <tr><td>Surfing</td><td class="n">Assumed taken</td><td>Surfline is the category incumbent with a cam network</td></tr>
+        <tr><td>Skiing conditions</td><td class="n">Assumed taken</td><td>OpenSnow exists and does exactly the aspect/elevation forecast described</td></tr>
+        <tr><td>Running / cycling conditions</td><td class="n">Assumed taken</td><td>Strava, Garmin and WHOOP all ship environmental adjustment features</td></tr>
+        <tr><td>Kayaking, swimming, hiking conditions</td><td class="n">Assumed taken</td><td>Same pattern; Windy already covers most of the inputs</td></tr>
+        <tr><td>Camping trip execution</td><td class="n">Assumed taken</td><td>The Dyrt and Hipcamp have the distribution and are adding features</td></tr>
+        <tr><td>Stargazing conditions</td><td class="n">Assumed taken</td><td>Clear-sky forecasting is a decades-old amateur-astronomy tool category</td></tr>
+        <tr class="hi"><td><strong>Activity partner matching</strong><br><span style="color:var(--muted)">pace, distance, schedule, skill</span></td><td class="n"><strong>Genuinely harder</strong></td><td><strong>The only one on your list with a real network effect</strong> — which is exactly why it's hard to bootstrap and why nobody has cracked it. Hard for a reason, not empty for a reason. Worth a proper look.</td></tr>
+        <tr class="hi"><td><strong>Personal environmental exposure</strong></td><td class="n"><strong>Unresearched</strong></td><td>Genuinely different shape — cumulative, personal, longitudinal rather than a daily score. <strong>But you correctly flagged the medical-claims problem, and that's a real regulatory wall.</strong></td></tr>
+        <tr class="ok"><td><strong>Citizen science data pipeline</strong></td><td class="n"><strong>Different game</strong></td><td>The only entry on your list that is <strong>dataset-first rather than app-first</strong> — which, per everything above, is the correct shape. Consumer monetisation is unclear, but the buyer might not be the consumer.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== WHAT TO DO ===== -->
+<section id="do">
+  <div class="shead">
+    <span class="lab">What I'd actually do</span>
+    <h2>Three moves, in order</h2>
+  </div>
+
+  <div class="card live">
+    <h3>1. Run the "does it exist" check <em>first</em>, always</h3>
+    <p style="margin-bottom:0">Five markets, five kills, one search each. <strong>That check costs ten minutes and it has now saved you five times.</strong> Put it above every idea in your notes, before the market sizing and before the technical plan. It is the cheapest filter you own and you keep applying it last.</p>
+  </div>
+
+  <div class="card vio">
+    <h3>2. Do one dataset-hunting pass instead of one more idea-hunting pass</h3>
+    <p>Look for records that <strong>exist but are fragmented</strong> — the shape onX found. Public but scattered. Legally accessible but nobody has assembled them. In your world that might be: dive site access and entry information, marine protected area boundaries against actual enforcement, shore access rights, water quality sampling records, small-harbour and launch data. <strong>I don't know which of these is unassembled — that's the next research pass, and it's a different search than the one that keeps failing.</strong></p>
+    <p style="margin-bottom:0">The test: <em>could I still charge for this if every weather API went away tomorrow?</em></p>
+  </div>
+
+  <div class="card">
+    <h3>3. Keep the sonar project exactly where you put it</h3>
+    <p style="margin-bottom:0">Your instinct to move it to a separate "deep tech research" board is right. <strong>It is the one thing in this entire programme that survived every check</strong> — because it isn't competing on a weather API, it's competing on something genuinely nobody has done. It's a research project on a different clock, and it costs $0 to start. The two tracks don't compete for the same hours.</p>
+  </div>
+
+  <div class="pull">
+    <p>You've now run this loop enough times to see its shape: the ideas that come from public information lose to the dozens of people who had the same information.</p>
+    <span class="sub">Fishbrain has 7 million logged catches. onX has county parcel records. AllTrails has a decade of reviews. <strong>Every winner in this category is sitting on something that took years of unglamorous accumulation — and that's the only thing in consumer outdoor software that a weekend project can't replicate.</strong></span>
+  </div>
+</section>
+
+<footer>
+  <span class="lab q">Source quality &amp; confidence</span>
+  <p style="margin-top:10px"><strong>External fetching was blocked throughout.</strong> Every figure is a search-index summary; no filing, app-store page or company report was opened directly.</p>
+  <p><strong>High confidence:</strong> the existence and feature descriptions of Fishbrain, BirdCast, the five climbing apps, the five pet-safety apps and the five gardening apps · Fishbrain's pricing and its 15M-user / 7M-catch figures as stated by the company · AllTrails' $35.99 pricing and 5–7% conversion · Strava's $500M revenue, $2.2B valuation, 76M users and confidential S-1 · onX's 5M+ paid subscribers, 10× ARR growth and $87.4M Series B.</p>
+  <p><strong>⚠️ Assumed, not verified:</strong> every row in the re-scored table marked "assumed taken." The pattern held five times out of five, but <strong>inheritance is not evidence</strong> — run the check yourself before dropping any of them.</p>
+  <p><strong>Not researched at all:</strong> which specific datasets are unassembled and legally accessible. <strong>That is the next pass, and it is a different search.</strong></p>
+  <p><strong>Also unverified:</strong> AllTrails' ARR is an estimate derived from user count and conversion rate, not a reported figure. onX's revenue is described only as "high hundreds of millions" by secondary sources.</p>
+  <p style="margin-top:16px; color:var(--ink-2)">Market map · outdoor and environmental consumer software · August 2026</p>
+</footer>
+
+</div>
