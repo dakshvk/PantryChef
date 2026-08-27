@@ -1,0 +1,545 @@
+<title>Money First</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+:root{
+  --paper:#F1F0EC; --card:#FAFAF8; --sunk:#E4E3DE;
+  --ink:#15171B; --ink2:#4C5058; --ink3:#7A7F88;
+  --rule:#CFCEC8; --hair:#DEDDD8;
+  --stamp:#C0342A; --stamp-bg:#F6E2DF;
+  --money:#1D6349; --money-bg:#DDEDE5;
+  --hold:#8A6410; --hold-bg:#F5E9CE;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#101215; --card:#181B1F; --sunk:#22262B;
+    --ink:#E8E7E2; --ink2:#A8ADB5; --ink3:#787E87;
+    --rule:#2E3339; --hair:#23272C;
+    --stamp:#F0685C; --stamp-bg:#331512;
+    --money:#5FBF97; --money-bg:#0F2C22;
+    --hold:#DFAE4E; --hold-bg:#2E2410;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101215; --card:#181B1F; --sunk:#22262B;
+  --ink:#E8E7E2; --ink2:#A8ADB5; --ink3:#787E87;
+  --rule:#2E3339; --hair:#23272C;
+  --stamp:#F0685C; --stamp-bg:#331512;
+  --money:#5FBF97; --money-bg:#0F2C22;
+  --hold:#DFAE4E; --hold-bg:#2E2410;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,serif;font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,.ui{font-family:Archivo,system-ui,sans-serif}
+h1,h2,h3,h4{margin:0;text-wrap:balance;line-height:1.14;letter-spacing:-.018em}
+p{margin:0}
+a{color:var(--stamp)}
+.num{font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+
+.wrap{max-width:1120px;margin:0 auto;padding:0 26px}
+.col{max-width:73ch}
+
+/* masthead */
+.mast{padding:56px 0 0;border-bottom:3px solid var(--ink)}
+.kicker{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--stamp);font-weight:700}
+.mast h1{font-size:clamp(3rem,9vw,6.5rem);font-weight:800;margin:14px 0 0;letter-spacing:-.04em}
+.mast .dek{font-size:clamp(1.05rem,2.1vw,1.28rem);color:var(--ink2);margin:20px 0 0;max-width:60ch}
+.rules{display:flex;flex-wrap:wrap;gap:0;margin:36px 0 0;border-top:1px solid var(--rule)}
+.rules > div{flex:1 1 210px;padding:18px 22px 20px 0;border-right:1px solid var(--hair)}
+.rules > div:last-child{border-right:0}
+.rules .n{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink3)}
+.rules .v{font-family:Archivo,sans-serif;font-size:1.16rem;font-weight:700;margin-top:7px;letter-spacing:-.01em}
+.rules .s{font-size:.9rem;color:var(--ink2);margin-top:5px;line-height:1.45}
+
+section{padding:58px 0;border-bottom:1px solid var(--hair)}
+.snum{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:13px}
+h2{font-size:clamp(1.8rem,4vw,2.7rem);font-weight:800}
+h2+.lede{margin-top:16px;font-size:1.08rem;color:var(--ink2);max-width:68ch}
+h3{font-size:1.36rem;font-weight:700;margin-top:38px}
+h4{font-size:1.02rem;font-weight:700;margin-top:24px;letter-spacing:0}
+section p{margin-top:15px}
+
+/* stamp box */
+.stamp{border:2px solid var(--stamp);background:var(--stamp-bg);padding:24px 26px;margin:30px 0}
+.stamp.go{border-color:var(--money);background:var(--money-bg)}
+.stamp.hold{border-color:var(--hold);background:var(--hold-bg)}
+.stamp h3{margin:0 0 10px;font-size:1.2rem;color:var(--stamp)}
+.stamp.go h3{color:var(--money)}
+.stamp.hold h3{color:var(--hold)}
+.stamp p{margin-top:11px}
+.stamp p:first-of-type{margin-top:0}
+
+/* deadline banner */
+.deadline{background:var(--ink);color:var(--paper);padding:34px 32px;margin:34px 0;
+  display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:center}
+.deadline .big{font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(2.6rem,7vw,4.4rem);
+  line-height:.85;letter-spacing:-.04em;color:var(--paper)}
+.deadline .big small{display:block;font-size:.9rem;letter-spacing:.16em;font-weight:600;
+  text-transform:uppercase;margin-top:10px;opacity:.62;font-family:"JetBrains Mono",monospace}
+.deadline h3{color:var(--paper);font-size:1.3rem;margin:0}
+.deadline p{color:var(--paper);opacity:.86;margin-top:11px;font-size:.98rem}
+.deadline b{opacity:1}
+
+/* idea card */
+.idea{border:1px solid var(--rule);background:var(--card);margin-top:26px}
+.idea.pick{border:2px solid var(--money)}
+.idea.kill{border-color:var(--stamp)}
+.ihead{display:flex;gap:20px;align-items:flex-start;padding:24px 26px;border-bottom:1px solid var(--hair);flex-wrap:wrap}
+.irank{font-family:Archivo,sans-serif;font-weight:800;font-size:2.6rem;line-height:.82;
+  color:var(--stamp);min-width:46px;letter-spacing:-.04em}
+.idea.pick .irank{color:var(--money)}
+.ititle{flex:1 1 320px;min-width:0}
+.ititle h3{margin:0;font-size:1.34rem}
+.ititle .sub{font-size:.94rem;color:var(--ink2);margin-top:7px;font-family:Archivo,sans-serif}
+.tagline{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:700;padding:4px 9px;border:1px solid currentColor;white-space:nowrap;display:inline-block}
+.t-go{color:var(--money);background:var(--money-bg)}
+.t-no{color:var(--stamp);background:var(--stamp-bg)}
+.t-hold{color:var(--hold);background:var(--hold-bg)}
+.ibody{padding:24px 26px}
+.ibody > .blk + .blk{margin-top:22px;padding-top:22px;border-top:1px dashed var(--hair)}
+.blk .lbl{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--stamp);font-weight:700;display:block;margin-bottom:9px}
+.idea.pick .blk .lbl{color:var(--money)}
+.blk .say{font-size:1.14rem;line-height:1.5}
+.blk ol{margin:0;padding-left:20px}
+.blk ol li{margin-top:9px}
+.blk ol li::marker{font-family:"JetBrains Mono",monospace;font-size:.82em;color:var(--ink3)}
+.blk ul{margin:0;padding-left:19px}
+.blk ul li{margin-top:8px}
+
+/* tables */
+.scroll{overflow-x:auto;margin-top:24px;border:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;min-width:540px;font-size:.93rem;background:var(--card)}
+th,td{text-align:left;padding:11px 15px;border-bottom:1px solid var(--hair);vertical-align:top}
+thead th{background:var(--sunk);font-family:"JetBrains Mono",monospace;font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);font-weight:700;border-bottom:1px solid var(--rule)}
+tbody tr:last-child td{border-bottom:0}
+td.fig{font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:.9rem}
+td strong{font-weight:600}
+
+/* pull */
+blockquote{margin:30px 0;padding:0 0 0 24px;border-left:4px solid var(--stamp);
+  font-size:1.2rem;line-height:1.5;font-style:italic}
+blockquote cite{display:block;margin-top:11px;font-size:.8rem;font-style:normal;
+  font-family:"JetBrains Mono",monospace;letter-spacing:.05em;color:var(--ink3)}
+
+/* metric row */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);margin-top:26px}
+.metrics div{background:var(--card);padding:20px}
+.metrics .m{font-family:Archivo,sans-serif;font-weight:800;font-size:2rem;letter-spacing:-.03em;line-height:1}
+.metrics .m.bad{color:var(--stamp)}
+.metrics .m.good{color:var(--money)}
+.metrics .l{font-size:.86rem;color:var(--ink2);margin-top:9px;line-height:1.4}
+
+ul.tick{margin:16px 0 0;padding-left:0;list-style:none}
+ul.tick li{padding-left:24px;position:relative;margin-top:11px}
+ul.tick li::before{content:"→";position:absolute;left:0;color:var(--stamp);font-family:"JetBrains Mono",monospace}
+
+.foot{padding:46px 0 72px;color:var(--ink2);font-size:.9rem}
+.foot p{margin-top:13px}
+code{font-family:"JetBrains Mono",monospace;font-size:.85em;background:var(--sunk);padding:1px 5px}
+
+@media (max-width:640px){
+  .wrap{padding:0 17px}
+  .rules > div{flex-basis:100%;border-right:0;border-bottom:1px solid var(--hair);padding-right:0}
+  .deadline{grid-template-columns:1fr;gap:18px;padding:26px 22px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <span class="kicker">Revised brief · 26 Aug 2026 · Four agents</span>
+    <h1>Money First</h1>
+    <p class="dek">Same founder, new filter. Environmental impact is gone as a criterion. The only questions now are who writes a cheque, how big, how soon — and whether one person can build it alone.</p>
+    <div class="rules">
+      <div><span class="n">Rule 01</span><div class="v">Speed to first dollar</div><div class="s">Weeks, not years. A finding without a dollar figure is nearly worthless.</div></div>
+      <div><span class="n">Rule 02</span><div class="v">Buildable solo</div><div class="s">Shippable in 90 days. No team, no capital, no enterprise contract to begin.</div></div>
+      <div><span class="n">Rule 03</span><div class="v">It has to repeat</div><div class="s">One-off project work is a job. Recurring revenue is a business.</div></div>
+      <div><span class="n">Kept</span><div class="v">Water</div><div class="s">You liked the sector. The sector holds up — the original entry point doesn't.</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap col">
+    <span class="snum">01 — Before anything else</span>
+    <h2>There is a deadline five weeks out</h2>
+    <p class="lede">This is the most time-sensitive item found anywhere in either research program, and it costs nothing to enter.</p>
+
+    <div class="deadline">
+      <div class="big">$75K<small>NVC prize pool</small></div>
+      <div>
+        <h3>UCSB New Venture Competition — information sessions run each October</h3>
+        <p>An eight-month programme, <b>October to May</b>, open to all majors and all levels. <b>400+ students enter → 60 teams form → 21 reach the New Venture Fair → 6 finalists.</b> Roughly <b>10 of 60 teams take money home — about one in six.</b> Better odds than any grant you will ever apply for.</p>
+        <p>The 2026 winner, LegalTime AI, was <b>a team of two CS and maths undergraduates</b>, and took $10,000. Second place $7,500, third $5,000, Impact and People's Choice $2,500 each.</p>
+      </div>
+    </div>
+
+    <p><strong>The $10,000 is not the prize.</strong> The programme comes with <strong>60+ mentors from local tech industry</strong> — which is precisely the network you said you don't have — and an eight-month structure with real deadlines and a cohort watching. Hold that thought until section 6, where the single biggest killer of solo founders turns out to be quietly stopping during a long stretch when nothing compounds.</p>
+
+    <h4>Two smaller things while you're at it</h4>
+    <ul class="tick">
+      <li><strong>1517 Fund Medici Grant — $1,000, zero equity, zero IP, explicitly a gift.</strong> Rolling applications, ~2-week response, aimed at students building technical prototypes outside coursework. Apply this week; it costs an hour.</li>
+      <li><strong>UCSB URCA grant, up to $750</strong>, window opening around 1 October. Not a business grant — but it can fund the <em>customer discovery</em>: a trade-conference badge, interview incentives, data acquisition.</li>
+    </ul>
+    <p><em>Not eligible:</em> the Rice Business Plan Competition ($1.48M awarded in 2026) is graduate-led only. GSA Schedule requires two years in business and two years of sales history — revisit in 2029.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap col">
+    <span class="snum">02 — The finding that should change what you do</span>
+    <h2>You are missing one thing, and it is buyable</h2>
+    <p class="lede">This is the only peer-reviewed source in either research program, and it's the strongest evidence produced by any of the fourteen agents.</p>
+
+    <p>Azoulay, Jones, Kim and Miranda studied <strong>2.7 million US founders</strong> who hired at least one employee between 2007 and 2014. Published through NBER and <em>AER: Insights</em>.</p>
+
+    <div class="metrics">
+      <div><div class="m">41.9</div><div class="l">Mean founder age at founding. For the top 1-in-1,000 highest-growth ventures: <strong>45.0</strong></div></div>
+      <div><div class="m bad">&lt;1%</div><div class="l">Share of high-performance startups founded by 20-year-olds</div></div>
+      <div><div class="m">38</div><div class="l">Average founding age for enterprise software specifically</div></div>
+      <div><div class="m good">+125%</div><div class="l">Success advantage for founders <strong>previously employed in the sector they build in</strong></div></div>
+    </div>
+
+    <p>That last number is the one that matters. And it shows up in every named success the research turned up: <strong>Bannerbear's founder was a career product designer</strong> before bootstrapping to $50K MRR. <strong>Auxpanel's founder was a dentist</strong>, selling to dentists. <strong>ConvertKit's Nathan Barry was a working blogger</strong>, selling to bloggers. Not one was a domain outsider who picked a vertical off a list.</p>
+
+    <blockquote>A statistics undergraduate choosing a B2B vertical from a list starts with the single largest documented handicap in the data — and it is the only item on the failure list that can be deliberately bought, in under six months, through paid service work and field research.</blockquote>
+
+    <p><strong>Your age is not the problem and it isn't fixable anyway. Your domain ignorance is the problem, and it is.</strong> Everything in section 6 follows from this.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="col">
+      <span class="snum">03 — The one you kept</span>
+      <h2>Water holds up. The door doesn't.</h2>
+      <p class="lede">You liked the water idea. The sector survived scrutiny — but the specific entry point was already demoted last round, and the deeper scan found a better one two steps to the left.</p>
+      <p>The original idea was building school-and-daycare rosters for water utilities under the federal lead rule. It fell over because <strong>120Water already ships that product</strong>, Rural Water Associations <em>endorse</em> software rather than buy it, and <strong>EPA published the free how-to guide in June 2026</strong> telling utilities to build the roster from billing records instead.</p>
+      <p>So the new agent mapped the whole industry instead — drinking water, wastewater, stormwater, billing, water rights, wells, leak detection, grease traps, operator licensing. Its conclusion:</p>
+    </div>
+
+    <blockquote>The money in water for one person with no capital is <strong>not</strong> in selling software to water utilities — that path is an RFP, a reference customer, and a nine-to-eighteen-month cycle. It is in selling to the thousands of <strong>small contractors the utilities regulate</strong>, who pay by credit card, whose names and phone numbers are published free on utility websites, and whose work is legally compelled.<cite>Water money map agent</cite></blockquote>
+
+    <div class="idea pick">
+      <div class="ihead">
+        <span class="irank">1</span>
+        <div class="ititle">
+          <h3>Backflow testing software — sold to the testers, not the utilities</h3>
+          <p class="sub">Buyer: the owner of a 1–5 person backflow, irrigation or plumbing shop</p>
+        </div>
+        <span class="tagline t-go">Card on file, same day</span>
+      </div>
+      <div class="ibody">
+        <div class="blk"><span class="lbl">What it is</span>
+          <p class="say">A phone app for a plumber who tests backflow valves. It captures the test, fills in whichever form that particular city demands, and — the part he actually pays for — tells him which of his customers are due for their annual re-test, and sends the reminder.</p>
+        </div>
+        <div class="blk"><span class="lbl">Why this exists at all</span>
+          <p>A backflow preventer stops dirty water flowing backwards into the public drinking supply. Every commercial building has them, and <strong>the law requires a certified tester to check each one every year.</strong> Miss it and the penalties are real: <strong>Longmont, Colorado charges up to $500 per assembly plus a scheduled water shutoff. Denver Water charges $250 and moves you to suspension. San Francisco can terminate service outright.</strong></p>
+          <p>Three parties touch one record — the utility, the property owner, and the tester — and none of them share a system. <strong>That is why it still runs on Excel.</strong></p>
+        </div>
+        <div class="blk"><span class="lbl">Why you can reach the buyer</span>
+          <p><strong>Every water utility in America publishes its list of certified testers.</strong> Marin Water, CFPUA, James City County, Liberty Lake, SF.gov, Missouri DNR — thousands of such pages. Name, company, phone, often email. Pre-qualified as licensed and actively working.</p>
+          <p><strong>That is a free, public, phone-verified lead list of 19,000+ certified professionals</strong> — and scraping it into a national database is itself a defensible asset.</p>
+        </div>
+        <div class="blk"><span class="lbl">How you'd build it</span>
+          <ol>
+            <li>Scrape 200–400 utility tester-list pages into one national database. Two weeks.</li>
+            <li>Build the capture: gauge readings, pass/fail, assembly serial, photo — on a phone, in a mechanical room, offline.</li>
+            <li>Auto-generate <em>the specific PDF that specific utility requires.</em> This is the unglamorous differentiator and nobody does it well.</li>
+            <li>Build the due-date engine. <strong>The re-test reminder is the actual product</strong> — it converts a one-off job into an annuity for the tester. That is why he pays you.</li>
+          </ol>
+        </div>
+        <div class="blk"><span class="lbl">The money</span>
+          <div class="scroll"><table>
+            <thead><tr><th>Existing product</th><th class="fig">Price</th><th>Note</th></tr></thead>
+            <tbody>
+              <tr><td>Syncta</td><td class="fig">from $29/mo</td><td>Owned by Watts Water. Generic.</td></tr>
+              <tr><td>MyBackflow</td><td class="fig">$49/mo</td><td>Up to 500 assemblies</td></tr>
+              <tr><td>BackflowNet</td><td class="fig">$149/mo</td><td>Up to 250 assemblies</td></tr>
+              <tr><td>ServiceTrade</td><td class="fig">~$75/tech/mo</td><td>General field service</td></tr>
+              <tr><td><strong>You</strong></td><td class="fig"><strong>$39–79/mo</strong></td><td>19,000 targets × 1% at $59 = <strong>~$135K ARR</strong></td></tr>
+            </tbody>
+          </table></div>
+          <p>Realistic: <strong>first paying customer in 30–60 days</strong>, $2K–8K MRR by month nine — if you actually pick up the phone.</p>
+        </div>
+        <div class="blk"><span class="lbl">The risk, plainly</span>
+          <p>It's crowded — six named competitors — with low contract values and SMB churn. The differentiator has to be the utility-specific forms and the reminder engine, <strong>not "another inspection app."</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="idea">
+      <div class="ihead">
+        <span class="irank">2</span>
+        <div class="ititle">
+          <h3>Then flip that base into a filing clearinghouse</h3>
+          <p class="sub">Buyer: the Cross-Connection Control Coordinator at a water utility</p>
+        </div>
+        <span class="tagline t-hold">Where the real money is</span>
+      </div>
+      <div class="ibody">
+        <div class="blk"><span class="lbl">What it is</span>
+          <p class="say">The same software pointed at the other end of the pipe. The utility stops keying paper test reports by hand — and pays you nothing. <strong>The testers pay, per report filed.</strong></p>
+        </div>
+        <div class="blk"><span class="lbl">Why a solo founder can actually win a city</span>
+          <p><strong>There is no budget line to approve.</strong> Brycer's own municipal agenda materials state "zero cost for any aspect — setup, training, ongoing service." A coordinator can adopt this administratively or with a one-page policy change, not a capital procurement.</p>
+          <p><strong>That is the fastest route to a municipal "yes" found anywhere in this research.</strong></p>
+        </div>
+        <div class="blk"><span class="lbl">What the incumbents charge the testers</span>
+          <div class="scroll"><table>
+            <thead><tr><th>Vendor</th><th class="fig">Per report</th><th>Evidence</th></tr></thead>
+            <tbody>
+              <tr><td>Brycer / The Compliance Engine</td><td class="fig">$10 – $37</td><td>Raleigh $10–12 · Charleston $15 · Forney TX $17 · Redmond WA $37</td></tr>
+              <tr><td>BSI Online</td><td class="fig">$12.95 – $15.95</td><td>Est. <strong>$5.2M/yr revenue</strong> on ~43–51 staff ⚠️</td></tr>
+              <tr><td>Tokay (Veralto)</td><td class="fig">$1.00</td><td>+ $0.50 small-batch fee</td></tr>
+            </tbody>
+          </table></div>
+          <p><strong>A utility with 5,000 assemblies at $9.95/report is roughly $50,000 a year from one city.</strong> Ten cities is $500K on a support load one person can carry. Expect three to nine months per city, and expect the incumbents to defend.</p>
+        </div>
+        <div class="blk"><span class="lbl">The sequencing insight</span>
+          <p><strong>Idea 1 funds idea 2 — and hands it an unfair advantage.</strong> When a utility asks "will our testers actually use this," you answer with their names. Every incumbent acquired utilities first and treated testers as a captive toll-payer, which is why there's an entire genre of contractor complaint about the $12.95 fee. Going tester-first inverts their leverage.</p>
+        </div>
+        <div class="blk"><span class="lbl">And the sleeper nobody works</span>
+          <p>The utility mails a legally-compelled notice to a property owner who <strong>must hire a certified tester within 30 days.</strong> That is the highest-intent lead in the trades — plumbing leads run $35–75 on Google Ads, $150–200+ on competitive terms — and right now it converts through a photocopied list.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <h3>Three more water plays worth knowing</h3>
+      <div class="scroll"><table>
+        <thead><tr><th>Play</th><th>The forcing event</th><th class="fig">Price</th><th>Catch</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Consumer Confidence Reports</strong> — the annual water quality notice every utility must mail</td><td>EPA's revised rule: first compliance <strong>1 Jan 2027</strong>, systems over 10,000 people must publish <strong>twice a year</strong>, plus new translation requirements</td><td class="fig">$299–$1,499<br>(1water.ai's public tiers)</td><td>Seasonal — money lands Feb–June. Free EPA templates cap the price. A competitor already publishes this exact pricing.</td></tr>
+          <tr><td><strong>California cross-connection plans</strong> for small water systems</td><td>State handbook took effect 1 July 2024; plans were due 1 July 2025 — <strong>so there's a late cohort, the best-converting cohort in compliance sales</strong></td><td class="fig">$1,500–$3,000 flat</td><td>Displacing $209/hr engineering time, but California-only</td></tr>
+          <tr><td><strong>Industrial stormwater annual reports</strong> — sold to factories, not cities</td><td><strong>8,035 California permittees already pay $1,791/yr each just for the permit — $14.4M of proven non-optional spend</strong></td><td class="fig">$1,200–$2,500<br>per facility/yr</td><td>The buyer is a <em>private business</em> — no procurement, invoice, net-30. 100 facilities = $150K/yr.</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>Checked and rejected:</strong> small-utility billing (multi-year rip-and-replace, and Current Software has $2.75M and a head start) · private well testing (13M households but <em>no mandate</em>, plus kits, labs and inventory) · water rights (data moat and relationships you don't have) · rate studies (the deliverable is credibility, not a spreadsheet) · irrigation districts (Watervize already occupies your exact segment).</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="col">
+      <span class="snum">04 — Outside water</span>
+      <h2>The fastest money found anywhere</h2>
+      <p class="lede">Any discipline, ranked purely on how quickly someone pays. One heuristic emerged that's worth more than any single idea here.</p>
+      <blockquote>Any vertical where the incumbent refuses to publish a price is a market where a self-serve competitor with a public price wins on friction alone.<cite>Money-first scout</cite></blockquote>
+      <p>Sales-gated in this dataset: PestPac, Briostack, ServiceTitan, Passare, storEDGE, Vantaca, Highway, GovWin, Brightwheel, Procare. <strong>The list of verticals with no AI-native player correlates almost perfectly with the list of vendors who won't publish a price.</strong></p>
+    </div>
+
+    <div class="idea pick">
+      <div class="ihead">
+        <span class="irank">1</span>
+        <div class="ititle">
+          <h3>Trucking compliance for one-to-ten-truck carriers</h3>
+          <p class="sub">Buyer: an owner-operator who just got his authority to run a truck</p>
+        </div>
+        <span class="tagline t-go">First dollar in 14 days</span>
+      </div>
+      <div class="ibody">
+        <div class="blk"><span class="lbl">What it is</span>
+          <p class="say">A service that keeps a tiny trucking company legal: enrolling its drivers in the mandatory drug-testing pool, keeping their qualification files audit-ready, running the federally-required annual background queries, and filing the quarterly fuel tax.</p>
+        </div>
+        <div class="blk"><span class="lbl">Why it's first</span>
+          <ul>
+            <li><strong>The lead list is free, public, phone-verified, and refills itself.</strong> The federal carrier census gives name, phone, email, address <em>and the date the authority was granted</em> — and about <strong>3,200 new authorities are issued every week.</strong></li>
+            <li><strong>The purchase is legally mandatory and time-boxed.</strong> A new carrier must be in a testing consortium before operating and faces a New Entrant Safety Audit. You arrive the week they are <em>required</em> to act — you're not persuading anyone to want software.</li>
+            <li><strong>Credibility isn't the gate.</strong> A one-truck owner cares that his file is right. He does not check your degree. This is the exact opposite of every idea that needs an institutional buyer.</li>
+            <li><strong>Nobody sells the bundle.</strong> Four unrelated vendors for one man's obligations.</li>
+          </ul>
+        </div>
+        <div class="blk"><span class="lbl">The money</span>
+          <div class="scroll"><table>
+            <thead><tr><th>What they already pay</th><th class="fig">Price</th></tr></thead>
+            <tbody>
+              <tr><td>Managed driver-qualification files</td><td class="fig">$30–$49 / driver / mo</td></tr>
+              <tr><td>Full-service compliance</td><td class="fig">$100–$250 / driver / mo</td></tr>
+              <tr><td>Drug &amp; alcohol consortium</td><td class="fig">$49–$595 / yr</td></tr>
+              <tr><td>Quarterly fuel tax filing</td><td class="fig">$14.90–$80 / truck / quarter</td></tr>
+              <tr><td>Federal background queries</td><td class="fig">$1.25 each, mandated annually</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="blk"><span class="lbl">The 60 days</span>
+          <ol>
+            <li><strong>Days 1–7:</strong> pull the census, build the new-authority filter, get a phone number. Partner with an existing consortium as a reseller — <em>don't try to become one</em>, that's a licensing problem.</li>
+            <li><strong>Days 8–21:</strong> call thirty new carriers a day. "$499 for your first year — consortium enrolment, your file built and kept audit-ready, queries run, fuel tax filed." <strong>Do the first ones by hand in Google Drive.</strong></li>
+            <li><strong>Days 22–60:</strong> with 10–20 paying carriers, build the software you were faking. Your customers dictate the spec.</li>
+          </ol>
+          <p><strong>Realistic: ~15 carriers × $499 ≈ $7,500 collected in 60 days</strong>, converting to $500–700/mo recurring. Not life-changing. Real.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <h3>The rest, briefly</h3>
+      <div class="scroll"><table>
+        <thead><tr><th>Idea</th><th>The gap</th><th class="fig">Money</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Food safety plans</strong> for food trucks and small producers</td><td>A consultant-written plan costs <strong>$3,250 to $17,000</strong>. The cheapest software is $59.99/mo. <strong>Nothing serves the middle.</strong></td><td class="fig">$750 flat<br>+ $89/mo logs</td><td><span class="tagline t-hold">Credibility risk</span> — buyers ask "are you a certified food safety professional?" A 20-year-old is a hard sell. Needs a contracted reviewer.</td></tr>
+          <tr><td><strong>Building permit data</strong> resold as sales leads</td><td>Shovels.ai charges <strong>from $599/mo, sales-gated</strong>, for normalised data that is free and public at source. <strong>The clearest arbitrage found.</strong></td><td class="fig">$149–$299/mo<br>per metro, per trade</td><td><span class="tagline t-go">Closest to what you built</span> — and you email the contractors who appear in your own data.</td></tr>
+          <tr><td><strong>Fire inspection reporting</strong></td><td>Price dispersion from <strong>$40/user/mo to $1,299/mo</strong> for functionally the same form output — buyers can't compare and nobody owns the category</td><td class="fig">~$149/mo flat</td><td>Annual, mandatory, recurring</td></tr>
+          <tr><td><strong>AI receptionist</strong> for one trade</td><td>Human answering services charge <strong>$235/mo for 50 minutes</strong>, rising to $1,725</td><td class="fig">Price at $349/mo</td><td><span class="tagline t-no">Crowded</span> — your cost is $0.13–0.33/min, thinner than the hype, and <strong>Avoca hit a $1B valuation in exactly this vertical in April 2026</strong></td></tr>
+          <tr><td><strong>Buying a small SaaS</strong> instead of building</td><td>Sub-$50K deals trade at a <strong>median 1.7× profit</strong></td><td class="fig">—</td><td><span class="tagline t-no">No capital</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap col">
+    <span class="snum">05 — PantryChef</span>
+    <h2>The consumer app is closed by arithmetic</h2>
+    <p class="lede">You asked how to make it better and how to make money from it. The honest answer to the second question changes the answer to the first.</p>
+
+    <h3>Does anyone make money selling recipe apps?</h3>
+    <p><strong>Cookpad is the only public pure-play, so its numbers are audited.</strong> It is the largest recipe platform in the world outside Allrecipes, with tens of millions of users and about two million paid subscribers at its peak.</p>
+
+    <div class="metrics">
+      <div><div class="m">¥16.8B</div><div class="l">Revenue at its 2016 peak</div></div>
+      <div><div class="m bad">¥5.34B</div><div class="l">Revenue in FY2025 — <strong>a 68% collapse</strong> over nine consecutive years of decline</div></div>
+      <div><div class="m bad">−¥417M</div><div class="l">Net loss, Q1 FY2026</div></div>
+      <div><div class="m">$310M</div><div class="l">MyFitnessPal's 2025 revenue — <strong>roughly 9× Cookpad's entire global business</strong>, on near-identical technology</div></div>
+    </div>
+
+    <p>The reason Cookpad fell is instructive and it applies directly: from 2016, people stopped searching and reading recipes and started watching them. <strong>The interface to recipes got disrupted.</strong> In 2026 it is being disrupted again — <em>"what can I make with chicken, rice and half a lemon, I'm dairy-free"</em> is now a free question to any chatbot. PantryChef would be launching <em>after</em> that shift, not before it.</p>
+
+    <p>And everyone else in the category was acquired as a funnel for something that actually monetises. <strong>Whirlpool paid $100M for Yummly in 2017, laid off the whole team in April 2024, and switched it off that December</strong> with no export path. Mealime went to a grocer. Whisk went to Samsung. <strong>Crouton — winner of an Apple Design Award, the best-designed recipe app in the world — was bought by a thermometer company.</strong> The best independent outcome anyone found is AnyList at roughly $2M ARR with two people.</p>
+
+    <div class="stamp">
+      <h3>The arithmetic that ends it</h3>
+      <p>Food &amp; Drink apps have <strong>the worst retention of any category in mobile: 3.9% at day 30.</strong> Freemium converts at <strong>2.1%</strong>. Paying subscribers churn at <strong>13–14% every month.</strong> US cost per install runs about <strong>$4.06.</strong></p>
+      <p class="num" style="font-size:1.05rem;line-height:1.9;margin-top:16px">CAC per <em>paying</em> subscriber = $4.06 ÷ 0.021 ≈ <b>$193</b><br>LTV = ($4.99 − store cut) ÷ 0.135 churn ≈ <b>$31</b></p>
+      <p style="font-size:1.2rem;font-weight:600;margin-top:16px">Every paid install loses about $162 — before you pay Spoonacular and Gemini on every query, including the 97.9% who never pay.</p>
+      <p>That is not a marketing problem. It's a 6× inversion. And the only channel left — organic — is the one a solo founder can neither control nor forecast.</p>
+    </div>
+
+    <p><strong>One more structural problem specific to you:</strong> Spoonacular's terms let you cache their data for one hour. You can never accumulate a corpus. Every query is a rented API call — <strong>no compounding, nothing to license, nothing that becomes an asset.</strong> That alone caps the company's value near zero, and it's why every non-subscription model fails too: Walmart pays <em>0%</em> on grocery affiliate, Amazon pays 1%, and you can't licence data you're forbidden from storing.</p>
+
+    <div class="stamp go">
+      <h3>The pivot: point it at the walk-in cooler instead of the home fridge</h3>
+      <p><strong>The valuable thing you built is not the recipe database.</strong> It's the engine underneath: <em>given an inventory, a set of hard constraints, and an objective, rank what's feasible and explain the substitutions.</em></p>
+      <p>That engine is worth about $5/month to a consumer. <strong>It is worth $79–$199 per month per location to a kitchen with a food cost line on its P&amp;L.</strong></p>
+      <p style="font-size:1.14rem;margin-top:18px"><em>"Here's what's in inventory tonight. Here's what you can put on the menu, at what plate cost, at what margin, without breaking the allergen matrix or the 86 list."</em></p>
+    </div>
+
+    <h4>Why this specific pivot</h4>
+    <ul class="tick">
+      <li><strong>The code transfers almost unchanged.</strong> Swap "mood" for "target food cost %" and "dietary restriction" for "allergen matrix and par levels." The scoring engine, substitution logic and explanation layer all survive.</li>
+      <li><strong>The Spoonacular dependency doesn't survive — and that's the point.</strong> The recipes become the customer's own. <strong>You finally own a data asset instead of renting one on a one-hour lease.</strong></li>
+      <li><strong>Revenue per customer goes up 20–40×.</strong> meez sells at $79–199/location/mo; MarketMan at $199–239. Thirty locations at $150 is <strong>$54K ARR</strong> — more than six thousand consumer subscribers, and far easier to keep.</li>
+      <li><strong>Retention inverts.</strong> Consumer food apps retain 3.9% at day 30. A restaurant that has entered two hundred costed recipes does not churn — <strong>the switching cost is the data entry.</strong></li>
+      <li><strong>A chef can buy it on a personal card after one demo.</strong> meez and Craftable both publish self-serve prices. No RFP, no procurement, no security review. This is the only B2B food segment where that's true.</li>
+    </ul>
+
+    <p><strong>The second-best pivot, with a real mandate behind it:</strong> dietary compliance for senior living. MealSuite starts at $175/mo and the sector transacts at $3–5 per resident per month — a 20-facility operator is $115K/yr. And <em>"this resident is renal, diabetic and shellfish-allergic, what can they eat from tonight's menu"</em> is <strong>literally your existing function with the mood parameter deleted.</strong></p>
+
+    <div class="stamp hold">
+      <h3>So what do you actually do with it</h3>
+      <p><strong>Ship PantryChef as it is, write it up properly, and put it in the portfolio.</strong> It's a genuinely strong artifact of engineering judgment — deterministic scoring with the LLM confined to validation and explanation is the <em>right</em> architecture, and worth being able to defend in an interview.</p>
+      <p><strong>Then spend one weekend talking to ten chefs about food cost and 86 lists before writing another line of code.</strong> If they don't bite, you've lost a weekend instead of two years and $193 a subscriber.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap col">
+    <span class="snum">06 — Execution</span>
+    <h2>How you actually get a first customer</h2>
+    <p class="lede">Ideas are cheap. The last round's failure mode wasn't bad ideas — it was buyers who turned out not to exist or not to purchase. So one agent researched nothing but mechanics.</p>
+
+    <p>A note on source quality first, because it matters here. <strong>The agent found a fabricated statistic circulating in the wild</strong> — a widely-shared post cites "Y Combinator's 2023 founder survey" for a claim about Twitter and Series A. <strong>That survey does not exist.</strong> Roughly three-quarters of what ranks for "cold email benchmarks 2026" is written by companies selling cold email software. Everything below is tiered by source quality.</p>
+
+    <h3>What works</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Channel</th><th>Real numbers</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Cold calling small businesses</strong></td><td>SMB managers connect at <strong>18–25%</strong>. 25–35 dials per booked meeting. <strong>~100 dials/day ≈ 3 meetings/day.</strong></td><td><span class="tagline t-go">Do this</span> The only channel where being broke costs you nothing. Nobody recommends it because it's miserable, not because it doesn't work.</td></tr>
+        <tr><td><strong>Hand-written email, tiny lists</strong></td><td>One documented solo founder: <strong>43 emails → 17 replies → 1 paying customer.</strong> Campaigns under 50 recipients reply at <strong>5.8%</strong> vs 2.1% for large sends.</td><td><span class="tagline t-go">Do this</span> But note the trend: reply rates fell from 8.5% (2019) to <strong>3.43% (2026)</strong>, and software is the worst vertical at under 2%.</td></tr>
+        <tr><td><strong>Trade conference — as an attendee</strong></td><td>A booth costs <strong>$9,000–$45,000</strong> all-in. <strong>An attendee badge costs $200–600.</strong></td><td><span class="tagline t-go">Do this first</span> 200 of your exact buyers in one hotel for two days — and the one place "I'm a UCSB student researching how you handle X" beats a vendor pitch.</td></tr>
+        <tr><td><strong>SEO</strong></td><td>Traffic at months 3–6. <strong>Commercial-intent keywords on a new domain: 12–24 months.</strong></td><td><span class="tagline t-hold">Later</span> Not a first-customer channel.</td></tr>
+        <tr><td><strong>Reddit / building in public</strong></td><td>r/startups bans self-promotion outright. r/Entrepreneur removes posts with links.</td><td><span class="tagline t-no">Skip</span> r/SaaS and r/indiehackers are full of <em>other builders</em>, not buyers. Even the pro-Twitter anecdote concedes revenue came from "cold emails, conferences and referrals."</td></tr>
+        <tr><td><strong>App marketplaces</strong></td><td>Of ~700 Shopify apps launched in one quarter, total revenue across all of them was <strong>$29,471. Mean $39.72. Median zero.</strong></td><td><span class="tagline t-no">Skip</span> A listing fulfils demand you already created.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>The path the evidence actually supports</h3>
+    <p><strong>Don't start with a product. Start with paid service work in one vertical.</strong> It pays in weeks rather than months, it buys the sector experience worth +125%, and it is how Wildbit, Basecamp, Pointerpro and Bynder all started. <em>Wildbit's founder had to borrow money from family to fund the switch to product</em> — nobody glides through that transition.</p>
+
+    <div class="scroll"><table>
+      <thead><tr><th>What you can charge now</th><th class="fig">Rate</th></tr></thead>
+      <tbody>
+        <tr><td>Upwork, no platform history</td><td class="fig">$50–$85/hr</td></tr>
+        <tr><td>Direct, after 3–4 delivered engagements</td><td class="fig">$100–$150/hr</td></tr>
+        <tr><td>A single automation build, fixed fee</td><td class="fig">$400–$1,200</td></tr>
+        <tr><td>Multi-workflow with AI</td><td class="fig">$1,500–$4,500</td></tr>
+        <tr><td>Standard agency shape</td><td class="fig">$2,500–15,000 setup + $1,500–5,000/mo</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Four $1,500 builds in a quarter is $6,000</strong> — more than most micro-SaaS attempts earn in their entire first year.</p>
+    <p><strong>The tell that you've found the product:</strong> the same deliverable, requested by three unrelated clients, that you now produce in 20% of the original time. <strong>That delta is the software.</strong> Automate only what someone has already paid you to do by hand.</p>
+    <p><em>And set the exit trigger in advance</em> — service work is a comfortable local maximum, because $6K/mo of client work always feels more urgent than a speculative product. "At engagement #5 in the same vertical, I cap new clients."</p>
+
+    <h3>The numbers that constrain everything</h3>
+    <div class="metrics">
+      <div><div class="m">~$110</div><div class="l">Realistic monthly burn, pre-revenue. About one tutoring client.</div></div>
+      <div><div class="m">$29–499</div><div class="l">Your addressable price band, per month — see the ceiling below</div></div>
+      <div><div class="m bad">30%</div><div class="l">Of micro-SaaS attempts <strong>never reach $1K MRR and are abandoned</strong></div></div>
+      <div><div class="m bad">80%</div><div class="l">End below $10K MRR. Median time to $1K MRR: <strong>12–18 months</strong></div></div>
+    </div>
+
+    <div class="stamp">
+      <h3>The procurement ceiling — design around it from day one</h3>
+      <p><strong>SOC 2 becomes effectively mandatory above roughly $50K in annual contract value</strong>, and procurement at companies with 200+ employees routinely blocks vendors without it. <strong>SOC 2 costs $45,000–70,000 in the first year.</strong></p>
+      <p>So your market is <strong>businesses under about 200 employees, where the person you're talking to can put it on a card without asking anyone.</strong> Above that line lies security review, vendor onboarding and legal — with a $45K compliance bill and no company to put it on. <strong>Choosing a buyer whose procurement you can't survive is a named, documented way to die.</strong></p>
+    </div>
+
+    <p>Two practical notes. <strong>Sonnet's introductory API pricing ends 1 September</strong> — route to Haiku by default and cache your system prompt; at 10% of input price that's the single biggest cost lever available, and it's the difference between viable and not at $29/mo. And <strong>confirm California's $800 franchise tax first-year waiver with the FTB directly</strong> — the sources genuinely contradict each other, and it's an $800 question.</p>
+
+    <h3>How solo founders die</h3>
+    <p>CB Insights analysed 483 startup post-mortems. <strong>"No market need" is the number one cause, and nine of the top twenty reasons relate to customers</strong> — not meeting their needs, not listening, or ignoring them.</p>
+    <p>For you specifically, the risk isn't any of the exotic ones. It's this: <strong>54% of solo founders report burnout; 30% abandon before $1K MRR; and there is no external forcing function</strong> — no investor, no co-founder, no payroll. In a twelve-to-eighteen-month stretch with no feedback, quietly stopping is the path of least resistance, and it is what most people do.</p>
+    <blockquote>In the early days we tried nearly every growth idea — Reddit posts, Indie Hackers updates, Slack communities, startup directories, newsletters, cold outreach. Most brought small wins but no repeatable traction.<cite>Senja.io founders, who did eventually reach $5,000 MRR</cite></blockquote>
+    <p><strong>Budget for a long stretch where nothing compounds.</strong> And note what the NVC actually gives you against that: eight months of deadlines, a cohort, and sixty people expecting to see progress.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap col">
+    <span class="snum">07 — If it were my call</span>
+    <h2>What I'd do</h2>
+    <ol style="padding-left:22px;margin-top:22px;font-size:1.05rem">
+      <li style="margin-top:16px"><strong>Go to the NVC information session in October.</strong> Five weeks out, one-in-six odds at real money, sixty mentors, and an eight-month structure aimed straight at the failure mode most likely to get you. Apply to the 1517 Medici Grant this week while you're at it.</li>
+      <li style="margin-top:16px"><strong>Pick one vertical and take paid service work in it.</strong> Backflow testers and small trucking carriers are both reachable this month with a free public list and a phone. This pays in weeks and buys the sector experience worth +125%.</li>
+      <li style="margin-top:16px"><strong>Buy a $300 conference badge before you write any code.</strong> Two hundred buyers in one hotel, and student status is an asset in that room rather than a liability.</li>
+      <li style="margin-top:16px"><strong>Do the first ten jobs by hand.</strong> Tell customers it's manual — the research is clear that they pay anyway. Automate only what three unrelated clients have already paid you to do.</li>
+      <li style="margin-top:16px"><strong>Ship PantryChef as a portfolio piece and stop developing it.</strong> Revisit the engine only if ten chefs tell you food cost is a real problem worth $150/month.</li>
+      <li style="margin-top:16px"><strong>Keep burn at $110/month</strong> and never sell to anyone whose security team you'd have to survive.</li>
+    </ol>
+    <p style="margin-top:26px"><strong>The through-line:</strong> every idea on this page is reachable because someone publishes a list — certified backflow testers, new trucking authorities, permitted facilities, licensed food producers. <strong>You have no network, and a public list is the closest thing to one that money can't buy.</strong> That, more than any single idea here, is the asset to build on.</p>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap col">
+    <p><b>Method.</b> Four agents: a whole-industry water money map, a money-first opportunity scout across any discipline, a PantryChef monetisation study, and a solo-founder execution playbook. Every agent was required to produce real dollar figures — published prices, contract awards, disclosed revenue — and to flag anything it couldn't verify.</p>
+    <p><b>The same limitation as last time.</b> The network egress policy blocks document fetches, so <b>no agent loaded a vendor pricing page, contract PDF or filing directly.</b> Every figure is a search engine's rendering of a real URL. Nothing was fabricated and every agent disclosed the constraint unprompted — but before you act on any specific price, open the source. The most load-bearing unverified numbers are flagged in the underlying documents.</p>
+    <p><b>Where this differs from the last brief.</b> Environmental impact is no longer scored. The water sector is kept because it survived the money test; the specific lead-rule idea is dropped because 120Water already sells it and the buyer doesn't purchase software. Everything else on the previous page is cleared.</p>
+    <p style="margin-top:22px;padding-top:18px;border-top:1px solid var(--rule);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--ink3)">Full agent reports: <code>research/v2-money-first/</code> — four documents, committed.</p>
+  </div>
+</footer>
