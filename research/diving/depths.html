@@ -1,0 +1,589 @@
+<title>The Money Is Deeper Than The People</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Fira+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --ink:#0E1B1F; --ink-2:#39494E; --muted:#6A7B80;
+  --paper:#E7ECED; --card:#FAFCFC; --band:#DCE3E4;
+  --rule:#BFCBCD; --rule-soft:#D4DDDE;
+  --deep:#0E6070; --deep-ink:#0A4C59; --deep-wash:#DBE9EB;
+  --flag:#A6362A; --flag-wash:#F0DFDC;
+  --gauge-top:#8FB6BD; --gauge-bot:#0B3A45;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#DFEAEB; --ink-2:#AFC0C3; --muted:#7E9095;
+    --paper:#071316; --card:#101E22; --band:#0C181B;
+    --rule:#22383D; --rule-soft:#192A2E;
+    --deep:#5CBCCB; --deep-ink:#83D3DE; --deep-wash:#0D2E35;
+    --flag:#E4837A; --flag-wash:#331714;
+    --gauge-top:#2C6C79; --gauge-bot:#04181E;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#DFEAEB; --ink-2:#AFC0C3; --muted:#7E9095;
+  --paper:#071316; --card:#101E22; --band:#0C181B;
+  --rule:#22383D; --rule-soft:#192A2E;
+  --deep:#5CBCCB; --deep-ink:#83D3DE; --deep-wash:#0D2E35;
+  --flag:#E4837A; --flag-wash:#331714;
+  --gauge-top:#2C6C79; --gauge-bot:#04181E;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:Newsreader,Georgia,"Times New Roman",serif;
+  font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1000px; margin:0 auto; padding:0 22px 90px}
+
+h1,h2,h3,h4,.grot{font-family:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif; font-weight:700; text-wrap:balance; letter-spacing:-.015em}
+h1{font-size:clamp(2.7rem,7.2vw,4.7rem); line-height:.98; margin:0; font-weight:800}
+h2{font-size:clamp(1.85rem,4vw,2.6rem); line-height:1.05; margin:0}
+h3{font-size:1.34rem; line-height:1.18; margin:0 0 6px}
+h4{font-size:1.05rem; line-height:1.2; margin:0 0 5px; font-weight:700}
+p{margin:0 0 14px; max-width:68ch}
+a{color:var(--deep-ink)}
+.mono,.lab,td.n,th.n,.fig{font-family:"Fira Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.lab{font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--deep); font-weight:500}
+.lab.q{color:var(--muted)} .lab.r{color:var(--flag)}
+.sans{font-family:"Bricolage Grotesque",Arial,sans-serif}
+
+/* masthead */
+header.mast{padding:52px 0 0}
+.topline{display:flex; flex-wrap:wrap; gap:8px 20px; align-items:baseline; border-bottom:1px solid var(--ink); padding-bottom:8px; margin-bottom:28px}
+.topline .who{font-family:"Fira Mono",monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase}
+.topline .meta{margin-left:auto; font-family:"Fira Mono",monospace; font-size:11px; color:var(--muted); letter-spacing:.05em}
+.dek{margin:24px 0 0; font-size:1.22rem; line-height:1.52; color:var(--ink-2); max-width:60ch}
+
+/* depth gauge — the centrepiece */
+.gauge{margin:40px 0 0; border:1px solid var(--rule-soft); background:var(--card)}
+.gauge .ghead{padding:18px 22px 14px; border-bottom:1px solid var(--rule-soft)}
+.gauge .ghead h3{margin-bottom:5px}
+.gauge .ghead p{margin:0; font-size:.95rem; color:var(--ink-2)}
+.zone{display:grid; grid-template-columns:14px 128px 1fr 130px 130px; align-items:stretch; border-bottom:1px solid var(--rule-soft)}
+.zone:last-child{border-bottom:none}
+.zone .bar{background:var(--z)}
+.zone .d{padding:15px 0 15px 16px; font-family:"Fira Mono",monospace; font-size:11px; letter-spacing:.06em; color:var(--muted); text-transform:uppercase}
+.zone .who{padding:15px 16px 15px 0}
+.zone .who strong{font-family:"Bricolage Grotesque",Arial,sans-serif; font-size:1.06rem; display:block; margin-bottom:2px}
+.zone .who span{font-size:.9rem; color:var(--muted)}
+.zone .m{padding:15px 16px; text-align:right; border-left:1px solid var(--rule-soft)}
+.zone .m .fig{display:block; font-family:"Bricolage Grotesque",Arial,sans-serif; font-weight:700; font-size:1.24rem; line-height:1.1; letter-spacing:-.01em}
+.zone .m .k{display:block; font-family:"Fira Mono",monospace; font-size:9.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); margin-top:5px}
+.zone .m.money .fig{color:var(--deep-ink)}
+.gfoot{padding:16px 22px; background:var(--deep-wash); border-top:1px solid var(--rule-soft)}
+.gfoot p{margin:0; font-family:"Bricolage Grotesque",Arial,sans-serif; font-weight:700; font-size:1.12rem; line-height:1.34; letter-spacing:-.01em; max-width:64ch}
+
+/* sections */
+section{margin:64px 0 0; scroll-margin-top:14px}
+.shead{border-top:2px solid var(--ink); padding-top:12px; margin-bottom:22px}
+.shead .lab{display:block; margin-bottom:6px}
+.shead p{margin:10px 0 0; color:var(--ink-2); max-width:66ch}
+
+/* blocks */
+.card{background:var(--card); border:1px solid var(--rule-soft); padding:22px 24px; margin:22px 0}
+.card>*:last-child{margin-bottom:0}
+.pull{border-left:3px solid var(--deep); padding:3px 0 3px 20px; margin:26px 0; max-width:63ch}
+.pull p{font-family:"Bricolage Grotesque",Arial,sans-serif; font-weight:700; font-size:1.4rem; line-height:1.25; margin:0; letter-spacing:-.015em}
+.pull .sub{font-family:Newsreader,serif; font-weight:400; font-size:.98rem; color:var(--muted); line-height:1.55; margin-top:9px; letter-spacing:0}
+.pull.red{border-left-color:var(--flag)}
+.pull.red p{color:var(--ink)}
+
+ul.list{margin:0 0 16px; padding:0; list-style:none}
+ul.list li{position:relative; padding-left:20px; margin-bottom:9px; max-width:68ch}
+ul.list li::before{content:""; position:absolute; left:2px; top:.75em; width:8px; height:1px; background:var(--deep)}
+
+/* group cards */
+.grp{background:var(--card); border:1px solid var(--rule-soft); margin:20px 0}
+.grp .gh{display:flex; flex-wrap:wrap; gap:6px 18px; align-items:baseline; padding:14px 22px; background:var(--band); border-bottom:1px solid var(--rule-soft)}
+.grp .gh h3{margin:0}
+.grp .gh .pop{margin-left:auto; font-family:"Fira Mono",monospace; font-size:11px; color:var(--muted); letter-spacing:.06em}
+.grp .split{display:grid; grid-template-columns:1fr 1fr}
+.grp .split>div{padding:20px 22px}
+.grp .split>div+div{border-left:1px solid var(--rule-soft)}
+.grp .split .lab{display:block; margin-bottom:9px}
+.grp .split p:last-child,.grp .split ul:last-child{margin-bottom:0}
+.grp .miss{background:var(--flag-wash)}
+.grp .miss .lab{color:var(--flag)}
+.grp .miss ul.list li::before{background:var(--flag)}
+
+/* tables */
+.scroll{overflow-x:auto; margin:22px 0; border:1px solid var(--rule-soft); background:var(--card)}
+table{border-collapse:collapse; width:100%; min-width:540px; font-size:.94rem}
+th,td{text-align:left; padding:11px 16px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
+thead th{font-family:"Fira Mono",monospace; font-size:9.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); font-weight:500; border-bottom:1px solid var(--rule); white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+tr.hi td{background:var(--deep-wash)}
+td.n,th.n{text-align:right; white-space:nowrap; font-family:"Fira Mono",monospace}
+caption{caption-side:bottom; text-align:left; padding:10px 16px; font-size:12px; color:var(--muted); line-height:1.45}
+
+.warn{border:1px solid var(--flag); border-left-width:3px; background:var(--card); padding:18px 20px; margin:24px 0}
+.warn>*:last-child{margin-bottom:0}
+
+/* ranked opportunities */
+.opp{display:grid; grid-template-columns:54px 1fr; gap:0 18px; border-top:1px solid var(--rule); padding:22px 0}
+.opp .r{font-family:"Bricolage Grotesque",Arial,sans-serif; font-weight:800; font-size:2.1rem; line-height:.9; color:var(--deep); padding-top:3px}
+.opp.dead .r{color:var(--flag)}
+.opp h3{font-size:1.4rem}
+.opp .verdict{font-family:"Fira Mono",monospace; font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); margin:0 0 9px}
+.opp p{margin:0 0 10px}
+.opp p:last-child{margin-bottom:0}
+.against{border-left:2px solid var(--flag); padding-left:14px; margin-top:12px; color:var(--ink-2); font-size:.96rem}
+
+footer{margin:72px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.9rem; line-height:1.62}
+footer p{max-width:78ch}
+a:focus-visible{outline:2px solid var(--deep); outline-offset:2px}
+
+@media (max-width:760px){
+  .zone{grid-template-columns:10px 1fr 1fr}
+  .zone .d{grid-column:2/4; padding:14px 16px 0 16px}
+  .zone .who{grid-column:2/4; padding:6px 16px 12px}
+  .zone .m{border-left:none; border-top:1px solid var(--rule-soft); text-align:left; padding:12px 16px}
+  .zone .m+.m{border-left:1px solid var(--rule-soft)}
+  .grp .split{grid-template-columns:1fr}
+  .grp .split>div+div{border-left:none; border-top:1px solid var(--rule-soft)}
+  .opp{grid-template-columns:1fr; gap:6px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="topline">
+    <span class="who">PantryChef · Research File 05</span>
+    <span class="meta">Aug 2026 · Diving market scan</span>
+  </div>
+  <h1>The Money<br>Is Deeper Than<br>The People</h1>
+  <p class="dek">Scuba, freediving, spearfishing and subsea — what each group uses, what each one misses, what all four miss together, and the one thing that has already been tried and died.</p>
+
+  <div class="gauge">
+    <div class="ghead">
+      <h3>Population and market, by working depth</h3>
+      <p>Read it top to bottom. The number of humans falls at every step. The money does the opposite.</p>
+    </div>
+
+    <div class="zone" style="--z:var(--gauge-top)">
+      <div class="bar"></div>
+      <div class="d">0 – 40 m</div>
+      <div class="who"><strong>Recreational scuba</strong><span>Certified sport divers, holiday and local</span></div>
+      <div class="m"><span class="fig">~6M</span><span class="k">certified<br>&lt;42% active</span></div>
+      <div class="m money"><span class="fig">~$250M</span><span class="k">dive computers<br>(all hardware)</span></div>
+    </div>
+
+    <div class="zone" style="--z:#5F98A2">
+      <div class="bar"></div>
+      <div class="d">Surface – 100 m+</div>
+      <div class="who"><strong>Freediving &amp; spearfishing</strong><span>Breath-hold, growing fastest of any group</span></div>
+      <div class="m"><span class="fig">7M+</span><span class="k">active 2025<br>+52% since 2021</span></div>
+      <div class="m money"><span class="fig">$1.2B</span><span class="k">spearfishing gear<br>(2024)</span></div>
+    </div>
+
+    <div class="zone" style="--z:#2F7180">
+      <div class="bar"></div>
+      <div class="d">To ~300 m</div>
+      <div class="who"><strong>Commercial diving</strong><span>Offshore energy, inspection, salvage</span></div>
+      <div class="m"><span class="fig">25,000</span><span class="k">certified globally<br>47% offshore energy</span></div>
+      <div class="m money"><span class="fig">$3.2B</span><span class="k">services<br>→$4.8B by 2033</span></div>
+    </div>
+
+    <div class="zone" style="--z:var(--gauge-bot)">
+      <div class="bar"></div>
+      <div class="d">No limit</div>
+      <div class="who"><strong>ROV &amp; AUV</strong><span>Robots. No humans in the water at all.</span></div>
+      <div class="m"><span class="fig">0</span><span class="k">people<br>underwater</span></div>
+      <div class="m money"><span class="fig">$6.9B</span><span class="k">2026 → $19.2B<br>by 2031 · 22.7%</span></div>
+    </div>
+
+    <div class="gfoot">
+      <p>Six million recreational divers support a quarter-billion-dollar hardware category. Twenty-five thousand commercial divers support $3.2 billion. Zero humans support a nineteen-billion-dollar robot market.</p>
+    </div>
+  </div>
+</header>
+
+<!-- ===== SOURCE WARNING ===== -->
+<section id="warning">
+  <div class="shead">
+    <span class="lab r">Read before trusting any figure above</span>
+    <h2>The numbers are worse than uncertain</h2>
+  </div>
+
+  <div class="warn">
+    <span class="lab r">5× disagreement</span>
+    <p style="margin-top:9px">Three paid research firms size <strong>the scuba equipment market for the same year</strong> at <strong>$5.18 billion</strong>, <strong>$1.10 billion</strong> and <strong>$1.87 billion</strong>. That is not a rounding difference — it means they are measuring different things and none of them says which.</p>
+    <p>Diving market sizing is dominated by firms whose business model <em>is</em> publishing confident numbers. <strong>Treat every dollar figure here as an order of magnitude, not a measurement.</strong></p>
+    <p style="margin-bottom:0"><strong>The participation numbers are far more trustworthy than the revenue numbers</strong>, because certification agencies actually count certificates. Build your reasoning on people, not on dollars.</p>
+  </div>
+</section>
+
+<!-- ===== ASYMMETRY ===== -->
+<section id="asymmetry">
+  <div class="shead">
+    <span class="lab">The comparison that picks your segment</span>
+    <h2>One sport is shrinking. The other is not.</h2>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Certification counts are the most reliable data in the whole diving industry — they are literally counted, not modelled.</caption>
+      <thead><tr><th>Signal</th><th class="n">Then</th><th class="n">Now</th><th>Direction</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td><strong>US entry-level open-water certifications</strong></td><td class="n">198,000<br><span style="color:var(--muted)">2001</span></td><td class="n">128,000<br><span style="color:var(--muted)">2023</span></td><td style="color:var(--flag)"><strong>−35% over 22 years</strong> <span style="color:var(--muted)">(floor of 87,000 in 2020)</span></td></tr>
+        <tr><td>PADI certifications worldwide</td><td class="n">—</td><td class="n">1,317,383<br><span style="color:var(--muted)">2024, a record</span></td><td>+43% on 2019 — <strong>growth is real, and it is not in the US</strong></td></tr>
+        <tr class="hi"><td><strong>Freediving participants</strong></td><td class="n">—</td><td class="n">7M+<br><span style="color:var(--muted)">2025</span></td><td style="color:var(--deep-ink)"><strong>+52% since 2021</strong>; certifications +25% in 2024 alone; 4,000+ centres in 62 countries</td></tr>
+        <tr><td>Commercial diving workforce</td><td class="n">—</td><td class="n">25,000<br><span style="color:var(--muted)">2024</span></td><td><strong>26% over age 45</strong>; ~4,000 new certs needed annually just to replace retirements; 31% of operators report peak-season shortages</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull">
+    <p>US scuba shrank about 35% over two decades while freediving grew 52% in four years.</p>
+    <span class="sub">If you are picking a segment on trajectory rather than on romance, it is not scuba. And offshore wind is separately driving a <strong>50% rise in subsea cable inspection work</strong>, with ~28% of turbine foundations needing diver-supported cable routing — against a workforce that is retiring faster than it is replaced.</span>
+  </div>
+</section>
+
+<!-- ===== FOUR GROUPS ===== -->
+<section id="groups">
+  <div class="shead">
+    <span class="lab">Four groups, four equipment sets</span>
+    <h2>What they use, what they miss</h2>
+  </div>
+
+  <div class="grp">
+    <div class="gh"><h3>Scuba divers</h3><span class="pop">~6M certified · &lt;42% active</span></div>
+    <div class="split">
+      <div>
+        <span class="lab">What they use</span>
+        <p>A dive computer — Shearwater, Garmin Descent, Suunto, Oceanic, Mares — plus a logging app.</p>
+        <ul class="list">
+          <li><strong>Subsurface</strong> — free, open source, imports from <strong>100+ dive-computer models</strong></li>
+          <li><strong>MacDive</strong> — Apple-native, 3D profile visualisation</li>
+          <li><strong>Shearwater Cloud</strong>, <strong>Divelogs</strong>, <strong>DiverLog+</strong></li>
+          <li><strong>Oceanic+</strong> on Apple Watch Ultra</li>
+        </ul>
+      </div>
+      <div class="miss">
+        <span class="lab">What they miss</span>
+        <ul class="list">
+          <li><strong>Sync is chronically broken, and the complaints are specific.</strong> DiverLog+ WiFi sync failing outright; crashes on export and on the calendar view; a user who could not connect an i300c at all and solved it by abandoning the vendor app; the Oceans app returning <strong>wrong dates and times even when synced directly from the computer</strong>.</li>
+          <li><strong>Shearwater Cloud is web-only</strong> — no native mobile, no offline — on a device people use on boats with no signal.</li>
+          <li><strong>Data is trapped per-vendor.</strong> Subsurface supports 100+ formats precisely <em>because</em> no interchange standard works end to end.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="grp">
+    <div class="gh"><h3>Freedivers</h3><span class="pop">7M+ active · +52% since 2021</span></div>
+    <div class="split">
+      <div>
+        <span class="lab">What they use</span>
+        <p>Breath-hold timers running CO₂ and O₂ tables, plus freediving-mode watches.</p>
+        <ul class="list">
+          <li><strong>STAmina Apnea Trainer</strong> — O₂ and CO₂ tables with customisation</li>
+          <li><strong>Apnea Assistant</strong>, <strong>Static Apnea Trainer</strong></li>
+          <li><strong>Freedive &amp; Apnea Trainer</strong> — 180k+ downloads</li>
+        </ul>
+        <p style="font-size:.93rem; color:var(--muted); margin-top:12px">The apps handle calculations, countdowns and timing. That is the whole category.</p>
+      </div>
+      <div class="miss">
+        <span class="lab">What they miss — the most serious gap in the water</span>
+        <ul class="list">
+          <li><strong>~59–61 freedivers die each year</strong> (DAN, analysing 2006–2011).</li>
+          <li><strong>~73% of analysed freediving accidents were fatal.</strong> If something goes wrong, you have less than a one-in-three chance.</li>
+          <li><strong>The majority of fatalities involved divers who were alone or had separated from their buddy.</strong></li>
+          <li><strong>Blackout has no warning signal.</strong> Hyperventilation removes the CO₂-driven urge to breathe, so consciousness goes with no subjective cue at all.</li>
+        </ul>
+        <p style="margin-top:12px; font-size:.95rem">The only mitigation in use is social: one up, one down, and the safety diver watches for <strong>thirty seconds after surfacing</strong> — because that is when blackout is most likely.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grp">
+    <div class="gh"><h3>Spearfishers</h3><span class="pop">$1.2B gear market · worst solo-risk profile</span></div>
+    <div class="split">
+      <div>
+        <span class="lab">What they use</span>
+        <p>Navigation and GPS, species ID, weather, and logbook apps — largely borrowed from adjacent sports rather than built for them.</p>
+        <p>Emerging hardware: <strong>smart spearguns with tracking systems</strong>, plus buoyancy aids and visibility aids marketed as safety features.</p>
+      </div>
+      <div class="miss">
+        <span class="lab">What they miss</span>
+        <ul class="list">
+          <li><strong>Nobody can answer "can I legally take this fish, at this size, here, today?"</strong> Rules are <strong>highly fragmented across countries and regional jurisdictions</strong> — licensing, gear limits, protected-species lists, size and bag limits. The market research names this compliance complexity directly; it is not an inference.</li>
+          <li><strong>DAN found spearfishing and game collecting among the most common activities at the time of fatal breath-hold accidents</strong> — and notes the sport is often solitary and that <strong>many spearos are self-taught</strong> and under-informed about the risk.</li>
+          <li>Of six US spearfishing deaths with an established cause: three drowning, one drowning with barotrauma, one air embolism, one cardiovascular.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="grp">
+    <div class="gh"><h3>Technical, commercial &amp; subsea</h3><span class="pop">25,000 divers · $3.2B services · $6.9B robots</span></div>
+    <div class="split">
+      <div>
+        <span class="lab">What they use</span>
+        <ul class="list">
+          <li><strong>V-Planner</strong> (VPM-B) — OC, SCR, CCR, trimix, heliox, bailout, lost-deco and turn pressures</li>
+          <li><strong>AP Diving Projection</strong>, <strong>DiveBlendr</strong>, Divesoft planning tools</li>
+          <li>Subsea: ROVs, AUVs, NDT inspection rigs, and inspection-compliance platforms of the <strong>LAUTEC Q</strong> type</li>
+        </ul>
+      </div>
+      <div class="miss">
+        <span class="lab">What they miss</span>
+        <p>Honestly — <strong>not much software.</strong> CCR trimix past 50m is genuinely hard (the diluent on the bottle isn't what you breathe, bailout volumes balloon, deco mixes multiply, the scrubber budget tightens), but the tooling is mature and no clear gap was located.</p>
+        <p style="margin-bottom:0"><strong>The shortage in this segment is people, not software.</strong> An ageing workforce, 4,000 replacement certifications needed a year, and offshore wind driving demand up 50%.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SHARED ===== -->
+<section id="shared">
+  <div class="shead">
+    <span class="lab">The one thing common to all four</span>
+    <h2>You cannot be found underwater</h2>
+    <p>GPS does not penetrate water. Everything in use is a workaround, and every workaround has the same hole in it.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Approach</th><th>What exists</th><th>The limitation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Ultrasonic</strong></td><td>Buddy Phone D2 (digital DSP transceiver, diver-to-diver and diver-to-surface). L3Harris <strong>CUUUWi</strong>, bridging above-water mobile and SATCOM to submerged users. Research systems sending prestored codes — "I need to surface", "come over here" — and even sketches.</td><td>Only <em>"if directional connectivity can be maintained."</em> In practice, line of sight in a moving medium.</td></tr>
+        <tr class="hi"><td><strong>Surface relay</strong></td><td><strong>Nautilus Lifeline nexGen — $249.</strong> Rated to 425ft, GPS accurate to 1.5m, broadcasts to AIS and DSC-equipped vessels <strong>up to 34 miles.</strong></td><td><strong>It only helps once you have already surfaced.</strong> It solves lost-at-sea, not lost-underwater.</td></tr>
+        <tr><td>Analogue</td><td>The DSMB — a brightly coloured inflatable tube you send up from depth.</td><td>It is a tube.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull red">
+    <p>Buddy separation is the shared failure mode. Four sports, four equipment sets, one common way people die.</p>
+    <span class="sub">It is the leading circumstance in freediving fatalities. It is what the DSMB and the Nautilus Lifeline exist to mitigate. It is what diver-to-diver ultrasonic systems are built for. Nobody has solved it — <strong>and that is a signal about difficulty, not about opportunity.</strong></span>
+  </div>
+</section>
+
+<!-- ===== COMMS ===== -->
+<section id="comms">
+  <div class="shead">
+    <span class="lab">You asked: can anything text underwater?</span>
+    <h2>Yes. Garmin shipped it.</h2>
+    <p>Radio is out — GPS at 1.5&nbsp;GHz and Bluetooth at 2.4&nbsp;GHz both die within centimetres of seawater. <strong>Acoustic is the only channel</strong>, and one company has already productised it for divers.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption><strong>Garmin SubWave</strong> — Descent Mk3i paired with the Descent T2 transceiver. Preset messages only, not free text.</caption>
+      <thead><tr><th>Capability</th><th class="n">Spec</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td><strong>Diver-to-diver preset messages</strong></td><td class="n"><strong>30 m, line of sight</strong></td></tr>
+        <tr><td>Message latency</td><td class="n"><strong>up to 45 seconds</strong></td></tr>
+        <tr><td>Network size</td><td class="n">up to 8 divers</td></tr>
+        <tr><td>Buddy tank pressure, air consumption rate, remaining time</td><td class="n">within 10 m</td></tr>
+        <tr><td>Message set</td><td class="n" style="text-align:left">"Are You OK?" + response · "Come to Me" · "Safely End Dive"</td></tr>
+        <tr><td>Diver Assistance Mode</td><td class="n" style="text-align:left">Alerts divers within 30 m, who can then monitor the distressed diver's depth and distance</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:34px; font-size:1.45rem">Why it's slow — and the number that matters</h3>
+
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Constraint</th><th>Consequence</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Sound travels at ~1,500 m/s</strong></td><td>Propagation delay is inherent. Not an engineering flaw — the speed of sound.</td></tr>
+        <tr><td><strong>Low frequency = long range, tiny bandwidth</strong></td><td>Commercial modems reach beyond 10&nbsp;km at <strong>under 400 bps</strong>; under 1,000 bps out to 100&nbsp;km.</td></tr>
+        <tr><td><strong>High frequency = high bandwidth, heavy attenuation</strong></td><td>Range collapses. This is the central tradeoff in the whole field.</td></tr>
+        <tr><td><strong>Multipath and Doppler</strong></td><td>Only <strong>1–2 bits per symbol</strong> survive, and error-control coding cuts the effective rate further.</td></tr>
+        <tr class="hi"><td><strong>But at short range</strong></td><td><strong>Wide-bandwidth acoustics reach ~1 Mbps at up to 100 m.</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull">
+    <p>At 30 metres, physics does not force a 45-second canned phrase.</p>
+    <span class="sub">Garmin is trading throughput for robustness, battery life and wrist-sized packaging — not hitting a wall imposed by nature. <strong>The gap between "45 seconds for a preset at 30 m" and "1 Mbps at 100 m" is genuine engineering headroom.</strong> It is also transducer design, DSP and power budgeting — a hardware company, with Garmin several years and a distribution network ahead. <em>That reading is my inference from the research figures, not something a source states directly.</em></span>
+  </div>
+
+  <h3 style="margin-top:34px; font-size:1.45rem">Could an app be the medium instead?</h3>
+
+  <div class="warn">
+    <span class="lab r">The sentence that kills the idea</span>
+    <p style="margin-top:9px; font-family:'Bricolage Grotesque',Arial,sans-serif; font-weight:700; font-size:1.2rem; line-height:1.3">Your phone is on the boat.</p>
+    <p>A dive computer underwater has no link to a phone. Bluetooth is 2.4&nbsp;GHz radio and dies in centimetres of water, same as GPS. <strong>Every dive computer syncs to a phone only after you surface</strong> — that's a hardware constraint, not a software gap.</p>
+    <p style="margin-bottom:0">Underwater, the medium has to be acoustic and hardware-to-hardware, with no room for an app in the middle. On the surface an app <em>can</em> be the medium — but then it's a sync-and-share product, and <strong>Subsurface already reads 100+ dive computers for free, while Deepblu died building the social layer on top of exactly that.</strong></p>
+  </div>
+
+  <h3 style="margin-top:34px; font-size:1.45rem">And the universal tank transmitter?</h3>
+  <p><strong>A cross-brand standard already quietly exists — it just doesn't include everyone.</strong> Oceanic, Aqualung, Sherwood and Shearwater transmitters are <em>the same hardware</em>, made by <strong>Pelagic Pressure Systems</strong>. Shearwater's own guidance: any transmitter marked <span class="mono">FCC ID MH8A</span> works with a Shearwater computer, whatever the brand on the box.</p>
+  <p><strong>Garmin and Suunto are the genuine holdouts</strong> — proprietary protocols, and transmitters that need unique air spools with flow restrictors, so the lock-in is mechanical as well as digital.</p>
+
+  <div class="pull red">
+    <p>This is a business problem wearing a technical costume.</p>
+    <span class="sub">The pairing lives in the radio protocol inside the transmitter and the receiver chip — there is no software layer to insert yourself into. There's no universal standard not because nobody thought of it, but because <strong>a transmitter is a $200–350 accessory that locks a customer into a $700–1,600 computer, and the lock-in is the point.</strong></span>
+  </div>
+
+  <h3 style="margin-top:34px; font-size:1.45rem">The one software-shaped thing left here</h3>
+  <div class="card">
+    <p><strong>SubWave created a networked-diver data stream that did not exist before</strong> — up to eight divers sharing depth, distance, tank pressure, air-consumption rate and remaining dive time, live. That is a genuinely new dataset about how groups of divers behave together.</p>
+    <p><strong>Dive operators and instructors are the plausible buyer:</strong> someone responsible for eight people at once who currently has telemetry on none of them.</p>
+    <p style="margin-bottom:0">⚠️ <strong>Check this before spending an hour on it:</strong> whether Garmin exposes SubWave data to third parties at all. Egress was blocked, so the developer documentation could not be opened. <strong>If the answer is no, this closes too.</strong></p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Three claims in the brief you brought that don't hold up — two of them would have changed what you built.</caption>
+      <thead><tr><th>Claim</th><th>Reality</th></tr></thead>
+      <tbody>
+        <tr><td>"Premium dive computers display local reef maps underwater on your wrist"</td><td><strong>Garmin DiveView is real</strong> — bathymetry plus 4,000+ dive sites — <strong>but it's a surface and planning feature.</strong> No live fix underwater means no "you are here" dot on any consumer device.</td></tr>
+        <tr><td>"Real-time diver tracking showing distance from the entry point or boat"</td><td>Not from GPS. Anything like this is <strong>dead reckoning</strong> — heading plus estimated speed — which accumulates error with no way to correct itself.</td></tr>
+        <tr><td>"Buy Garmin, you must buy Garmin; use Shearwater, you need a different one"</td><td><strong>Half right</strong>, and the wrong half is the interesting one — see the four-brand Pelagic standard above.</td></tr>
+        <tr class="hi"><td>"Garmin's SubWave network"</td><td><strong>Correct</strong> — and it settles the whole question.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== DEEPBLU ===== -->
+<section id="deepblu">
+  <div class="shead">
+    <span class="lab r">Already tried, already dead</span>
+    <h2>Deepblu ran your first idea for ten years</h2>
+  </div>
+
+  <div class="card" style="border-color:var(--flag)">
+    <h3>"The Strava of diving"</h3>
+    <p>A social network for divers, launched to acclaim as the platform for "the next generation of divers." It went as far as <strong>launching its own dive computer — the Cosmiq+ — purely as a means of pushing the app.</strong></p>
+    <p><strong>In December 2023 it took its servers offline, citing "lack of paid users."</strong> Too few would pay the subscription; server costs became unaffordable. Users had to export their own data or lose it.</p>
+    <p style="margin-bottom:0"><strong>A consumer dive social and logging app was run as a real business, with its own hardware, for a decade — and died of exactly what kills consumer subscription apps: people who dive six days a year will not pay every month.</strong></p>
+  </div>
+</section>
+
+<!-- ===== CLOSED GAPS ===== -->
+<section id="closed">
+  <div class="shead">
+    <span class="lab">The two obvious ideas</span>
+    <h2>Both gaps closed while nobody was looking</h2>
+    <p>These are the ideas anyone would have after one dive trip. As of 2026 they are crowded, and most of the entrants are recent.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Between them, eleven live products in two categories — nearly all launched in the last two years.</caption>
+      <thead><tr><th>Idea</th><th>Who already ships it</th></tr></thead>
+      <tbody>
+        <tr><td><strong>AI fish identification</strong></td><td><strong>Seabook</strong> (AI fish ID + dive log) · <strong>FINS</strong> (5,000+ fish and invertebrates) · <strong>ReefDex</strong> · <strong>FishID</strong> · <strong>Fishial.ai</strong> (open source, public-domain code, crowdsourcing photos from divers) · plus <strong>iNaturalist</strong> as the free incumbent with millions of geo-referenced observations, and <strong>Reef Check</strong> (17,000+ surveys, 102 countries) owning structured citizen science</td></tr>
+        <tr><td><strong>Visibility &amp; conditions forecasting</strong></td><td><strong>DiveSight</strong> (28,000+ sites; two daily forecasts out to seven days, modelling sunlight, cloud, wind, rainfall, runoff, wave and swell energy, currents, tides, chlorophyll and suspended matter) · <strong>DiveViz</strong> · <strong>Marla Blue</strong> (satellite + weather + diver reports) · <strong>VizFinder</strong> · <strong>Viz-app</strong> (crowdsourced)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>Steal their critique of the prior art anyway</strong>, because it generalises: most condition apps either <em>repackage shallow surface weather, blind to what is actually happening underwater</em>, or <em>lean on user-submitted reports, which are inherently sparse — only a handful of sites, only on the days someone happened to dive them.</em> That is a good test to run against any data product you build.</p>
+</section>
+
+<!-- ===== PRICING ===== -->
+<section id="pricing">
+  <div class="shead">
+    <span class="lab">The best idea in diving software, and it isn't a feature</span>
+    <h2>The Oceanic+ day pass</h2>
+    <p><strong>Huish Outdoors, built with Apple</strong>, turns an Apple Watch Ultra into a dive computer to 40m. Free to download with depth, timers and basic logging; subscription unlocks decompression tracking, tissue loading, the location planner and unlimited logbook.</p>
+  </div>
+
+  <div class="scroll">
+    <table style="min-width:380px">
+      <thead><tr><th>Plan</th><th class="n">Price</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td><strong>Day pass</strong></td><td class="n"><strong>$4.99</strong></td></tr>
+        <tr><td>Month</td><td class="n">$9.99</td></tr>
+        <tr><td>Year</td><td class="n">$79.99</td></tr>
+        <tr><td>Year, family of five</td><td class="n">$129</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull">
+    <p>The day pass is the direct answer to what killed Deepblu.</p>
+    <span class="sub">Recreational divers dive a handful of days a year, on holiday. An annual subscription asks someone who dives six days a year to pay for 365; a day pass charges them on the days they are actually in the water. <strong>Price any consumer dive product this way — and note that Apple and a major manufacturer got there first, which tells you how the economics really work.</strong></span>
+  </div>
+
+  <p><strong>The B2B layer is full too.</strong> Dive-centre management software is an established category with agency endorsement as the moat: <strong>Dive Shop 360</strong> (all-in-one POS built by industry people), <strong>EVE Diving</strong> (PADI-endorsed), <strong>Bloowatch</strong> (PADI and SSI integration, <strong>startup plan $199/month</strong>), <strong>Divery</strong>, <strong>Dive Admin</strong>, <strong>Diversdesk</strong>. Same shape as the restaurant research — an entrenched category at mid-hundreds monthly pricing.</p>
+</section>
+
+<!-- ===== OPPORTUNITIES ===== -->
+<section id="opportunities">
+  <div class="shead">
+    <span class="lab">Ranked honestly, for you specifically</span>
+    <h2>What could actually be built and sold</h2>
+  </div>
+
+  <div class="opp">
+    <span class="r">1</span>
+    <div>
+      <p class="verdict">★ Best fit — a data problem, not an ML problem</p>
+      <h3>Spearfishing regulation compliance</h3>
+      <p><em>"Can I legally take this fish, at this size, in this water, today?"</em></p>
+      <ul class="list">
+        <li><strong>The problem is named in the market research itself</strong> as a genuine compliance burden — you are not inferring it.</li>
+        <li>The data is <strong>public record</strong> — state and national fisheries regulations. The hard part is ingesting, normalising and versioning hundreds of fragmented jurisdictions. <strong>That is statistics and data engineering, which is your degree.</strong></li>
+        <li><strong>Low liability</strong> framed as reference rather than advice, and no safety-critical failure mode.</li>
+        <li>Growing segment, least served by existing apps, and the compliance data becomes the moat because it needs perpetual maintenance.</li>
+      </ul>
+      <p class="against"><strong>Against it:</strong> the market is small, spearfishers are famously unwilling to pay, and that perpetual maintenance is also a perpetual cost. <strong>Run the fifteen-interview treatment on spearos before writing code</strong> — the same instrument, pointed at a different sport.</p>
+    </div>
+  </div>
+
+  <div class="opp">
+    <span class="r">2</span>
+    <div>
+      <p class="verdict">Best problem on the page — worst fit for you this year</p>
+      <h3>Freediver blackout &amp; buddy-loss detection</h3>
+      <p>The highest human stakes in the file, in the fastest-growing segment, and <strong>only research prototypes exist</strong>: a wearable SpO₂ concept with an acoustic "latest point of return" warning (<em>Augmented Humans</em>, 2020); a student MAX30100 pulse-oximetry experiment; and <strong>US Patent 7,988,511</strong>, a freediving safety apparatus that auto-inflates flotation if the diver exceeds a personal time or depth limit. <strong>No mainstream commercial product was found.</strong></p>
+      <p class="against"><strong>Against it:</strong> it is hardware; it is a safety-critical device where a false negative kills someone; it carries regulatory and liability exposure. <strong>And there is likely a sensor-physics blocker</strong> — the mammalian dive reflex causes peripheral vasoconstriction, and wrist or finger pulse oximetry depends on peripheral perfusion, so the response that makes breath-hold diving possible may be the same one that breaks the obvious sensor. <em>That last point is my inference, not a sourced finding — verify it with a diving-medicine source before believing me.</em> This is a funded hardware startup or a PhD group, not a solo undergraduate project this academic year.</p>
+    </div>
+  </div>
+
+  <div class="opp">
+    <span class="r">3</span>
+    <div>
+      <p class="verdict">Real money, no access</p>
+      <h3>Commercial dive &amp; inspection compliance</h3>
+      <p>Mandated record-keeping, real budgets, an ageing workforce, and offshore wind driving a 50% rise in subsea inspection demand with ~28% of foundations needing diver-supported work.</p>
+      <p class="against"><strong>Against it:</strong> you cannot sell to offshore contractors without industry access, and that takes years to acquire. It is a genuinely good business for someone who already works in it.</p>
+    </div>
+  </div>
+
+  <div class="opp">
+    <span class="r">4</span>
+    <div>
+      <p class="verdict">Where the money is, hardest to enter</p>
+      <h3>Dive travel</h3>
+      <p><strong>$5.5–6.25B growing ~11.5%</strong> — the richest consumer pool on the page. Average trip spend <strong>$1,950</strong>, rising to <strong>$2,680</strong> for ages 51–65 and <strong>$2,840</strong> for 65+. <strong>Liveaboards take ~18% of dive-travel revenue on just 6.3% of trips</strong>, at $250–450 a day standard and $500–1,200 luxury.</p>
+      <p class="against"><strong>Against it:</strong> it is a marketplace business with a brutal cold-start problem, competing against established operators with existing supply relationships.</p>
+    </div>
+  </div>
+
+  <div class="opp dead">
+    <span class="r">✕</span>
+    <div>
+      <p class="verdict">Do not enter</p>
+      <h3>Consumer dive log, social network, fish ID, or visibility forecast</h3>
+      <p><strong>Deepblu ran the first for ten years with its own hardware and died of it. Six companies ship the third. Five ship the fourth.</strong> Every one of these is the idea you get after one dive trip, and every one of them has already been had.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="lab q">Source quality &amp; confidence</span>
+  <p style="margin-top:10px"><strong>External fetching was blocked for this entire research programme.</strong> Every figure is a search-index summary; no DAN Annual Diving Report PDF, filed financial, App Store page or academic paper was opened directly.</p>
+  <p><strong>High confidence:</strong> the DAN freediving fatality figures and the alone-or-separated finding · the US certification decline · freediving participation growth · Deepblu's shutdown and its stated reason · Oceanic+ pricing · the fish-ID and visibility-forecast competitor lists · Nautilus Lifeline specs and price · commercial diver workforce demographics.</p>
+  <p><strong>Low confidence — order of magnitude only:</strong> every market-size dollar figure, and especially scuba equipment, where three firms disagree by 5×. Also the active-diver population, where sources contradict each other outright.</p>
+  <p><strong>Flagged as inference, not finding:</strong> the peripheral-vasoconstriction explanation for why underwater pulse oximetry has never shipped.</p>
+  <p><strong>The most important number that does not exist publicly:</strong> what share of divers pay for any dive app at all. <strong>Deepblu's death suggests the answer is "very few"</strong> — and finding out for real is what fifteen conversations on a dive boat would buy you.</p>
+  <p style="margin-top:16px; color:var(--ink-2)">PantryChef research file 05 · scuba, freediving, spearfishing, subsea · August 2026</p>
+</footer>
+
+</div>
