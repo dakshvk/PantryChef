@@ -1,0 +1,771 @@
+<title>Where Restaurants Lose Money</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Chivo:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --ink:#15191B; --ink-2:#3D474B; --muted:#6C787D;
+  --paper:#E9EDEC; --card:#FBFCFC; --band:#DFE5E4;
+  --rule:#C1CBCA; --rule-soft:#D9E0DF;
+  --amber:#9E5800; --amber-ink:#7A4400; --amber-wash:#F3E6D2;
+  --kill:#8C3128; --keep:#2A5C4C;
+  --shadow:0 1px 0 rgba(21,25,27,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E7ECEB; --ink-2:#B3BFBE; --muted:#84918F;
+    --paper:#0D1113; --card:#171C1E; --band:#12181A;
+    --rule:#2F383B; --rule-soft:#222A2C;
+    --amber:#E8A247; --amber-ink:#F0B76D; --amber-wash:#3A2A12;
+    --kill:#DC7A6E; --keep:#6EB89C;
+    --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E7ECEB; --ink-2:#B3BFBE; --muted:#84918F;
+  --paper:#0D1113; --card:#171C1E; --band:#12181A;
+  --rule:#2F383B; --rule-soft:#222A2C;
+  --amber:#E8A247; --amber-ink:#F0B76D; --amber-wash:#3A2A12;
+  --kill:#DC7A6E; --keep:#6EB89C;
+  --shadow:none;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:Chivo,"Helvetica Neue",Arial,sans-serif;
+  font-size:16px; line-height:1.62; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1000px; margin:0 auto; padding:0 22px 90px}
+
+/* ---------- type ---------- */
+h1,h2,h3,.cond{font-family:"Barlow Condensed","Arial Narrow",Arial,sans-serif; font-weight:700; text-wrap:balance; letter-spacing:.005em}
+h1{font-size:clamp(2.9rem,8vw,5.2rem); line-height:.93; margin:0; text-transform:uppercase}
+h2{font-size:clamp(1.9rem,4vw,2.7rem); line-height:1.02; margin:0; text-transform:uppercase}
+h3{font-size:1.32rem; line-height:1.15; margin:0 0 6px; text-transform:uppercase; letter-spacing:.02em}
+p{margin:0 0 14px; max-width:70ch}
+a{color:var(--amber-ink)}
+strong{font-weight:700}
+.mono,.tag,.fig,td.n,th.n{font-family:"DM Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.tag{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--amber); font-weight:500}
+.tag.q{color:var(--muted)}
+.lede{font-size:1.18rem; line-height:1.5; color:var(--ink-2); max-width:62ch}
+
+/* ---------- masthead ---------- */
+header.mast{padding:56px 0 0}
+.kicker{display:flex; flex-wrap:wrap; gap:10px 22px; align-items:baseline; border-bottom:2px solid var(--ink); padding-bottom:9px; margin-bottom:26px}
+.kicker .who{font-family:"Barlow Condensed",Arial,sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:.1em; font-size:14px}
+.kicker .meta{margin-left:auto; font-family:"DM Mono",monospace; font-size:11px; color:var(--muted); letter-spacing:.06em}
+.verdict{margin:26px 0 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); padding:20px 0}
+.verdict p{font-family:"Barlow Condensed",Arial,sans-serif; font-size:clamp(1.35rem,3vw,1.9rem); line-height:1.2; font-weight:600; text-transform:none; margin:0; max-width:32ch; color:var(--ink)}
+.verdict p em{font-style:normal; color:var(--amber-ink)}
+
+/* ---------- headline numbers ---------- */
+.figs{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1px; background:var(--rule-soft); border:1px solid var(--rule-soft); margin:34px 0 0}
+.figs>div{background:var(--card); padding:20px 18px 18px}
+.fig{display:block; font-size:clamp(1.9rem,4.4vw,2.6rem); font-weight:500; line-height:1; letter-spacing:-.02em; color:var(--amber-ink)}
+.figs .cap{display:block; margin-top:9px; font-size:13px; line-height:1.35; color:var(--ink-2)}
+
+/* ---------- contents ---------- */
+nav.toc{margin:38px 0 0; border-top:1px solid var(--rule); padding-top:14px}
+nav.toc ol{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:2px 26px}
+nav.toc a{display:flex; gap:10px; padding:5px 0; text-decoration:none; color:var(--ink); border-bottom:1px solid transparent; font-family:"Barlow Condensed",Arial,sans-serif; font-size:1.06rem; text-transform:uppercase; letter-spacing:.03em; font-weight:600}
+nav.toc a:hover{border-bottom-color:var(--amber)}
+nav.toc .mono{color:var(--muted); font-size:11px; padding-top:4px}
+
+/* ---------- sections ---------- */
+section{margin:64px 0 0; scroll-margin-top:14px}
+.shead{border-top:3px solid var(--ink); padding-top:12px; margin-bottom:22px}
+.shead .src{display:block; margin-bottom:5px}
+.shead .sub{margin:8px 0 0; color:var(--ink-2); max-width:66ch}
+
+/* ---------- generic blocks ---------- */
+.card{background:var(--card); border:1px solid var(--rule-soft); padding:22px 24px; margin:22px 0; box-shadow:var(--shadow)}
+.card>*:last-child{margin-bottom:0}
+.pull{border-left:3px solid var(--amber); padding:2px 0 2px 18px; margin:24px 0; max-width:64ch}
+.pull p{font-family:"Barlow Condensed",Arial,sans-serif; font-weight:600; font-size:1.35rem; line-height:1.25; margin:0}
+.pull .sub{font-family:Chivo,sans-serif; font-weight:400; font-size:.95rem; color:var(--muted); margin-top:7px; line-height:1.5}
+
+ul.list{margin:0 0 16px; padding:0; list-style:none}
+ul.list li{position:relative; padding-left:20px; margin-bottom:9px; max-width:68ch}
+ul.list li::before{content:""; position:absolute; left:2px; top:.68em; width:7px; height:1px; background:var(--amber)}
+
+/* claim ledger — debunked numbers */
+.claims{display:grid; gap:1px; background:var(--rule-soft); border:1px solid var(--rule-soft); margin:24px 0}
+.claim{background:var(--card); padding:18px 20px; display:grid; grid-template-columns:64px 1fr; gap:4px 16px; align-items:start}
+.claim .verdictmark{font-family:"DM Mono",monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; padding-top:5px; font-weight:500}
+.claim.bad .verdictmark{color:var(--kill)}
+.claim.ok .verdictmark{color:var(--keep)}
+.claim .what{font-family:"Barlow Condensed",Arial,sans-serif; font-size:1.28rem; font-weight:600; line-height:1.15}
+.claim.bad .what{text-decoration:line-through; text-decoration-color:var(--kill); text-decoration-thickness:2px}
+.claim .why{grid-column:2; font-size:.94rem; color:var(--ink-2); line-height:1.55; max-width:64ch}
+
+/* tables */
+.scroll{overflow-x:auto; margin:22px 0; border:1px solid var(--rule-soft); background:var(--card)}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:.93rem}
+th,td{text-align:left; padding:10px 16px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
+thead th{font-family:"Barlow Condensed",Arial,sans-serif; font-size:.95rem; text-transform:uppercase; letter-spacing:.06em; font-weight:600; color:var(--muted); border-bottom:1px solid var(--rule); white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+td.n,th.n{text-align:right; white-space:nowrap}
+tr.hi td{background:var(--amber-wash)}
+caption{caption-side:bottom; text-align:left; padding:9px 16px; font-size:12px; color:var(--muted); line-height:1.45}
+
+/* the math box */
+.math{background:var(--band); border:1px solid var(--rule-soft); padding:18px 20px; margin:22px 0; font-family:"DM Mono",monospace; font-size:.88rem; line-height:1.85; overflow-x:auto}
+.math .lbl{color:var(--ink-2)}
+.math .out{color:var(--amber-ink); font-weight:500}
+.math hr{border:none; border-top:1px solid var(--rule); margin:6px 0}
+
+/* questionnaire */
+.qmeta{display:flex; flex-wrap:wrap; gap:12px 26px; align-items:center; margin:0 0 18px; padding:12px 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule)}
+.qmeta .prog{font-family:"DM Mono",monospace; font-size:12px; color:var(--muted); letter-spacing:.05em}
+button.reset{font-family:"Barlow Condensed",Arial,sans-serif; text-transform:uppercase; letter-spacing:.08em; font-weight:600; font-size:.9rem; background:none; border:1px solid var(--rule); color:var(--ink-2); padding:5px 12px; cursor:pointer}
+button.reset:hover{border-color:var(--amber); color:var(--amber-ink)}
+button.reset:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--amber); outline-offset:2px}
+
+.part{margin:30px 0 0}
+.parthead{display:flex; gap:12px; align-items:baseline; border-bottom:1px solid var(--rule); padding-bottom:6px; margin-bottom:4px}
+.parthead h3{margin:0}
+.parthead .time{margin-left:auto; font-family:"DM Mono",monospace; font-size:11px; color:var(--muted); white-space:nowrap}
+.q{display:grid; grid-template-columns:22px 34px 1fr; gap:0 10px; align-items:start; padding:11px 0; border-bottom:1px solid var(--rule-soft)}
+.q input{margin:5px 0 0; width:15px; height:15px; accent-color:var(--amber)}
+.q .num{font-family:"DM Mono",monospace; font-size:12px; color:var(--muted); padding-top:5px}
+.q .txt{font-size:1.02rem; line-height:1.5}
+.q.key .txt{font-weight:700}
+.q .note{display:block; margin-top:4px; font-size:.88rem; color:var(--muted); line-height:1.5; font-style:italic}
+.q input:checked ~ .txt{color:var(--muted); text-decoration:line-through; text-decoration-color:var(--rule)}
+
+.rules{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1px; background:var(--rule-soft); border:1px solid var(--rule-soft); margin:20px 0}
+.rules>div{background:var(--card); padding:18px 20px}
+.rules .n{font-family:"Barlow Condensed",Arial,sans-serif; font-size:2.1rem; line-height:1; color:var(--amber); font-weight:700}
+.rules h4{font-family:"Barlow Condensed",Arial,sans-serif; text-transform:uppercase; font-size:1.1rem; margin:8px 0 5px; letter-spacing:.03em}
+.rules p{font-size:.92rem; color:var(--ink-2); margin:0}
+
+footer{margin:70px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.86rem; line-height:1.6}
+footer p{max-width:76ch}
+.warn{border:1px solid var(--kill); border-left-width:3px; padding:16px 18px; margin:22px 0; background:var(--card)}
+.warn .tag{color:var(--kill)}
+@media (max-width:620px){
+  .claim{grid-template-columns:1fr}
+  .claim .why{grid-column:1}
+  .q{grid-template-columns:22px 30px 1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="kicker">
+    <span class="who">PantryChef · Research File 03</span>
+    <span class="meta">Aug 2026 · Santa Barbara, CA</span>
+  </div>
+  <h1>Where<br>Restaurants<br>Lose Money</h1>
+  <div class="verdict">
+    <p>Food waste is real, bounded, and <em>the fourth-biggest problem</em>. Two bigger ones are already bleeding the same restaurant — and as of April 2026 the software answer ships inside the cash register.</p>
+  </div>
+
+  <div class="figs">
+    <div><span class="fig">$48K</span><span class="cap">Annual profit of a typical $1.2M independent restaurant. Every software dollar competes with this pool.</span></div>
+    <div><span class="fig">70.2%</span><span class="cap">Share of restaurant food surplus that is <strong>plate waste</strong> — food the customer was served and left. Untouchable by inventory software.</span></div>
+    <div><span class="fig">$99</span><span class="cap">Per location, per month: Square Restaurant Inventory <em>by MarketMan</em>, launched 2 April 2026 inside the POS.</span></div>
+    <div><span class="fig">~$333</span><span class="cap">Total monthly software wallet per restaurant, all vendors, from Toast's own investor model.</span></div>
+  </div>
+
+  <nav class="toc" aria-label="Contents">
+    <ol>
+      <li><a href="#economics"><span class="mono">01</span> The P&amp;L</a></li>
+      <li><a href="#waste"><span class="mono">02</span> The waste numbers</a></li>
+      <li><a href="#software"><span class="mono">03</span> How they buy software</a></li>
+      <li><a href="#marketman"><span class="mono">04</span> vs. MarketMan</a></li>
+      <li><a href="#permits"><span class="mono">05</span> The permit-data idea</a></li>
+      <li><a href="#questionnaire"><span class="mono">06</span> The questionnaire</a></li>
+      <li><a href="#scoring"><span class="mono">07</span> Scoring &amp; kill criteria</a></li>
+      <li><a href="#do"><span class="mono">08</span> What to actually do</a></li>
+    </ol>
+  </nav>
+</header>
+
+<!-- ============ 01 ============ -->
+<section id="economics">
+  <div class="shead">
+    <span class="tag src">Source · 01-restaurant-economics.md</span>
+    <h2>01 · Where the money actually goes</h2>
+    <p class="sub">Before deciding what to build, know the size of the pool you're fishing in. A typical US independent does <strong>~$1.2M revenue at 3–6% net</strong>. That's roughly <strong>$48,000 of profit for a year of somebody's life.</strong></p>
+  </div>
+
+  <h3>Myth killed first</h3>
+  <div class="claims">
+    <div class="claim bad">
+      <span class="verdictmark">False</span>
+      <span class="what">"90% of restaurants fail in year one"</span>
+      <span class="why">Traceable to nothing. H.G. Parsa (Ohio State) found no evidence for it anywhere in the literature. When American Express was asked in writing for the data behind its own 90% claim, <strong>it said it could not provide any.</strong> Actual first-year failure is ~17% — <em>lower</em> than the 19% rate for all other service businesses. "Restaurants are dying" is not a defensible framing for a pitch.</span>
+    </div>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Typical P&amp;L, US independent. Prime cost (food + labour) above 65% is generally not viable.</caption>
+      <thead><tr><th>Line</th><th class="n">Full-service</th><th class="n">QSR</th></tr></thead>
+      <tbody>
+        <tr><td>Food cost</td><td class="n">28–35%</td><td class="n">25–32%</td></tr>
+        <tr class="hi"><td><strong>Labour</strong></td><td class="n"><strong>36.5% actual (2025)</strong><br>vs 30–35% target</td><td class="n">28–32%</td></tr>
+        <tr><td>Rent + occupancy</td><td class="n">5–10% <span style="color:var(--muted)">(12–15% urban)</span></td><td class="n">5–10%</td></tr>
+        <tr><td>Card processing</td><td class="n">2.2–3.5%</td><td class="n">2.2–2.8%</td></tr>
+        <tr><td>Utilities, marketing, repairs, tech</td><td class="n">10–15%</td><td class="n">10–15%</td></tr>
+        <tr class="hi"><td><strong>Delivery commission</strong><br><span style="color:var(--muted)">of delivery orders only</span></td><td class="n"><strong>15–30%</strong></td><td class="n">15–30%</td></tr>
+        <tr><td><strong>Net profit</strong></td><td class="n"><strong>3–6%</strong></td><td class="n">6–10%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:34px">Ranked causes of loss — in dollars, for that $1.2M restaurant</h3>
+
+  <div class="scroll">
+    <table>
+      <caption>Converted to annual dollars against a ~$48,000 net profit.</caption>
+      <thead><tr><th class="n">#</th><th>Cause</th><th class="n">Annual cost</th><th>Why it ranks there</th></tr></thead>
+      <tbody>
+        <tr><td class="n">1</td><td><strong>Labour &amp; turnover</strong></td><td class="n">$400K+ at 80% turnover<br><span style="color:var(--muted)">(50 staff)</span></td><td>36.5% of sales, above its historical band. Hourly turnover 92% full-service / 110% limited-service. Replacement cost $1,056 FOH, $1,491 BOH, $2,611 manager. And the wage floor keeps ratcheting — CA $16.90 in Jan 2026, no tip credit.</td></tr>
+        <tr class="hi"><td class="n">2</td><td><strong>Delivery commission</strong></td><td class="n">~$45,000</td><td><strong>Can be the entire net profit in one line.</strong> 15% delivery mix × 25% effective take. Effective rates hit 30–40% once sponsored listings count. 80% of independents still rely on it. Structural — independents can't negotiate chain rates.</td></tr>
+        <tr><td class="n">3</td><td>Theft / shrinkage</td><td class="n">"$48,000" ⚠️</td><td><strong>Worst-sourced number in the file.</strong> The 4%-of-sales figure circulates only through loss-prevention vendors, CPA marketing, and a polygraph-services website. No date, no methodology, no primary source. Do not build a comparison on it.</td></tr>
+        <tr><td class="n">4</td><td><strong>Food cost &amp; waste</strong></td><td class="n">$14,400–$36,000<br><span style="color:var(--muted)">mostly unavoidable</span></td><td>Real, but the recoverable slice is the top of the band, not the whole thing — trim, bones and cooking yield are physics. A 2-point theoretical-vs-actual gap ≈ $24,000.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull">
+    <p>The leverage is genuinely high — one point of food cost on $1.2M is $12,000, which is 25% of the year's profit.</p>
+    <span class="sub">Which is why this is worth taking seriously even though it ranks fourth. Small percentage moves against a thin net are enormous.</span>
+  </div>
+
+  <h3 style="margin-top:34px">The one gap that is unambiguously real</h3>
+  <div class="scroll">
+    <table>
+      <caption>A 6–20× mismatch in refresh rate. Operators on Excel re-cost quarterly and discover at month-end that they've been losing margin for ten weeks.</caption>
+      <thead><tr><th>Event</th><th class="n">Frequency</th></tr></thead>
+      <tbody>
+        <tr><td>Supplier prices change</td><td class="n"><strong>every 2–3 weeks</strong></td></tr>
+        <tr><td>Operators re-cost the menu</td><td class="n"><strong>every 90–180 days</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>2024–26 made this acute rather than academic. Ground beef hit a record <strong>$6.23/lb</strong> (Sept 2025) with the US cattle herd at its smallest in 60+ years; beef/veal inflation ran <strong>15% YoY</strong>; eggs moved from $1.33 to a <strong>$6.23 peak</strong> — a 368% swing — then fell 34% YoY by Jan 2026. <strong>A menu costed in January is wrong by March.</strong></p>
+  <p>And costing today is done badly or not at all: <strong>42% of restaurants still use spreadsheets or pen-and-paper</strong> for critical back-of-house operations, and about <strong>1 in 5</strong> run on "paper and in-person chats, sticky notes, and gut instincts."</p>
+
+  <div class="card">
+    <h3>Who hurts most is not who can pay</h3>
+    <div class="scroll" style="margin:14px 0 0; border:none">
+      <table style="min-width:460px">
+        <thead><tr><th>Segment</th><th>Pain</th><th>Budget</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Single-location independent</strong><br><span class="mono" style="font-size:12px; color:var(--muted)">152,430 full-service in the US</span></td><td>Most acute</td><td>~$48K/yr total profit. $4,200/yr of software is <strong>9% of it.</strong></td></tr>
+          <tr><td>Small chain, 2–10 units</td><td>Real, visible across units</td><td>Yes — and this is exactly where Restaurant365 and MarginEdge are entrenched</td></tr>
+          <tr><td>Franchise</td><td>Least — corporate mandates the stack</td><td>Effectively closed</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:14px"><strong>The uncomfortable read:</strong> the segment that hurts most has the least money and is shrinking — independents fell <strong>2.3% in 2025</strong>, a net loss of ~9,500 locations. The segment with budget already has vendors.</p>
+  </div>
+</section>
+
+<!-- ============ 02 ============ -->
+<section id="waste">
+  <div class="shead">
+    <span class="tag src">Source · 02-food-waste.md</span>
+    <h2>02 · The waste numbers don't hold up</h2>
+    <p class="sub">You asked how much food restaurants waste and why. The honest answer is that <strong>nobody credibly knows</strong>, and the three figures everyone quotes are misattributed, unsourced, or vendor-supplied.</p>
+  </div>
+
+  <div class="pull">
+    <p>70.2% of uneaten food at restaurants is plate waste — post-consumer, food the customer was served and chose not to eat.</p>
+    <span class="sub">ReFED Insights Engine. Only ~30% of restaurant surplus ever passes through a walk-in, a prep station, or a purchase order. That's the ceiling on what inventory software can touch — before you write a line of code.</span>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Realistic software-addressable slice: <strong>15–20% of total restaurant food surplus.</strong></caption>
+      <thead><tr><th>Bucket</th><th class="n">Share</th><th>Can software touch it?</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Plate waste</strong> — portions too large, customer didn't finish</td><td class="n"><strong>~70%</strong></td><td><strong>No.</strong> Portion size, menu design, buffet ops.</td></tr>
+        <tr><td>Trim &amp; prep loss — peels, bones, fat</td><td class="n">part of ~30%</td><td><strong>Barely.</strong> Physically determined by yield. Better tracking improves <em>costing accuracy</em>, not waste volume.</td></tr>
+        <tr class="hi"><td><strong>Spoilage from over-ordering</strong></td><td class="n">part of ~30%</td><td><strong>Yes — the real target.</strong> Par levels, order forecasting, purchase-vs-usage variance.</td></tr>
+        <tr><td>Poor rotation</td><td class="n">part of ~30%</td><td>Partially. Software can prompt; it cannot see the walk-in.</td></tr>
+        <tr><td>Over-prep / overproduction</td><td class="n">part of ~30%</td><td>Partially. Needs forecasting tied to POS.</td></tr>
+        <tr><td>Cooking errors, comps, remakes</td><td class="n">small</td><td>No.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:34px">Three load-bearing numbers that fail inspection</h3>
+  <div class="claims">
+    <div class="claim bad">
+      <span class="verdictmark">Misattr.</span>
+      <span class="what">"$162 billion lost to restaurant food waste"</span>
+      <span class="why">This is USDA ERS's <strong>2010 estimate of total US retail + consumer food loss</strong> — two-thirds of it in homes and <em>all</em> away-from-home eating combined, one-third in grocery retail. Restaurants are a fraction of a fraction. Anyone quoting $162B as a restaurant number is careless or selling something.</span>
+    </div>
+    <div class="claim bad">
+      <span class="verdictmark">Folklore</span>
+      <span class="what">"4–10% of food purchased never reaches a customer"</span>
+      <span class="why">Attributed variously to the National Restaurant Association and the Green Restaurant Association, appearing almost entirely in vendor and trade content. <strong>No primary study, methodology, or sample was locatable.</strong> Plausible magnitude — and it is <em>the</em> load-bearing number in nearly every waste-software pitch.</span>
+    </div>
+    <div class="claim bad">
+      <span class="verdictmark">Biased</span>
+      <span class="what">"7:1 ROI on waste reduction" (Champions 12.3, 2018)</span>
+      <span class="why">A real study — 114 sites, 12 countries. But the sites were <strong>already running waste programmes</strong> (pure survivorship bias), the data was <strong>supplied by Winnow and Leanpath</strong> — the two companies the ratio justifies buying — there was <strong>no control group</strong>, it modelled avoided cost rather than auditing a P&amp;L, it measured only the ~30% kitchen slice, and it is <strong>eight years old.</strong></span>
+    </div>
+    <div class="claim bad">
+      <span class="verdictmark">Vendor</span>
+      <span class="what">The cause breakdown itself</span>
+      <span class="why">ReFED's pre-consumer cause split is derived from <strong>Leanpath's aggregated customer data</strong>, and its catering plate-waste rates are <em>"based on expert interviews"</em> — not measurement. Leanpath sells waste-tracking hardware to institutional caterers and hotels. <strong>The cause mix in a Sodexo cafeteria is not the cause mix in a 60-seat bistro.</strong></span>
+    </div>
+    <div class="claim ok">
+      <span class="verdictmark">Holds</span>
+      <span class="what">Manual waste logging collapses in 2–3 weeks</span>
+      <span class="why">Consistent across every source. Entries get filled in from memory at end of shift rather than at disposal, and logging is the first thing skipped when service gets busy — <strong>which is exactly when overproduction happens.</strong> The dataset is systematically biased at precisely the moments that matter.</span>
+    </div>
+  </div>
+
+  <p style="margin-top:6px">And the two authoritative sources disagree by 2×: EPA puts foodservice at ~26.5M tons (2019); ReFED at 12.5M tons (2024). University of Minnesota researchers found commonly cited food-waste estimates <em>"inaccurate, incomplete, overstated, or contradictory."</em></p>
+
+  <div class="pull">
+    <p>You cannot measure waste without hardware, because measurement requires a human action during the busiest moment of their day, and they will not do it.</p>
+    <span class="sub">Every company that survived this category either added a camera (Winnow, Leanpath, Orbisk, Kitro — and Phood, which <em>pivoted</em> to computer vision) or added a transaction (Spoiler Alert, B2B surplus liquidation). <strong>Pure dashboards did not.</strong></span>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption><strong>Not one of these vendors sells to independent restaurants.</strong> Every named customer is a hotel chain, cruise line, casino, contract caterer or corporate campus.</caption>
+      <thead><tr><th>Vendor</th><th class="n">Price</th><th>Who actually buys</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Winnow</strong> <span class="mono" style="color:var(--muted); font-size:12px">UK, 2013</span></td><td class="n">~$300–600/mo ⚠️</td><td>IKEA, Hilton, Marriott, Accor, Mandarin Oriental, casinos, cruise lines</td></tr>
+        <tr><td><strong>Leanpath</strong> <span class="mono" style="color:var(--muted); font-size:12px">US, 2004</span></td><td class="n">Quote only</td><td>Sodexo (3,000-site rollout), Aramark, Compass, Hilton, Google</td></tr>
+        <tr><td>Orbisk <span class="mono" style="color:var(--muted); font-size:12px">NL</span></td><td class="n">Quote only</td><td>Hotels, hospitality groups</td></tr>
+        <tr><td>Kitro <span class="mono" style="color:var(--muted); font-size:12px">CH</span></td><td class="n">from €369/mo</td><td>Zürich Marriott, Hyatt Regency Düsseldorf, Four Seasons Geneva</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Why enterprise only: <strong>buffets</strong> (centrally controlled, enormous visible overproduction), <strong>ESG reporting</strong> (Compass, Sodexo and Hilton have investor-facing disclosure duties — an independent restaurant has no one to report to), <strong>central procurement</strong> (one contract amortises CAC across 3,000 sites), and <strong>tender advantage</strong> in contract catering. None of those exist for a 60-seat independent.</p>
+
+  <p><strong>The category's ceiling:</strong> Winnow — clear leader, 12+ years old, $36–45M raised, hardware, blue-chip customers in 94 countries — sits at roughly <strong>$26M revenue</strong> ⚠️ <span style="color:var(--muted)">(self-reported aggregator data)</span>.</p>
+
+  <h3 style="margin-top:34px">And nothing compels the spend</h3>
+  <p><strong>California SB 1383</strong> covers restaurants with 250+ seats or 5,000+ sq ft — which exempts the typical single unit. It mandates <em>diversion, donation and record-keeping</em>, not measurement or prevention. Penalties are <strong>$50–$200 with a mandatory 60-day cure period.</strong> Nobody buys $200/month software to avoid a $100 fine they can cure.</p>
+  <div class="warn">
+    <span class="tag">Peer-reviewed</span>
+    <p style="margin:6px 0 0"><strong><em>Science</em>, Sept 2024 (UC San Diego Rady School):</strong> of the first five US states with food waste bans, <strong>only Massachusetts</strong> measurably reduced landfilled waste. Combined effect did not exceed 3%. The authors explicitly call for policymakers to reassess these laws as <em>"having little to no effect."</em> The flagship voluntary programme, the US Food Waste Pact, cut <strong>4,000 tons against a 12.5-million-ton sector — 0.03%.</strong></p>
+  </div>
+
+  <div class="math">
+    <span class="lbl">Bottom-up, $1M independent at 32% food cost</span><br>
+    Annual purchases <span class="out">$320,000</span><br>
+    × folkloric 4–10% pre-consumer waste <span class="out">$12,800 – $32,000</span><br>
+    − irreducible trim (~half) <span class="out">$6,000 – $16,000 theoretically preventable</span><br>
+    × realistic capture, software-only, imperfect logging (20–30%)
+    <hr>
+    <span class="lbl">Actually recoverable</span> <span class="out">~$1,500 – $5,000/yr</span>
+  </div>
+  <p><strong>That supports a $50–150/month product.</strong> It does not support $500/month on waste reduction alone — and it sits below what MarketMan already charges for something far broader.</p>
+
+  <div class="pull">
+    <p>Sell the food cost line. Never the waste line.</p>
+    <span class="sub">Nobody has waste on their list — tech spending priorities for 2026 run digital guest experience 57%, POS 53%, driving traffic 52%, <strong>reducing food costs 36%</strong>, and waste tracking <strong>does not chart as a category at all.</strong> Waste reduction is the mechanism. Margin is the pitch.</span>
+  </div>
+  <p>The reframe matters, because "help kitchens use inventory before it spoils and cost menus accurately" isn't a waste product — it's an <strong>inventory and COGS product</strong>, and there the evidence is favourable: food cost is named by <strong>9 in 10 operators</strong> as a significant challenge, <strong>42% of operators were unprofitable last year</strong>, and the restaurant inventory/purchasing software market is <strong>$4.55B (2025) → $9.18B (2030)</strong>.</p>
+  <p><strong>Build from data that already exists and requires no staff action during service: invoices, POS sales, and recipes.</strong> Purchase-vs-theoretical-usage variance is computable without anyone weighing anything. That's the one honest path to waste insight that survives the compliance problem.</p>
+</section>
+
+<!-- ============ 03 ============ -->
+<section id="software">
+  <div class="shead">
+    <span class="tag src">Source · 04-restaurant-software.md</span>
+    <h2>03 · How restaurants buy software</h2>
+    <p class="sub">This section is the reason to be careful. It is not "there are competitors." It is that <strong>the distribution channel you'd have to sell through has already shipped the product you were going to sell through it.</strong></p>
+  </div>
+
+  <div class="pull">
+    <p>2 April 2026: Square launched "Square Restaurant Inventory <em>by MarketMan</em>" — MarketMan's engine inside Square, single sign-on, unified billing, native POS feed, $99/month per location.</p>
+    <span class="sub">Toast has bundled xtraCHEF since 2021. As of April 2026, <strong>both dominant POS platforms ship a first-party food-costing answer one toggle away</strong> from a restaurant that already has the POS installed.</span>
+  </div>
+
+  <h3>The price ceiling, from Toast's own investor model</h3>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Line</th><th class="n">Per restaurant</th></tr></thead>
+      <tbody>
+        <tr><td>Toast's assumed annual software spend</td><td class="n">~$4,000/yr</td></tr>
+        <tr class="hi"><td><strong>Total monthly software wallet, all vendors</strong></td><td class="n"><strong>~$333/mo</strong></td></tr>
+        <tr><td>Already committed to POS + payments</td><td class="n">roughly half</td></tr>
+        <tr><td>Genuinely contestable by a new category</td><td class="n">~$100–150/mo, crowded</td></tr>
+        <tr><td>That $4,000 as a share of the $48K annual profit</td><td class="n"><strong>8.3%</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>There is no headroom. Every dollar you win is taken from a vendor already installed. And <strong>64% of restaurants name technology consolidation as a priority</strong>, with operators describing vendor fatigue from managing as many as 20 providers — you'd be selling a 21st vendor into a market actively trying to get to five.</p>
+
+  <h3 style="margin-top:34px">The platform tax</h3>
+  <div class="math">
+    <span class="lbl">Selling a $99/mo product through Toast's marketplace</span><br>
+    Restaurant pays you <span class="out">$99</span><br>
+    Toast's revenue share, 30%, in perpetuity ⚠️ <span class="out">−$30</span><br>
+    Payment processing ~2.9% + 30¢ <span class="out">−$3</span>
+    <hr>
+    <span class="lbl">You keep</span> <span class="out">$66</span><br>
+    <span class="lbl">Restaurant's true cost</span> <span class="out">$149/mo</span> <span class="lbl">— $99 to you + $50/mo to Toast for the Restaurant Management Suite any API integration requires</span>
+  </div>
+  <ul class="list">
+    <li><strong>You keep two-thirds, and the restaurant pays half again your sticker price</strong> — while selling against a bundled module they can switch on with no integration fee at all.</li>
+    <li>Toast's partner path is an <strong>eight-stage process</strong> requiring compliance, privacy, security and legal sign-off <em>before development begins</em>.</li>
+    <li>Square requires <strong>five live paying Square sellers before it will list you</strong> — the channel that would get you customers requires customers.</li>
+    <li><strong>26% of operators name POS integration as the #1 barrier</strong> to adopting inventory software. Without the POS sales feed there is no theoretical usage, so no variance — and variance is the entire product. <strong>A costing tool with no POS feed is a spreadsheet with a login.</strong></li>
+  </ul>
+  <p>So: the integration is mandatory, it's gated behind an eight-stage approval, and the gate is operated by the company selling the competing product.</p>
+
+  <div class="scroll">
+    <table>
+      <caption>⚠️ MarketMan standalone pricing and Toast's revenue-share terms are reported, not taken from published contracts.</caption>
+      <thead><tr><th>Product</th><th class="n">Per location / mo</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td><strong>Square Restaurant Inventory by MarketMan</strong></td><td class="n"><strong>$99</strong></td><td>Native to the POS. Launched April 2026. <strong>This is your floor and you cannot undercut it.</strong></td></tr>
+        <tr><td>MarketMan standalone</td><td class="n">~$179+ ⚠️</td><td>Already ships <strong>AI recipe creation from a photographed ingredient list</strong></td></tr>
+        <tr><td>xtraCHEF by Toast</td><td class="n">bundled</td><td>Free-ish inside the Toast stack</td></tr>
+        <tr><td>MarginEdge</td><td class="n">$350</td><td>Invoice capture, plate cost, AvT variance</td></tr>
+        <tr><td>Restaurant365 Essential</td><td class="n">$469–499</td><td>Full back-office + accounting</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:34px">The one documented solo success — and why it doesn't transfer</h3>
+  <div class="card">
+    <h3 style="color:var(--amber-ink)">Recipe Cost Calculator · Daniel Wintschel</h3>
+    <p><strong>10,000+ food businesses, from $29/month, solo, no sales team, no funding, self-serve checkout, no demo call.</strong> ⚠️ <span style="color:var(--muted)">self-reported</span>. It's proof one person <em>can</em> build a profitable food-costing business. Almost none of it is repeatable from a standing start:</p>
+    <ul class="list">
+      <li><strong>He owned a wholesale bakery for a decade first.</strong> Domain credibility was pre-existing, not acquired through interviews.</li>
+      <li><strong>He was his own first customer for a year</strong> before selling to anyone.</li>
+      <li><strong>He does not sell to restaurants.</strong> Customers are bakeries, caterers, meal-prep companies, CPG producers and food manufacturers.</li>
+      <li><strong>Therefore he needs no POS integration.</strong> A bakery costing a SKU has no covers, no tickets, no Toast — the hardest technical and political dependency simply isn't in his product.</li>
+      <li><strong>It took 13+ years.</strong></li>
+    </ul>
+    <p style="margin-bottom:0">The lesson isn't "a solo founder can win here." It's <strong>"the solo founder who won did it in the adjacent market that has the same math and none of the gatekeepers."</strong></p>
+  </div>
+</section>
+
+<!-- ============ 04 ============ -->
+<section id="marketman">
+  <div class="shead">
+    <span class="tag src">You asked · marketman.com</span>
+    <h2>04 · How close is this to MarketMan?</h2>
+    <p class="sub">Closer than is comfortable. Here is the honest overlap, feature by feature, against the PantryChef-for-kitchens pivot as described.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Direct feature comparison. The green column is where the pivot has something MarketMan doesn't — and it is thin.</caption>
+      <thead><tr><th>Capability</th><th>MarketMan today</th><th>The pivot as described</th></tr></thead>
+      <tbody>
+        <tr><td>Ingredient inventory with quantities</td><td>Yes — core product since 2012</td><td>Yes</td></tr>
+        <tr><td>Recipe / plate costing</td><td>Yes, with live supplier pricing</td><td>Yes</td></tr>
+        <tr><td>Invoice capture &amp; price tracking</td><td>Yes — OCR, supplier catalogues, price-change alerts</td><td>Planned</td></tr>
+        <tr><td>Theoretical-vs-actual variance</td><td>Yes</td><td>Planned</td></tr>
+        <tr><td>Supplier ordering / purchase orders</td><td>Yes, integrated with distributors</td><td>No</td></tr>
+        <tr><td>POS integration</td><td>Yes — and now <em>is</em> the POS product on Square</td><td>Not built, and it's the #1 adoption barrier</td></tr>
+        <tr class="hi"><td><strong>AI recipe generation from an ingredient list</strong></td><td><strong>Yes — ships today, from a photographed ingredient list</strong></td><td>Yes — this was going to be the differentiator</td></tr>
+        <tr><td>"Cook this before it spoils" suggestion engine</td><td>Not a marketed feature</td><td><strong>Yes — the genuine gap</strong></td></tr>
+        <tr><td>Deterministic allergen / dietary safety layer</td><td>No</td><td><strong>Yes — but restaurants don't buy this</strong></td></tr>
+        <tr><td>Price</td><td>$99 via Square · ~$179+ standalone ⚠️</td><td>Would have to be under $99</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull">
+    <p>The single feature you were counting on to be different — an LLM turning what's in the walk-in into a costed dish — MarketMan already ships.</p>
+    <span class="sub">"We use AI to read your invoices and build recipes" is table stakes in this category as of 2026, not a wedge. What remains genuinely unclaimed is narrow: <strong>a suggestion engine that ranks dishes by what's about to expire</strong>, which is PantryChef's actual original mechanic — and even that is a feature, not a company.</span>
+  </div>
+
+  <p><strong>The structural difference is not the feature list, it's the direction of travel.</strong> MarketMan starts from <em>procurement</em> — invoices, suppliers, purchase orders, counts — and derives cost. PantryChef starts from <em>what's on hand</em> and derives a dish. For a restaurant, procurement is the load-bearing half: they need to place orders, reconcile invoices, and close a period. The dish suggestion is the garnish. <strong>You'd be selling the garnish against a company that owns the plate — and that now sits inside the cash register.</strong></p>
+</section>
+
+<!-- ============ 05 ============ -->
+<section id="permits">
+  <div class="shead">
+    <span class="tag src">Source · 03-permit-data.md · you asked separately</span>
+    <h2>05 · The permit-data idea</h2>
+    <p class="sub">Selling building-permit and contractor-license data as leads. You asked for more on this, so here it is — and the honest answer is that it doesn't survive.</p>
+  </div>
+
+  <div class="claims">
+    <div class="claim bad">
+      <span class="verdictmark">Kills it</span>
+      <span class="what">"Permit data is an untapped lead source"</span>
+      <span class="why"><strong>A permit is a lagging indicator.</strong> By the time it's filed, the contractor is hired, the scope is set and the money is committed. You'd be selling a list of people who have already bought.</span>
+    </div>
+    <div class="claim bad">
+      <span class="verdictmark">Kills it</span>
+      <span class="what">"Nobody sells this data cheaply"</span>
+      <span class="why"><strong>The low end is already saturated.</strong> PermitStack $19–49/mo · permits.llc at <strong>$0.01 per record</strong> · Apify scrapers at <strong>$0.001 per record</strong> · Shovels bundles 37 states. On the license side: the CSLB sells a <strong>$235 bulk file</strong>, Dietrich Direct sells lists from $69, and the National Contractor Index carries 1M+ records. There is no arbitrage in reselling public records that already cost a tenth of a cent.</span>
+    </div>
+    <div class="claim bad">
+      <span class="verdictmark">Kills it</span>
+      <span class="what">"Contractors will pay for leads"</span>
+      <span class="why">They already do, and they hate it. <strong>Angi runs ~5.9% monthly churn</strong> — meaning it replaces most of its customer base annually — and the FTC hit HomeAdvisor with a <strong>$7.2M order</strong> over how leads were sold. You'd be entering the most litigated, highest-churn corner of small-business SaaS with a worse product.</span>
+    </div>
+    <div class="claim ok">
+      <span class="verdictmark">Legal</span>
+      <span class="what">Scraping public permit portals is defensible — with one rule</span>
+      <span class="why"><em>hiQ v. LinkedIn</em> and <em>Van Buren</em> established that scraping publicly available data isn't CFAA "unauthorized access"; <em>Meta v. Bright Data</em> reinforced that contract claims turn on account terms. The operational rule that follows: <strong>never log in.</strong> The moment you accept terms of service, you're in contract, not just tort — and that's where scrapers actually lose.</span>
+    </div>
+  </div>
+  <p>Keep the legal rule; it generalises to any public-data product you build later. Drop the business.</p>
+</section>
+
+<!-- ============ 06 ============ -->
+<section id="questionnaire">
+  <div class="shead">
+    <span class="tag src">Deliverable · questionnaire.md</span>
+    <h2>06 · The questionnaire</h2>
+    <p class="sub">38 questions, 20–25 minutes. Everything above is desk research and every number in it is contested. <strong>This is how you find out what's actually true in Santa Barbara.</strong> Tick questions off as you ask them — your progress is saved in this browser.</p>
+  </div>
+
+  <div class="rules">
+    <div>
+      <span class="n">1</span>
+      <h4>Ask about their life, not your idea</h4>
+      <p>The moment you describe a product, everyone becomes encouraging and the data is worthless. <strong>Do not mention software, an app, or PantryChef at any point.</strong> If asked: <em>"I'm a UCSB stats student studying how independent kitchens manage cost. I'm not selling anything."</em> That's true, and it's the best door-opener you have.</p>
+    </div>
+    <div>
+      <span class="n">2</span>
+      <h4>Specific past events, never the future</h4>
+      <p>"Would you use…?" and "Do you think…?" produce fantasy. <strong>"Walk me through the last time…"</strong> produces facts.</p>
+    </div>
+    <div>
+      <span class="n">3</span>
+      <h4>Chase money and time already spent</h4>
+      <p>Did they spend money on it? Time? Have they tried to fix it before? If none of those are true, they don't have a problem — <strong>they have an opinion.</strong></p>
+    </div>
+  </div>
+
+  <p><strong>Practical:</strong> interview between 2–4pm, never during service. Ask permission to record. Buy something. <strong>Talk less than 30% of the time</strong> — silence is your best tool, let them fill it.</p>
+
+  <div class="qmeta">
+    <span class="prog" id="prog">0 / 38 asked</span>
+    <button class="reset" id="reset" type="button">Clear all</button>
+  </div>
+
+  <div class="part">
+    <div class="parthead"><h3>Part 1 · Who you're talking to</h3><span class="time">2 min</span></div>
+    <label class="q"><input type="checkbox" data-q="1"><span class="num">01</span><span class="txt">What type of place is this, and how many covers on a busy night?</span></label>
+    <label class="q"><input type="checkbox" data-q="2"><span class="num">02</span><span class="txt">How long have you been open?</span></label>
+    <label class="q"><input type="checkbox" data-q="3"><span class="num">03</span><span class="txt">How many locations?</span></label>
+    <label class="q key"><input type="checkbox" data-q="4"><span class="num">04</span><span class="txt">Who does the ordering — you, or someone else?<span class="note">If it's not them, you may be talking to the wrong person. Ask who does, and whether you can meet them.</span></span></label>
+    <label class="q key"><input type="checkbox" data-q="5"><span class="num">05</span><span class="txt">Who signs off on money — a new supplier, a new tool, a new hire?<span class="note">The budget-authority question. Ask it early so you don't spend 20 minutes on someone who can't buy.</span></span></label>
+  </div>
+
+  <div class="part">
+    <div class="parthead"><h3>Part 2 · The open question</h3><span class="time">5 min · most important</span></div>
+    <p style="font-size:.94rem; color:var(--ink-2); margin:10px 0 2px"><strong>Do not narrow this. Do not mention cost, waste, or food.</strong> Let them tell you.</p>
+    <label class="q key"><input type="checkbox" data-q="6"><span class="num">06</span><span class="txt">Walk me through yesterday. What went wrong?</span></label>
+    <label class="q key"><input type="checkbox" data-q="7"><span class="num">07</span><span class="txt">What's the most frustrating part of running this place that has nothing to do with customers?</span></label>
+    <label class="q key"><input type="checkbox" data-q="8"><span class="num">08</span><span class="txt">If you could wave a wand and fix one thing about how this kitchen runs, what would it be?</span></label>
+    <label class="q"><input type="checkbox" data-q="9"><span class="num">09</span><span class="txt">What keeps you up at night about the business?</span></label>
+    <div class="pull" style="margin:18px 0 0">
+      <p>Write down what they say verbatim, in their words.</p>
+      <span class="sub">If food cost or waste doesn't come up unprompted in this section, that is your single most important data point — and it means the pivot thesis is wrong. Note it and keep going anyway.</span>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="parthead"><h3>Part 3 · Where the money goes</h3><span class="time">5 min</span></div>
+    <label class="q"><input type="checkbox" data-q="10"><span class="num">10</span><span class="txt">Roughly what percentage of revenue goes to food? To labour?<span class="note">Watch whether they know. Hesitation is data.</span></span></label>
+    <label class="q"><input type="checkbox" data-q="11"><span class="num">11</span><span class="txt">Do you know your prime cost?<span class="note">Food + labour. If they don't know the term, that tells you a lot about the sophistication of the buyer.</span></span></label>
+    <label class="q"><input type="checkbox" data-q="12"><span class="num">12</span><span class="txt">Which of those has moved most in the last year?</span></label>
+    <label class="q key"><input type="checkbox" data-q="13"><span class="num">13</span><span class="txt">Of everything that eats your margin — food, labour, rent, delivery apps, card fees, insurance — which one has actually cost you the most sleep this year?</span></label>
+    <label class="q key"><input type="checkbox" data-q="14"><span class="num">14</span><span class="txt">What share of your orders come through delivery apps?<span class="note">The published research has a ceiling — "up to 30%" — but no average. Nobody knows this number for independents. Every answer you collect is genuinely new data.</span></span></label>
+    <label class="q key"><input type="checkbox" data-q="15"><span class="num">15</span><span class="txt">And what percentage do they take? How do you feel about that?<span class="note">Ask for the effective rate including any marketing or sponsored-listing fee — the headline commission understates it.</span></span></label>
+    <label class="q"><input type="checkbox" data-q="16"><span class="num">16</span><span class="txt">Has anything surprised you on a P&amp;L in the last six months?</span></label>
+    <div class="math" style="margin-top:18px">
+      <span class="lbl">Q14 × Q15 — the multiplication that can end the thesis</span><br>
+      20% delivery mix on $1.2M <span class="out">$240,000</span><br>
+      × 28% effective take
+      <hr>
+      <span class="out">$67,000/yr</span> <span class="lbl">— more than the entire annual profit, and roughly triple the food-waste opportunity</span>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="parthead"><h3>Part 4 · How costing actually works</h3><span class="time">5 min</span></div>
+    <p style="font-size:.94rem; color:var(--ink-2); margin:10px 0 2px">Only now do you get specific. Notice this is all <em>past behaviour</em>, not opinion.</p>
+    <label class="q key"><input type="checkbox" data-q="17"><span class="num">17</span><span class="txt">Walk me through how you priced the newest thing on your menu.<span class="note">Let them talk. Do not help.</span></span></label>
+    <label class="q"><input type="checkbox" data-q="18"><span class="num">18</span><span class="txt">Do you know what each dish costs you to make? How do you know that?</span></label>
+    <label class="q key"><input type="checkbox" data-q="19"><span class="num">19</span><span class="txt">When was the last time you re-costed a dish? What made you do it?</span></label>
+    <label class="q"><input type="checkbox" data-q="20"><span class="num">20</span><span class="txt">Your supplier's prices moved this year — how did you find out, and what did you do about it?</span></label>
+    <label class="q key"><input type="checkbox" data-q="21"><span class="num">21</span><span class="txt">Is there anything on the menu you suspect you're losing money on? How would you know?</span></label>
+    <label class="q"><input type="checkbox" data-q="22"><span class="num">22</span><span class="txt">How long does it take you to count inventory, and how often do you do it?</span></label>
+    <label class="q"><input type="checkbox" data-q="23"><span class="num">23</span><span class="txt">Do you compare what you <em>should</em> have used against what you <em>actually</em> used?<span class="note">Theoretical vs actual variance. If yes, you've found a sophisticated operator. If they've never heard of it, note that.</span></span></label>
+  </div>
+
+  <div class="part">
+    <div class="parthead"><h3>Part 5 · Waste — asked last, on purpose</h3><span class="time">4 min</span></div>
+    <p style="font-size:.94rem; color:var(--ink-2); margin:10px 0 2px">Deliberately at the end so it doesn't contaminate Parts 2–4. Asked as observation, never as accusation.</p>
+    <label class="q key"><input type="checkbox" data-q="24"><span class="num">24</span><span class="txt">What ended up in the bin at the end of last week?<span class="note">Concrete, recent, specific.</span></span></label>
+    <label class="q"><input type="checkbox" data-q="25"><span class="num">25</span><span class="txt">What's the thing that spoils most often here?</span></label>
+    <label class="q key"><input type="checkbox" data-q="26"><span class="num">26</span><span class="txt">When something spoils, do you find out about it — or does it just disappear?</span></label>
+    <label class="q"><input type="checkbox" data-q="27"><span class="num">27</span><span class="txt">Roughly what does that cost you in a month?<span class="note">If they have no idea, that's the answer.</span></span></label>
+    <label class="q key"><input type="checkbox" data-q="28"><span class="num">28</span><span class="txt">Have you ever tried to do anything about it? What happened?<span class="note">Past attempted solutions = proof of real pain. No attempt = no pain.</span></span></label>
+    <label class="q"><input type="checkbox" data-q="29"><span class="num">29</span><span class="txt">Does anyone make you track or report waste?<span class="note">Probing for a regulatory forcing function. Per SB 1383, most independents are exempt — check.</span></span></label>
+  </div>
+
+  <div class="part">
+    <div class="parthead"><h3>Part 6 · What they already pay for</h3><span class="time">4 min</span></div>
+    <label class="q"><input type="checkbox" data-q="30"><span class="num">30</span><span class="txt">What software do you run this place on?<span class="note">Get every name — POS, scheduling, accounting, inventory, delivery.</span></span></label>
+    <label class="q key"><input type="checkbox" data-q="31"><span class="num">31</span><span class="txt">Roughly what does all of that cost you a month?<span class="note">The published research says the whole wallet is around $333/mo. Test it.</span></span></label>
+    <label class="q key"><input type="checkbox" data-q="32"><span class="num">32</span><span class="txt">Has your POS company ever tried to sell you extra modules — inventory, costing, scheduling? Did you take any?<span class="note">The bundling question, and the one that decides whether a standalone tool has a prayer. Toast ships xtraCHEF; Square launched inventory with MarketMan in April 2026 at $99/mo. If they say "yes, and I switched it on," a standalone product is dead on arrival for them. If they say "they pitched it and I ignored it," ask why.</span></span></label>
+    <label class="q"><input type="checkbox" data-q="33"><span class="num">33</span><span class="txt">What's the most useless thing you pay for?</span></label>
+    <label class="q key"><input type="checkbox" data-q="34"><span class="num">34</span><span class="txt">When was the last time you added a new tool? Who sold it to you and how did they find you?<span class="note">This is your go-to-market answer, from the customer's mouth.</span></span></label>
+    <label class="q"><input type="checkbox" data-q="35"><span class="num">35</span><span class="txt">Is there anything you've tried and stopped using? Why?</span></label>
+  </div>
+
+  <div class="part">
+    <div class="parthead"><h3>Part 7 · The close</h3><span class="time">2 min</span></div>
+    <label class="q key"><input type="checkbox" data-q="36"><span class="num">36</span><span class="txt">If I came back in a month with something that showed you X, would that be worth anything to you?<span class="note">Fill in X with whatever <em>they</em> said in Part 2 — not what you wanted them to say.</span></span></label>
+    <label class="q key"><input type="checkbox" data-q="37"><span class="num">37</span><span class="txt">Who else should I talk to?<span class="note">Always ask. Referrals are how you get from five walk-ins to twenty interviews.</span></span></label>
+    <label class="q"><input type="checkbox" data-q="38"><span class="num">38</span><span class="txt">Can I come back and show you what I find?</span></label>
+  </div>
+
+  <div class="card">
+    <h3>Where to find fifteen restaurants</h3>
+    <p>Santa Barbara is unusually good for this — a dense independent scene in walking distance, and a student identity that opens doors a salesperson's wouldn't.</p>
+    <ul class="list">
+      <li><strong>Walk in at 2:30pm on a Tuesday.</strong> Slowest hour of the slowest day. Ask for the owner or the chef.</li>
+      <li><strong>Start with places you already eat at.</strong> Familiarity converts.</li>
+      <li><strong>Ask every single one for two referrals.</strong> Fifteen interviews from five cold walk-ins is normal.</li>
+      <li><strong>Independent, owner-operated, single location.</strong> One person makes the decision and holds the card. Skip chains — the decision is made elsewhere.</li>
+      <li>Try the SBCC culinary programme and any local restaurant association for warm introductions.</li>
+    </ul>
+    <p style="margin-bottom:0"><strong>Cost: about $60 in coffee and one week.</strong> Compare that against building for a year.</p>
+  </div>
+</section>
+
+<!-- ============ 07 ============ -->
+<section id="scoring">
+  <div class="shead">
+    <span class="tag src">Fill this in after each interview, before you forget</span>
+    <h2>07 · Scoring &amp; kill criteria</h2>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Signal</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr><td>Food cost or waste named <strong>unprompted</strong> in Part 2</td><td style="color:var(--keep)"><strong>✅ Strong.</strong> The thesis survives.</td></tr>
+        <tr><td>Only named after you asked in Part 4/5</td><td>⚠️ Weak. A real cost, but not a felt pain.</td></tr>
+        <tr class="hi"><td><strong>They have already tried to fix it</strong> — spreadsheet, consultant, software</td><td style="color:var(--keep)"><strong>✅ Strongest possible signal.</strong> They spent money or time on this.</td></tr>
+        <tr><td>They can quote a number for waste or plate cost</td><td style="color:var(--keep)">✅ They're measuring, so they care</td></tr>
+        <tr><td>They shrug: "it's just part of the business"</td><td style="color:var(--kill)">❌ Not a fundable problem</td></tr>
+        <tr><td>Q13 answered "delivery apps" or "labour"</td><td>🔄 <strong>Pivot the pivot.</strong> Follow that instead.</td></tr>
+        <tr><td><strong>Q14 × Q15 exceeds $40K/yr</strong></td><td>🔄 Commission is their real bleed, whatever they said in Part 2</td></tr>
+        <tr><td>Q31 total software spend under ~$200/mo</td><td>⚠️ Low ceiling; price accordingly</td></tr>
+        <tr><td><strong>Q32: they already switched on their POS's inventory module</strong></td><td style="color:var(--kill)"><strong>❌ Hardest no in the deck.</strong> You'd have to beat a bundle they already pay for.</td></tr>
+        <tr><td>Q5 shows they can't authorise spending</td><td style="color:var(--kill)">❌ Wrong person — get the name of the right one</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="warn">
+    <span class="tag">Decide these now, before you're emotionally invested — after fifteen interviews</span>
+    <ul class="list" style="margin:12px 0 0">
+      <li><strong>Fewer than 5 name food cost or waste unprompted</strong> → the pivot is wrong. Follow whatever they <em>did</em> name.</li>
+      <li><strong>Fewer than 3 have ever tried to fix it</strong> → it's a cost they've accepted, not a problem they'll pay to solve.</li>
+      <li><strong>Nobody can put a number on it</strong> → you can't sell a solution to a problem nobody measures.</li>
+      <li><strong>Most say delivery commissions are the real bleed</strong> → that's the actual business. Go look at it.</li>
+      <li><strong>More than 5 already run their POS's inventory module</strong> → you're selling against a bundle at a price you can't match. Take the costing product to bakeries, caterers and meal-prep companies instead, where there's no POS to bundle it into.</li>
+    </ul>
+  </div>
+  <p><strong>Write the kill criteria on paper and stick them above your desk before interview one.</strong> The whole point of doing fifteen interviews is to be <em>allowed to be wrong</em> cheaply. Founders skip this step, hear what they hoped for in three of fifteen conversations, and build anyway.</p>
+</section>
+
+<!-- ============ 08 ============ -->
+<section id="do">
+  <div class="shead">
+    <span class="tag src">The recommendation</span>
+    <h2>08 · What to actually do</h2>
+  </div>
+
+  <div class="claims">
+    <div class="claim bad">
+      <span class="verdictmark">Don't</span>
+      <span class="what">Build inventory software for restaurants</span>
+      <span class="why">Five stacked reasons, any two of which would be enough: both dominant POS platforms shipped the answer · the wallet is ~$333/mo against a $48K profit · distribution costs 30% in perpetuity plus a $50/mo tax on your own customer · the mandatory POS feed is the #1 adoption barrier and is controlled by your competitor · the market wants fewer vendors, not a better 21st one.</span>
+    </div>
+    <div class="claim bad">
+      <span class="verdictmark">Don't</span>
+      <span class="what">Pitch food waste reduction</span>
+      <span class="why">~70% of the problem is plate waste you can't touch, measurement needs hardware, the buyers who pay are hotels and contract caterers rather than restaurants, nothing compels the spend, and every headline number you'd cite falls apart under scrutiny. <strong>Never cite 7:1, "$162B", or "4–10%" in a deck</strong> — any operator or investor who checks will discount everything else you said.</span>
+    </div>
+    <div class="claim ok">
+      <span class="verdictmark">Do</span>
+      <span class="what">Sell costing to food businesses that aren't restaurants</span>
+      <span class="why">Bakeries, caterers, meal-prep companies, ghost kitchens, CPG producers, food trucks. <strong>Same math, same pain, no POS dependency, no marketplace gatekeeper, no bundled incumbent.</strong> This is the only path in the entire file with a documented solo success behind it.</span>
+    </div>
+    <div class="claim ok">
+      <span class="verdictmark">Do</span>
+      <span class="what">Price so nobody has to talk to you</span>
+      <span class="why">$29–79/mo, self-serve, no demo call. That was Recipe Cost Calculator's entire go-to-market, and it's the only model a solo founder can actually operate while enrolled at UCSB.</span>
+    </div>
+    <div class="claim ok">
+      <span class="verdictmark">Do</span>
+      <span class="what">Run the fifteen interviews before writing any code</span>
+      <span class="why">Every number above is contested, vendor-supplied, or unsourced. Fifteen conversations at $60 and one week buys you primary data nobody else has — including the delivery-mix number that doesn't exist publicly. <strong>And if the answers say "delivery commissions," you've found a bigger problem for the price of ten coffees.</strong></span>
+    </div>
+    <div class="claim ok">
+      <span class="verdictmark">Do</span>
+      <span class="what">Get a kitchen job</span>
+      <span class="why">Every durable player in this category was founded by someone who had already run the operation. Wintschel had a bakery for a decade. That's the actual prerequisite, and it's cheaper to acquire than a year of building the wrong thing.</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="tag q">Source quality · read this before quoting anything above</span>
+  <p style="margin-top:10px"><strong>WebFetch was egress-blocked for this entire research programme.</strong> Every figure here is a search-index summary; no primary document was opened. Figures marked ⚠️ are vendor-stated or self-reported to aggregators.</p>
+  <p>A large share of food-cost benchmarks come from companies selling inventory software — Restaurant365, MarginEdge, MarketMan, Toast, meez, Supy, Apicbase, WISK — who have a direct commercial interest in making food cost sound large and mismanagement universal. Worse, a distinct cluster of 2026-dated sites recurred throughout the results (<span class="mono">restaurantinventorytools.com</span>, <span class="mono">vantainsights.com</span>, <span class="mono">culta.ai</span>, <span class="mono">stockcount.io</span>, <span class="mono">dishcost.com</span> and others) that reads as <strong>AI-generated SEO content for inventory-software affiliates</strong> — confident, precisely-numbered benchmarks with no attribution. Do not stake a pivot on any number appearing only in that cluster.</p>
+  <p><strong>Genuinely independent sources used:</strong> Ohio State News and Parsa (academic), <em>Science</em> 2024 (UC San Diego Rady School), Nation's Restaurant News, Restaurant Business, IBISWorld, USDA ERS, EPA, ReFED, BLS, Forbes/Georgetown, and the Independent Restaurant Coalition (biased <em>against</em> delivery apps specifically).</p>
+  <p><strong>The most important missing number:</strong> no survey exists quantifying what share of independents lack accurate plate costs. Only unsourced vendor assertions. The same is true of delivery-mix share for independents. <strong>Both are things your fifteen interviews would establish for the first time.</strong></p>
+  <p style="margin-top:16px; color:var(--ink-2)">PantryChef research file 03 · restaurant economics, food waste, software buying, permit data · August 2026</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var KEY='pc-restaurant-q-v1';
+  var boxes=[].slice.call(document.querySelectorAll('.q input[type=checkbox]'));
+  var prog=document.getElementById('prog');
+  function load(){
+    try{
+      var raw=localStorage.getItem(KEY);
+      if(!raw) return;
+      var done=JSON.parse(raw)||[];
+      boxes.forEach(function(b){ if(done.indexOf(b.dataset.q)>-1) b.checked=true; });
+    }catch(e){}
+  }
+  function save(){
+    try{
+      localStorage.setItem(KEY, JSON.stringify(
+        boxes.filter(function(b){return b.checked}).map(function(b){return b.dataset.q})
+      ));
+    }catch(e){}
+  }
+  function render(){
+    var n=boxes.filter(function(b){return b.checked}).length;
+    prog.textContent = n + ' / ' + boxes.length + ' asked';
+  }
+  boxes.forEach(function(b){ b.addEventListener('change', function(){ save(); render(); }); });
+  document.getElementById('reset').addEventListener('click', function(){
+    boxes.forEach(function(b){ b.checked=false; });
+    save(); render();
+  });
+  load(); render();
+})();
+</script>
