@@ -1,0 +1,464 @@
+<title>Winners Worth Stealing From</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Karla:ital,wght@0,400;0,600;0,700;1,400&family=Azeret+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --ink:#191416; --ink-2:#463B3E; --muted:#7A6C70;
+  --paper:#EFEBEB; --card:#FCFAFA; --band:#E5DFE0;
+  --rule:#CEC5C7; --rule-soft:#DFD8D9;
+  --ox:#7C2233; --ox-ink:#611A28; --ox-wash:#F0E1E3;
+  --slate:#4C5763; --good:#2F5D46;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#EEE7E8; --ink-2:#C0B4B7; --muted:#8D8083;
+    --paper:#121011; --card:#1C1819; --band:#171314;
+    --rule:#37302F; --rule-soft:#292322;
+    --ox:#E28C9B; --ox-ink:#EDA3B0; --ox-wash:#3A2126;
+    --slate:#96A6B4; --good:#79B79A;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#EEE7E8; --ink-2:#C0B4B7; --muted:#8D8083;
+  --paper:#121011; --card:#1C1819; --band:#171314;
+  --rule:#37302F; --rule-soft:#292322;
+  --ox:#E28C9B; --ox-ink:#EDA3B0; --ox-wash:#3A2126;
+  --slate:#96A6B4; --good:#79B79A;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:Karla,"Helvetica Neue",Arial,sans-serif; font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:980px; margin:0 auto; padding:0 22px 90px}
+
+h1,h2,h3,.serif{font-family:"Instrument Serif",Georgia,"Times New Roman",serif; font-weight:400; text-wrap:balance}
+h1{font-size:clamp(3.1rem,9vw,5.6rem); line-height:.94; margin:0; letter-spacing:-.015em}
+h2{font-size:clamp(2rem,4.4vw,3rem); line-height:1.03; margin:0; letter-spacing:-.01em}
+h3{font-size:1.7rem; line-height:1.12; margin:0}
+p{margin:0 0 14px; max-width:70ch}
+a{color:var(--ox-ink)}
+em.i{font-style:italic}
+.mono,.lab,td.n,th.n{font-family:"Azeret Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.lab{font-size:10px; letter-spacing:.17em; text-transform:uppercase; color:var(--ox); font-weight:500}
+.lab.q{color:var(--muted)}
+.lab.s{color:var(--slate)}
+
+/* masthead */
+header.mast{padding:54px 0 0}
+.rule-top{display:flex; flex-wrap:wrap; gap:8px 20px; align-items:baseline; border-bottom:1px solid var(--ink); padding-bottom:8px; margin-bottom:30px}
+.rule-top .who{font-family:"Azeret Mono",monospace; font-size:11px; letter-spacing:.13em; text-transform:uppercase}
+.rule-top .meta{margin-left:auto; font-family:"Azeret Mono",monospace; font-size:11px; color:var(--muted); letter-spacing:.06em}
+.dek{margin:24px 0 0; font-size:1.24rem; line-height:1.5; color:var(--ink-2); max-width:60ch}
+.dek strong{color:var(--ink)}
+
+/* sections */
+section{margin:66px 0 0; scroll-margin-top:14px}
+.shead{border-top:2px solid var(--ink); padding-top:12px; margin-bottom:24px}
+.shead .lab{display:block; margin-bottom:6px}
+.shead p{margin:10px 0 0; color:var(--ink-2); max-width:66ch}
+
+/* record card */
+.rec{background:var(--card); border:1px solid var(--rule-soft); margin:22px 0}
+.rec .strip{display:flex; flex-wrap:wrap; gap:4px 26px; padding:11px 24px; border-bottom:1px solid var(--rule-soft); background:var(--band)}
+.rec .strip span{font-family:"Azeret Mono",monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.rec .strip span b{color:var(--ink); font-weight:500}
+.rec .body{padding:22px 24px}
+.rec .body>*:last-child{margin-bottom:0}
+.rec h3{margin-bottom:4px}
+.rec .tagline{font-size:.98rem; color:var(--slate); margin:0 0 14px; font-weight:600}
+.steal{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start; border-top:1px solid var(--rule-soft); padding:16px 24px; background:var(--ox-wash)}
+.steal .lab{padding-top:4px; white-space:nowrap}
+.steal p{margin:0; font-size:.97rem; line-height:1.55}
+.rec.warn-rec{border-color:var(--ox)}
+
+/* pull */
+.pull{border-left:3px solid var(--ox); padding:3px 0 3px 20px; margin:26px 0; max-width:62ch}
+.pull p{font-family:"Instrument Serif",Georgia,serif; font-size:1.55rem; line-height:1.24; margin:0; letter-spacing:-.005em}
+.pull .sub{font-family:Karla,sans-serif; font-size:.95rem; color:var(--muted); line-height:1.55; margin-top:9px}
+
+ul.list{margin:0 0 16px; padding:0; list-style:none}
+ul.list li{position:relative; padding-left:20px; margin-bottom:9px; max-width:68ch}
+ul.list li::before{content:""; position:absolute; left:2px; top:.72em; width:8px; height:1px; background:var(--ox)}
+
+/* facts grid */
+.facts{display:grid; grid-template-columns:repeat(auto-fit,minmax(168px,1fr)); gap:1px; background:var(--rule-soft); border:1px solid var(--rule-soft); margin:24px 0}
+.facts>div{background:var(--card); padding:18px}
+.facts .big{display:block; font-family:"Instrument Serif",Georgia,serif; font-size:2.5rem; line-height:1; color:var(--ox-ink); letter-spacing:-.02em}
+.facts .cap{display:block; margin-top:7px; font-size:.87rem; line-height:1.4; color:var(--ink-2)}
+
+/* tables */
+.scroll{overflow-x:auto; margin:24px 0; border:1px solid var(--rule-soft); background:var(--card)}
+table{border-collapse:collapse; width:100%; min-width:540px; font-size:.93rem}
+th,td{text-align:left; padding:11px 16px; border-bottom:1px solid var(--rule-soft); vertical-align:top}
+thead th{font-family:"Azeret Mono",monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:500; border-bottom:1px solid var(--rule); white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+tr.hi td{background:var(--ox-wash)}
+td.n{text-align:right; white-space:nowrap}
+caption{caption-side:bottom; text-align:left; padding:10px 16px; font-size:12px; color:var(--muted); line-height:1.45}
+
+/* pattern list — genuinely ordered */
+.pat{display:grid; grid-template-columns:52px 1fr; gap:0 18px; border-top:1px solid var(--rule); padding:20px 0}
+.pat .n{font-family:"Instrument Serif",Georgia,serif; font-size:2.3rem; line-height:.9; color:var(--ox); padding-top:2px}
+.pat h3{font-size:1.32rem; margin-bottom:5px}
+.pat p{margin:0; color:var(--ink-2)}
+
+/* timeline — a real sequence */
+.tl{border-top:1px solid var(--rule); margin:24px 0 0}
+.tl .stop{display:grid; grid-template-columns:132px 1fr; gap:0 22px; padding:18px 0; border-bottom:1px solid var(--rule-soft); align-items:start}
+.tl .when{font-family:"Azeret Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ox); padding-top:5px}
+.tl .what h3{font-size:1.25rem; margin-bottom:4px}
+.tl .what p{margin:0; color:var(--ink-2); font-size:.96rem}
+.tl .stop.now{background:var(--ox-wash); margin:0 -16px; padding-left:16px; padding-right:16px; grid-template-columns:116px 1fr}
+
+.note{border:1px solid var(--ox); border-left-width:3px; background:var(--card); padding:17px 20px; margin:24px 0}
+.note>*:last-child{margin-bottom:0}
+
+footer{margin:72px 0 0; border-top:2px solid var(--ink); padding-top:16px; color:var(--muted); font-size:.86rem; line-height:1.6}
+footer p{max-width:78ch}
+a:focus-visible{outline:2px solid var(--ox); outline-offset:2px}
+@media (max-width:600px){
+  .pat{grid-template-columns:1fr; gap:6px}
+  .tl .stop,.tl .stop.now{grid-template-columns:1fr; gap:4px}
+  .steal{grid-template-columns:1fr; gap:6px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="rule-top">
+    <span class="who">PantryChef · Research File 04</span>
+    <span class="meta">Aug 2026 · Competition &amp; startup study</span>
+  </div>
+  <h1>Winners<br>Worth Stealing<br>From</h1>
+  <p class="dek">Nine startups — UCSB New Venture Competition winners, this year's finalist slate, YC companies already in your lane, and the student teams beating you to food waste. <strong>What each one did, and the one thing worth taking from it.</strong></p>
+
+  <div class="facts">
+    <div><span class="big">80+</span><span class="cap">Law firms the 2026 NVC winner interviewed before pitching. <strong>The research <em class="i">was</em> the pitch.</strong></span></div>
+    <div><span class="big">$75K</span><span class="cap">Prize pool at UCSB's New Venture Competition. Open to undergraduates in any major.</span></div>
+    <div><span class="big">6 / 6</span><span class="cap">2026 finalists selling to a business or institution. <strong>Zero consumer apps.</strong></span></div>
+    <div><span class="big">0</span><span class="cap">Student food-waste winners anywhere who target an independent restaurant.</span></div>
+  </div>
+</header>
+
+<!-- ============ NVC ============ -->
+<section id="nvc">
+  <div class="shead">
+    <span class="lab">The competition on your own campus</span>
+    <h2>UCSB New Venture Competition</h2>
+    <p>Running since 1999, now 27 years old. Not a weekend hackathon — <strong>an eight-month program</strong> that walks you from idea to pitch, open to students of every major and every level. More than <strong>70 startups have launched out of it, raising over $1.2 billion</strong> between them. ⚠️</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>The program runs on the academic calendar. Information sessions are held each October.</caption>
+      <thead><tr><th>Quarter</th><th>What happens</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td><strong>Fall</strong></td><td>Idea development, pitch events, <strong>student mixers and team formation</strong>. Info sessions in October.</td></tr>
+        <tr><td>Winter</td><td>Business-model workshops. Introductions to industry mentors.</td></tr>
+        <tr><td>Spring</td><td>Learn to tell the story of the business. Prep for the Finals in May.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <span class="lab">Timing</span>
+    <p style="margin-top:7px"><strong>It is August 2026. The October info sessions are about six weeks out, and fall quarter is when teams form.</strong> You would arrive with a product that already runs — which is more than almost anyone at those mixers has.</p>
+  </div>
+</section>
+
+<!-- ============ THE WINNER ============ -->
+<section id="winner">
+  <div class="shead">
+    <span class="lab">The case study to study</span>
+    <h2>The 2026 winner</h2>
+  </div>
+
+  <div class="rec">
+    <div class="strip">
+      <span>Won · <b>27th NVC Finals, 20 May 2026</b></span>
+      <span>Prize · <b>$10,000</b></span>
+      <span>Team · <b>2</b></span>
+    </div>
+    <div class="body">
+      <h3>LegalTime AI</h3>
+      <p class="tagline">Joaquin Del Pego (Computer Science) &amp; Quinn Godfrensen (Mathematics)</p>
+      <p>Automated billable-hour capture for law firms. Hands-free, processed on-device for client privacy, with native Clio integration. They pitched a <strong>10× return on investment</strong> for the firm.</p>
+      <p>Both founders arrived with experience across four tech startups — machine learning, sales automation, AI enablement, backend. <strong>Credibility was established before the competition, not during it.</strong></p>
+      <p style="color:var(--ink-2)"><strong>The honest asterisk:</strong> they aren't alone. <strong>Billables AI</strong> is an existing venture-backed startup doing automated legal time-tracking, covered by trade press in December 2025. Even a competition winner judged by VCs is in a contested space. <em class="i">Contested is normal. Not knowing you're contested is the problem.</em></p>
+    </div>
+    <div class="steal">
+      <span class="lab">Steal this</span>
+      <p><strong>They interviewed more than eighty law firms, and the customer research was the pitch.</strong> Not the demo. Not the model. The eighty conversations. Your fifteen restaurant interviews are the same instrument — and they're worth more to a judge than a working backend.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLATE ============ -->
+<section id="slate">
+  <div class="shead">
+    <span class="lab">Read this as a genre study</span>
+    <h2>The full 2026 finalist slate</h2>
+    <p>Six teams made the finals. <strong>2026 was the first year every single finalist chose to keep going after the competition ended.</strong></p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Two finalists could not be researched — company details weren't recoverable with external fetching blocked.</caption>
+      <thead><tr><th>Team</th><th>What it is</th><th>The pattern</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td><strong>LegalTime AI</strong></td><td>Automated billable-hour capture for law firms</td><td>Narrow vertical · boring workflow · quantified ROI</td></tr>
+        <tr><td><strong>CoListable</strong></td><td>B2B vertical SaaS for <strong>collectible dealers</strong> — list once, publish everywhere across eBay, Chrono24, watch forums, Reddit and Facebook Groups, with inventory synced from one dashboard</td><td>Absurdly specific niche. <strong>Nobody would call this a big market. It made the finals anyway.</strong></td></tr>
+        <tr><td><strong>MediMRF</strong></td><td>Modular AI waste-sorting for <strong>hospitals</strong> — identifies and pulls hazardous material out of the waste stream</td><td>Institutional buyer with a compliance mandate</td></tr>
+        <tr><td><strong>Vimicx</strong></td><td>Converts live 2D sonar into <strong>real-time 3D underwater vision inside AR displays</strong></td><td>The ocean/diving idea you liked — <strong>a team in your own competition is building it</strong></td></tr>
+        <tr><td>Yavin Systems</td><td colspan="2" style="color:var(--muted)">Not recoverable</td></tr>
+        <tr><td>DaJent</td><td colspan="2" style="color:var(--muted)">Not recoverable</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull">
+    <p>Not one recoverable finalist is a consumer app. Every one of them sells to a business or an institution.</p>
+    <span class="sub">This is the single most important thing on the page for how you frame PantryChef. A consumer recipe app is not the shape of what wins here.</span>
+  </div>
+</section>
+
+<!-- ============ PRIOR ============ -->
+<section id="prior">
+  <div class="shead">
+    <span class="lab">Previous winners &amp; what happened next</span>
+    <h2>The track record</h2>
+  </div>
+
+  <div class="rec">
+    <div class="strip"><span>2025 · <b>26th NVC</b></span><span>Prize · <b>$10,000</b></span><span>Team · <b>Economics + Mathematics</b></span></div>
+    <div class="body">
+      <h3>RazeMath</h3>
+      <p class="tagline">Nico Lehner &amp; Evan McCall, Class of 2026</p>
+      <p>AI math tutoring that breaks complex problems into individualised explanations based on each student's learning history, with step-by-step solutions. Post-win plan: raise, then expand into computer science and statistics.</p>
+    </div>
+  </div>
+
+  <div class="rec">
+    <div class="strip"><span>2023 · <b>24th NVC</b></span><span>Prize · <b>$12,000</b></span><span>Team · <b>2 materials PhDs</b></span></div>
+    <div class="body">
+      <h3>Leeta</h3>
+      <p>Advanced manufacturing for energy materials. What's instructive is the path <em class="i">after</em> the win: <strong>government grants plus local angel investors</strong>, and a berth in UCSB's CNSI Technology Incubator. Prize money was the door, not the funding.</p>
+    </div>
+  </div>
+
+  <div class="pull">
+    <p>Two founders. Never solo. Usually one who builds and one who sells.</p>
+    <span class="sub">RazeMath: economics + math. LegalTime: CS + math, with startup operating experience. Leeta: two PhDs. Across every winner on this page, the team shape is the same.</span>
+  </div>
+
+  <h3 style="margin-top:40px; font-size:1.5rem">The alumni that made it worth entering</h3>
+  <ul class="list" style="margin-top:14px">
+    <li><strong>Inogen</strong> — NVC winner, founded 2001 by three UCSB students. Portable oxygen concentrators. <strong>Went public.</strong></li>
+    <li><strong>Apeel Sciences</strong> — <strong>NVC 2012 winner.</strong> A plant-derived coating that extends produce shelf life. Raised <strong>$640M</strong> from backers including Temasek; valued above <strong>$2 billion</strong> in 2021 with 450 employees.</li>
+    <li><strong>Salty Girl Seafood</strong> (2014), AppScale, MILO, EVmatch.</li>
+  </ul>
+
+  <div class="rec warn-rec">
+    <div class="strip"><span>Cautionary · <b>the same company</b></span></div>
+    <div class="body">
+      <h3>Apeel today: roughly 50 staff, down from 450</h3>
+      <p>The company spent the better part of three years fighting a coordinated online misinformation campaign about its coating, and never got back to the 2021 valuation. <strong>No competitor beat it.</strong></p>
+    </div>
+    <div class="steal">
+      <span class="lab">Steal this</span>
+      <p><strong>The closest thing to your problem that UCSB ever produced — food spoilage — became a unicorn and then lost 90% of its staff to public perception.</strong> Anything that touches what people put in their mouths carries a risk that has nothing to do with whether the product works.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LANE ============ -->
+<section id="lane">
+  <div class="shead">
+    <span class="lab">Read before pitching anything restaurant-shaped</span>
+    <h2>Already in your lane</h2>
+    <p>Two YC-funded companies are building what the restaurant pivot would be. Both are worth studying precisely because of <em class="i">how</em> they solved the problems the restaurant research flagged.</p>
+  </div>
+
+  <div class="rec">
+    <div class="strip">
+      <span>YC · <b>S26</b></span><span>Founded · <b>2026</b></span><span>New York · <b>2 employees</b></span>
+    </div>
+    <div class="body">
+      <h3>Marble</h3>
+      <p class="tagline">"The first AI-native operating system for the restaurant back-of-house"</p>
+      <ul class="list">
+        <li><strong>Computer vision and voice AI</strong> capture real-time inventory ~90% faster than manual counts</li>
+        <li>ML demand forecasting claimed at <strong>97% item-level accuracy</strong></li>
+        <li>Agents run procurement, invoice reconciliation, scheduling, food prep and menu engineering</li>
+        <li><strong>Three national chain contracts in progress; $3M in sales processed</strong> ⚠️ <span style="color:var(--muted)">company-stated</span></li>
+      </ul>
+      <p><strong>Founders:</strong> Aakar Khanna (CEO) — Goldman Sachs investment banking <strong>covering restaurants and F&amp;B</strong>, then early BizOps at AtoB (YC S20). Arjun Chaliha (CTO) — Senior Software Engineer at Bloomberg, leading AI/ML for electronic trading.</p>
+    </div>
+    <div class="steal">
+      <span class="lab">Steal this</span>
+      <p><strong>Two independent confirmations of the restaurant research, from people with money on the line.</strong> They went straight to computer vision and voice because you cannot make a human log things during service — the exact conclusion the waste research reached. And they sell to <strong>national chains, not independents</strong> — the exact conclusion the vendor landscape reached.</p>
+    </div>
+  </div>
+
+  <div class="rec">
+    <div class="strip">
+      <span>YC · <b>F25</b></span><span>Founded · <b>May 2025</b></span><span>Seed · <b>$500K, Sept 2025</b></span>
+    </div>
+    <div class="body">
+      <h3>Zavo</h3>
+      <p class="tagline">Agentic point-of-sale for restaurants and retail — Can Zehebi &amp; Ilkan Gezer</p>
+      <p>Payments, POS and AI agents in one platform. Started by talking to small-business owners frustrated by fragmented systems. <strong>400+ businesses live</strong>, from coffee shops to full-service restaurants.</p>
+    </div>
+    <div class="steal">
+      <span class="lab">Steal this</span>
+      <p><strong>They didn't build a module for the POS. They built the POS.</strong> That's the other way past the distribution tax — own the register instead of renting space on someone else's. It is a much harder company to build, and it's the only structural answer to the 30%-in-perpetuity problem.</p>
+    </div>
+  </div>
+
+  <p>Also worth a look in YC's food stack: <strong>BetterBasket</strong> (AI pricing, competitive intelligence and promotion agents for grocery retailers) and <strong>GrubMarket</strong> (AI-powered digital transformation of the American food supply chain).</p>
+</section>
+
+<!-- ============ STUDENTS ============ -->
+<section id="students">
+  <div class="shead">
+    <span class="lab">Student teams already on food waste</span>
+    <h2>And the pattern nobody states</h2>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Project</th><th>Competition</th><th>Who they sell to</th></tr></thead>
+      <tbody>
+        <tr><td><strong>FoodTrace</strong></td><td>Northeastern Smart Campus Competition</td><td>Barcode inventory tracking for <strong>charitable food pantries</strong>, synced across locations</td></tr>
+        <tr><td><strong>FreshBridge</strong></td><td>Illinois State innovation workshop</td><td>Matching <strong>food pantry</strong> requests to donors</td></tr>
+        <tr><td><strong>Sustainabite</strong></td><td>Northeastern Sustainability Innovation Competition — 1st place</td><td>Cutting <strong>dining hall</strong> waste 25–30%</td></tr>
+        <tr><td>Unnamed</td><td>SDSU Social Venture Challenge — 3rd, <strong>$5,000 → shipped the app</strong></td><td>Campus food waste</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pull">
+    <p>Every student food-waste winner targets an institution with a mandate — campus dining or charitable pantries. Not one targets an independent restaurant.</p>
+    <span class="sub">That is now the <strong>third independent line of evidence</strong> pointing the same way, after the enterprise-only vendor landscape (Winnow, Leanpath, Orbisk, Kitro) and Marble's national-chain go-to-market. When three unrelated groups of people all route around the same customer, the customer is the problem.</span>
+  </div>
+</section>
+
+<!-- ============ PATTERN ============ -->
+<section id="pattern">
+  <div class="shead">
+    <span class="lab">The extracted pattern</span>
+    <h2>What actually wins</h2>
+    <p>Ranked by how consistently it showed up across every winner on this page.</p>
+  </div>
+
+  <div class="pat">
+    <span class="n">1</span>
+    <div>
+      <h3>Customer interviews are the spine of the pitch</h3>
+      <p>Eighty law firms. Zavo started by talking to small-business owners. This isn't preparation for the pitch — <strong>it is the pitch.</strong> It's also the only part you can do this month, for about $60.</p>
+    </div>
+  </div>
+  <div class="pat">
+    <span class="n">2</span>
+    <div>
+      <h3>A narrow, unglamorous vertical</h3>
+      <p>Legal timekeeping. Collectible-dealer listings. Hospital waste sorting. <strong>Nobody won with "AI for X" where X was large.</strong> CoListable made the finals selling to people who resell watches.</p>
+    </div>
+  </div>
+  <div class="pat">
+    <span class="n">3</span>
+    <div>
+      <h3>Founder-problem fit, established beforehand</h3>
+      <p>Apeel came out of materials research. Marble's CEO covered restaurants at Goldman. Recipe Cost Calculator's founder owned a bakery for a decade. <strong>Winners have a reason to be the ones doing it</strong> — and a semester spent in a kitchen is a cheap way to acquire one.</p>
+    </div>
+  </div>
+  <div class="pat">
+    <span class="n">4</span>
+    <div>
+      <h3>A business or institutional buyer</h3>
+      <p>Every recoverable 2026 finalist. Every student food-waste winner. <strong>Consumer apps do not win these competitions</strong>, and the CAC math in the earlier research says they don't win outside them either.</p>
+    </div>
+  </div>
+  <div class="pat">
+    <span class="n">5</span>
+    <div>
+      <h3>Two founders, complementary</h3>
+      <p>Never solo, in any case found. Usually one who builds and one who sells.</p>
+    </div>
+  </div>
+  <div class="pat">
+    <span class="n">6</span>
+    <div>
+      <h3>One number the judge remembers</h3>
+      <p>LegalTime: <strong>10× ROI.</strong> Sustainabite: <strong>25–30% reduction.</strong> Marble: <strong>90% faster counts, 97% forecast accuracy.</strong> Pick the number before you build the deck.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLAN ============ -->
+<section id="plan">
+  <div class="shead">
+    <span class="lab">If you want to run at this</span>
+    <h2>Your next eight months</h2>
+    <p>Mapped onto the competition calendar, starting from where you actually are today.</p>
+  </div>
+
+  <div class="tl">
+    <div class="stop now">
+      <span class="when">Now — Sept</span>
+      <div class="what">
+        <h3>Run the fifteen interviews</h3>
+        <p>The questionnaire is written and the kill criteria are set. LegalTime did eighty; fifteen is your minimum viable version. Walk in at 2:30pm on a Tuesday. <strong>Cost: about $60 and one week.</strong></p>
+      </div>
+    </div>
+    <div class="stop">
+      <span class="when">October</span>
+      <div class="what">
+        <h3>Go to a New Venture Program info session</h3>
+        <p>Free, open to any major, any level. Enroll on the program's Canvas page so you get the updates.</p>
+      </div>
+    </div>
+    <div class="stop">
+      <span class="when">Fall quarter</span>
+      <div class="what">
+        <h3>Find your second founder at the mixers</h3>
+        <p>Statistics &amp; Data Science covers the technical half. You need the half who will walk into fifteen restaurants with you. <strong>Nobody on this page won alone.</strong></p>
+      </div>
+    </div>
+    <div class="stop">
+      <span class="when">Winter quarter</span>
+      <div class="what">
+        <h3>Business model and mentors</h3>
+        <p>This is where the interview data turns into a model — and where a mentor tells you, for free, what the platform tax and the $99 Square floor mean for your pricing.</p>
+      </div>
+    </div>
+    <div class="stop">
+      <span class="when">Spring · May</span>
+      <div class="what">
+        <h3>Finals</h3>
+        <p>$75,000 pool. Six finalist slots. Pitch the business, not the app.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="lab">One more thing</span>
+    <p style="margin-top:7px"><strong>Vimicx made the 2026 finals with real-time 3D underwater vision in AR.</strong> The ocean idea you liked had a team in your own competition, and they got to the last six. That's not a reason to drop it — it's evidence the judges reward that kind of ambition.</p>
+  </div>
+</section>
+
+<footer>
+  <span class="lab q">Source quality</span>
+  <p style="margin-top:10px"><strong>External fetching was blocked for this research.</strong> Every figure here is a search-index summary; no primary page — including Devpost project listings and YC company pages — was opened directly. Figures marked ⚠️ are company-stated or self-reported to aggregators: Marble's $3M processed, 97% forecast accuracy and 90% speed claim; LegalTime's 10× ROI; Zavo's 400+ businesses; and the "70+ startups, $1.2B raised" NVC figure.</p>
+  <p><strong>Could not obtain:</strong> SB Hacks XII winning project names · what DaJent and Yavin Systems do · exact 2027 NVC calendar dates · Apeel's current valuation.</p>
+  <p style="margin-top:16px; color:var(--ink-2)">PantryChef research file 04 · competition winners, YC comparables, and the pattern across them · August 2026</p>
+</footer>
+
+</div>
