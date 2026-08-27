@@ -371,6 +371,114 @@ a:focus-visible{outline:2px solid var(--sig); outline-offset:2px}
   </div>
 </section>
 
+<!-- ===== REFRAME ===== -->
+<section id="reframe">
+  <div class="shead">
+    <span class="lab">Your reframe · "cheap sonar + open-source SLAM, shrunk to wearable"</span>
+    <h2>This is a much better question, and the answer changes</h2>
+    <p>Not "invent underwater sonar" but <strong>"integrate parts that already exist and make them small."</strong> That's a different problem with a different verdict — and researched properly, most of it comes back green.</p>
+  </div>
+
+  <div class="card go">
+    <span class="lab">Green · the software half is decisively yes</span>
+    <h3 style="margin-top:8px">The open-source stack genuinely exists</h3>
+    <ul class="list">
+      <li><span class="mono">CentraleNantesRobotics/ping360_sonar</span> — <strong>ROS2 driver, MIT licensed</strong>, with C++ and Python nodes sharing one API</li>
+      <li><span class="mono">GSO-soslab/bluerobotics_ping360</span> — a second independent Ping360 ROS driver</li>
+      <li><span class="mono">Tim-HW/HW-BlueRov2-Sonar-based-SLAM</span> — evaluates SLAM algorithms fusing <strong>sonar with DVL and IMU</strong> for AUV navigation</li>
+      <li><span class="mono">jake3991/sonar-SLAM</span> — underwater SLAM for multibeam sonar, <strong>ships with test data and parameter documentation</strong></li>
+      <li><strong>DRACo-SLAM</strong> — distributed, communication-efficient sonar SLAM for <em>teams</em> of imaging-sonar robots</li>
+      <li>⭐ <strong>Public datasets already exist</strong> — BlueROV2 sonar and camera recordings with Ping360, published on figshare</li>
+    </ul>
+    <p style="margin-bottom:0">Drivers, algorithms, datasets, and JANUS for the comms layer. <strong>You would be assembling, not inventing.</strong></p>
+  </div>
+
+  <div class="card go">
+    <span class="lab">Green · power and depth are not the constraint</span>
+    <h3 style="margin-top:8px">The "shrink it" part is the easy part</h3>
+    <div class="scroll" style="margin:14px 0">
+      <table style="min-width:440px">
+        <thead><tr><th>Element</th><th class="n">Reality</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Ping360 power draw</strong></td><td class="n"><strong>5 W max</strong>, 11–25 V supply</td></tr>
+          <tr><td>Single-board compute (Pi-class / Jetson-class)</td><td class="n">~7–15 W ⚠️ est.</td></tr>
+          <tr class="hi"><td><strong>One-hour dive, whole system</strong></td><td class="n"><strong>~20 Wh — a phone-sized cell</strong></td></tr>
+          <tr><td>Depth rating</td><td class="n">Ping360 is <strong>300 m</strong>; recreational stops at 40</td></tr>
+          <tr><td>Housing</td><td class="n">Blue Robotics sells configurable 2–8" locking enclosures with modular end caps ⚠️ <em>price not obtained</em></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-bottom:0"><strong>Battery, depth and packaging are all solved problems you can buy off a shelf.</strong> None of them is what stops this.</p>
+  </div>
+
+  <div class="card stop">
+    <span class="lab s">Red · the one real blocker, and it's very specific</span>
+    <h3 style="margin-top:8px">A full 360° sweep takes 8 seconds</h3>
+    <p>The Ping360 is a <strong>mechanical</strong> scanner — a single transducer on a motor, stepping in 1° increments. A 360° sweep takes <strong>~8 seconds</strong>; a narrower 120° fan at 20 m range takes <strong>~3.5 seconds</strong>. Shorter ranges scan faster, because the receiver waits less for returns.</p>
+    <p style="margin-bottom:0">A swimming diver moves at roughly half a metre per second. <strong>In one 8-second sweep the diver has travelled about four metres and rotated arbitrarily.</strong> The scan isn't a snapshot — it's smeared across a four-metre baseline. Blue Robotics say so themselves: the sweep time <em>"may influence detection performance in dynamic environments or when deployed on moving platforms."</em></p>
+  </div>
+
+  <div class="pull s">
+    <p>Every working implementation is on an ROV. ROVs can hover. Divers can't.</p>
+    <span class="sub">That single sentence is the difference between a mature technology and an open research problem — and it is <strong>exactly the gap your reframed question lands in.</strong></span>
+  </div>
+
+  <div class="card go">
+    <span class="lab">Green · and this is the encouraging part</span>
+    <h3 style="margin-top:8px">Motion distortion is a studied problem with published solutions</h3>
+    <p>The literature names your blocker directly — <em>"motion-induced distortions, continuous data flow, low scan frequency and high noise levels"</em> — and attacks it:</p>
+    <ul class="list">
+      <li><strong>EKF with a constant-velocity motion model</strong>, using velocity and attitude to <em>undistort</em> acoustic images by compounding relative position within a single scan</li>
+      <li><strong>Modified-FastSLAM</strong> for AUVs using a mechanical scanning imaging sonar as the active sensor</li>
+      <li><strong>RBPF SLAM with a sliding-window scan module</strong>, designed specifically <em>"to tackle scan distortion and data sparseness caused by slow-sampling mechanical scanning sonar"</em></li>
+    </ul>
+    <p style="margin-bottom:0">Researchers conclude that <strong>proper motion compensation significantly improves mapping quality with single-beam mechanical scanning sonar on moving platforms.</strong> So the smearing is not fatal — it's a known problem with known approaches.</p>
+  </div>
+
+  <div class="card stop">
+    <span class="lab s">Red · but they all lean on the same expensive part</span>
+    <p style="margin-bottom:0"><strong>The undistortion uses DVL velocity to correct the scan.</strong> That is the third time the Doppler Velocity Log has turned out to be the backbone — and the smallest one, the Water Linked A50, is quote-priced like every industrial subsea sensor. <strong>Strip the DVL out and you also strip out the thing that makes the correction work.</strong></p>
+  </div>
+
+  <h3 style="margin-top:36px; font-size:1.5rem">Which narrows it to one genuinely good research question</h3>
+
+  <div class="pull">
+    <p>Can sonar scan-matching plus a cheap IMU replace the DVL, on a platform that moves the way a diver moves?</p>
+    <span class="sub">There is precedent to build on — <strong>"EKF-SLAM for AUV navigation under Probabilistic Sonar Scan-Matching"</strong> estimates motion from sonar registration itself rather than from a velocity sensor. That's the DVL-free path. It is harder, less accurate, and as far as I can tell <strong>has not been tested at diver speeds or diver motion profiles.</strong> Which is precisely what makes it a question worth asking.</span>
+  </div>
+
+  <div class="card">
+    <h3>Two design levers you have that an ROV doesn't</h3>
+    <ul class="list">
+      <li><strong>You don't need 360°.</strong> A diver looks forward. A 120° fan at 20 m is <strong>3.5 seconds</strong> — less than half the smear.</li>
+      <li><strong>You don't need 50 m of range.</strong> Recreational visibility problems happen at 2–15 m. Shorter range scans faster, because return time is the limit. <strong>A 120° fan at 10 m should be faster still</strong> ⚠️ <em>(extrapolated from the stated relationship, not a quoted figure — measure it).</em></li>
+    </ul>
+    <p style="margin-bottom:0">Between them these could plausibly get you from an 8-second sweep to something on the order of 1–2 seconds, which changes the smear from four metres to well under one. <strong>That is the first thing I would try, and it costs nothing to reason about.</strong></p>
+  </div>
+
+  <div class="card go">
+    <span class="lab">⭐ What to do first — and it's free</span>
+    <h3 style="margin-top:8px">Test the idea on existing data before buying anything</h3>
+    <p><strong>Public BlueROV2 + Ping360 datasets already exist</strong>, and <span class="mono">jake3991/sonar-SLAM</span> ships its own test data. You can find out whether DVL-free scan-matching holds up <strong>on somebody else's recordings, tonight, for zero dollars.</strong></p>
+    <p style="margin-bottom:0">If it works on ROV data, the next question is whether it survives diver motion — and only <em>then</em> does anyone need to spend $1,975.</p>
+  </div>
+
+  <h3 style="margin-top:36px; font-size:1.5rem">The honest build list, if it gets that far</h3>
+  <div class="ladder">
+    <div class="rung"><div class="w"><strong>Ping360 scanning sonar</strong>Known price, known power, known depth rating</div><div class="p">$1,975</div></div>
+    <div class="rung"><div class="w"><strong>Single-board compute</strong>Pi-class or Jetson-class ⚠️ estimate</div><div class="p">$100–500</div></div>
+    <div class="rung"><div class="w"><strong>IMU</strong>Consumer to tactical grade ⚠️ estimate</div><div class="p">$20–200</div></div>
+    <div class="rung"><div class="w"><strong>Watertight enclosure</strong>Blue Robotics configurable series ⚠️ <em>price not obtained</em></div><div class="p">?</div></div>
+    <div class="rung"><div class="w"><strong>Battery</strong>~20 Wh for a one-hour dive</div><div class="p">trivial</div></div>
+    <div class="rung you"><div class="w"><strong>Software</strong>ROS2 drivers, published SLAM, public datasets — MIT-licensed</div><div class="p">$0</div></div>
+  </div>
+
+  <div class="pull">
+    <p>So: verdict changed. Not a product, but a real research project with an unusually clear first experiment.</p>
+    <span class="sub">The reframe took this from "a funded hardware company or nothing" to <strong>"a question a statistics undergraduate could genuinely attack, starting with free data."</strong> It won't be a startup — the market analysis hasn't moved and the Ping360 still costs 6× a consumer price point. <strong>But it is exactly the kind of work that gets an undergraduate into a lab, onto a paper, and into the New Venture Competition with something nobody else in the room has.</strong> And Vimicx — the 2026 NVC finalist doing 2D sonar to 3D underwater AR — is the team to go talk to before you do anything else.</span>
+  </div>
+</section>
+
 <!-- ===== VERDICT ===== -->
 <section id="verdict">
   <div class="shead">
